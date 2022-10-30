@@ -158,7 +158,7 @@ export default function HomeAdmin({navigation}) {
   };
   return (
     <View>
-      <HomeAdminHeader navigation={navigation} title="Màn hình chính" />
+      <HomeAdminHeader navigation={navigation} title="Home" />
       <FlatList
         style={{marginLeft: 5, marginBottom: 10, marginTop: 20}}
         showsVerticalScrollIndicator={false}
@@ -242,7 +242,7 @@ export default function HomeAdmin({navigation}) {
               alignSelf: 'center',
               marginTop: 10,
             }}>
-            Cập nhập thuốc
+            Update Medicine
           </Text>
           <TouchableOpacity
             onPress={() => {
@@ -269,7 +269,7 @@ export default function HomeAdmin({navigation}) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>Chọn hình ảnh</Text>
+            <Text>Upload image</Text>
           </TouchableOpacity>
           <TextInput
             style={{
@@ -283,7 +283,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Tên thuốc"
+            placeholder="Name medicine"
             value={name1}
             onChangeText={txt => setname1(txt)}
           />
@@ -298,7 +298,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Giá"
+            placeholder="Price"
             value={gia1}
             onChangeText={txt => setgia1(txt)}
           />
@@ -314,7 +314,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Nhà thuốc"
+            placeholder="Pharmacy"
             value={nhathuoc1}
             onChangeText={txt => setnhathuoc1(txt)}
           />
@@ -329,7 +329,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Mô tả"
+            placeholder="Description"
             value={mota1}
             onChangeText={txt => setmota1(txt)}
           />
@@ -338,7 +338,7 @@ export default function HomeAdmin({navigation}) {
               onPress={() => {
                 delete1(itemthuoc);
               }}
-              title="Xóa"
+              title="Delete"
               buttonStyle={{
                 backgroundColor: colors.blue,
                 borderRadius: 30,
@@ -347,7 +347,7 @@ export default function HomeAdmin({navigation}) {
               }}
             />
             <Button
-              title="Cập nhập"
+              title="Update"
               buttonStyle={{
                 backgroundColor: colors.blue,
                 borderRadius: 30,
@@ -395,7 +395,7 @@ export default function HomeAdmin({navigation}) {
               alignSelf: 'center',
               marginTop: 10,
             }}>
-            Cập nhập thuốc
+            Update Medicine
           </Text>
           <TouchableOpacity
             onPress={() => {
@@ -422,7 +422,7 @@ export default function HomeAdmin({navigation}) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>Chọn hình ảnh</Text>
+            <Text>Upload image</Text>
           </TouchableOpacity>
           <TextInput
             style={{
@@ -436,7 +436,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Tên thuốc"
+            placeholder="Name medicine"
             value={name1}
             onChangeText={txt => setname1(txt)}
           />
@@ -451,7 +451,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Giá"
+            placeholder="Price"
             value={gia1}
             onChangeText={txt => setgia1(txt)}
           />
@@ -467,7 +467,7 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Nhà thuốc"
+            placeholder="Pharmacy"
             value={nhathuoc1}
             onChangeText={txt => setnhathuoc1(txt)}
           />
@@ -482,14 +482,14 @@ export default function HomeAdmin({navigation}) {
               paddingHorizontal: 10,
               color: colors.text,
             }}
-            placeholder="Mô tả"
+            placeholder="Description"
             value={mota1}
             onChangeText={txt => setmota1(txt)}
           />
           <View
             style={{alignItems: 'flex-end', marginRight: 40, marginTop: 20}}>
             <Button
-              title="Thêm"
+              title="Add"
               buttonStyle={{
                 backgroundColor: colors.blue,
                 borderRadius: 30,

@@ -108,10 +108,10 @@ export default function SignInScreen({navigation}) {
   return (
     <>
       <View style={styles.container}>
-        <Header title="ĐĂNG NHẬP" type="arrow-left" navigation={navigation} />
+        <Header title="LOGIN" type="arrow-left" navigation={navigation} />
         <View style={{marginLeft: 20, marginTop: 10}}></View>
         <View style={{alignItems: 'center', marginTop: 10}}>
-          <Text style={styles.text1}>Đăng nhập tài khoản của bạn</Text>
+          <Text style={styles.text1}>Log in to your account</Text>
         </View>
         <Formik
           initialValues={{email: '', password: ''}}
@@ -146,7 +146,7 @@ export default function SignInScreen({navigation}) {
                   <TextInput
                     autoCapitalize="none"
                     style={{width: '76%'}}
-                    placeholder="Mật khẩu"
+                    placeholder="Password"
                     ref={textinput2}
                     onFocus={() => {
                       setTextInput2Fossued(false);
@@ -175,7 +175,7 @@ export default function SignInScreen({navigation}) {
 
               <View style={{marginHorizontal: 20, marginTop: 10}}>
                 <Button
-                  title="Đăng nhập"
+                  title="Login"
                   buttonStyle={styles.styledButton}
                   titleStyle={styles.buttonTitle}
                   onPress={props.handleSubmit}
@@ -189,7 +189,7 @@ export default function SignInScreen({navigation}) {
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text style={{...styles.text1, textDecorationLine: 'underline'}}>
               {' '}
-              Quên mật khẩu ?
+              Forgot password ?
             </Text>
           </TouchableOpacity>
         </View>
@@ -200,7 +200,7 @@ export default function SignInScreen({navigation}) {
 
         <View style={{marginHorizontal: 10, marginTop: -2}}>
           <SocialIcon
-            title="Đăng nhập với Facebook"
+            title="Login with Facebook"
             button
             type="facebook"
             style={styles.SocialIcon}
@@ -211,7 +211,7 @@ export default function SignInScreen({navigation}) {
         </View>
         <View style={{marginHorizontal: 10, marginTop: 0}}>
           <SocialIcon
-            title="Đăng nhập với Google"
+            title="Login with Google"
             button
             type="google"
             style={styles.SocialIcon}
@@ -222,12 +222,12 @@ export default function SignInScreen({navigation}) {
         </View>
 
         <View style={{marginTop: 20, marginLeft: 20}}>
-          <Text style={{...styles.text1}}> Chưa có tài khoản ? </Text>
+          <Text style={{...styles.text1}}> No account ? </Text>
         </View>
 
         <View style={{alignItems: 'flex-end', marginHorizontal: 20}}>
           <Button
-            title="Đăng ký"
+            title="Sign up"
             buttonStyle={styles.createButton}
             titleStyle={styles.createButtonTittle}
             onPress={() => {
@@ -254,10 +254,10 @@ export default function SignInScreen({navigation}) {
                   style={{marginLeft: 265, marginTop: -20}}
                 />
               </TouchableOpacity>
-              <Text style={styles.modalText}>Quên mật khẩu</Text>
+              <Text style={styles.modalText}>Forgot password</Text>
               <Text style={styles.modalText1}>
-                Nhập email của bạn. Chúng tôi sẽ gửi đường link để đặt lại mật
-                khẩu.
+                Enter your email. We will send you a link to reset your password
+                export.
               </Text>
               <View>
                 <TextInput
@@ -270,7 +270,7 @@ export default function SignInScreen({navigation}) {
                 />
               </View>
               <Button
-                title="Gửi Email"
+                title="Send Email"
                 buttonStyle={{
                   alignContent: 'center',
                   borderRadius: 15,

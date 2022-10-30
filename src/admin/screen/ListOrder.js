@@ -39,7 +39,7 @@ export default function ListOrder({navigation}) {
             alignItems: 'center',
           }}>
           <Text style={{fontWeight: 'bold', fontSize: 17, color: 'black'}}>
-            Người dùng: {item.name}
+            User: {item.name}
           </Text>
         </View>
       </TouchableOpacity>
@@ -47,7 +47,7 @@ export default function ListOrder({navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <HomeAdminHeader navigation={navigation} title="Người dùng" />
+      <HomeAdminHeader navigation={navigation} title="User" />
       <View style={{alignSelf: 'center'}}>
         <View>
           <Text
@@ -57,7 +57,7 @@ export default function ListOrder({navigation}) {
               fontSize: 20,
               marginTop: 20,
             }}>
-            Danh sách người dùng đặt hàng
+            List of users
           </Text>
           <FlatList
             data={getdata}

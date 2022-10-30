@@ -18,7 +18,7 @@ export default function Drawernavigation() {
                 component={HomeAdmin}
                 options={{
                     headerShown: false,
-                    title: "Màn hình chính",
+                    title: "HomeAdmin",
                     drawerIcon: ({ color, size }) => (
                         <Icon2
                             name="home"

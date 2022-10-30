@@ -38,7 +38,7 @@ export default function ViewSales() {
     }, []);
     return (
         <View style={{ height: 60, backgroundColor: "#36a0ef", borderTopColor: "blue", justifyContent: 'center' }}>
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 22, alignSelf: 'center', marginBottom: 15 }}>Tổng doanh thu: {isValue}.000đ</Text>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 22, alignSelf: 'center', marginBottom: 15 }}>Total revenue: {isValue}.000đ</Text>
         </View>
     )
 }

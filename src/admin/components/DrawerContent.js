@@ -97,7 +97,7 @@ export default function DrawerContent(props) {
           signOut();
         }}>
         <DrawerItem
-          label="Đăng xuất"
+          label="Log out"
           icon={({color, size}) => (
             <Icon
               type="material-community"

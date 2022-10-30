@@ -49,7 +49,7 @@ export default function DetailCustomer({route, navigation}) {
       .collection('order' + route.params.uid)
       .doc(item)
       .update({
-        status: 'Đang giao hàng',
+        status: 'Delivery in progress',
       })
       .then(() => {
         console.log('User updated!');
@@ -128,7 +128,7 @@ export default function DetailCustomer({route, navigation}) {
             </View>
             <View style={{flexDirection: 'row', marginTop: 10, marginLeft: 10}}>
               <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
-                Địa chỉ nhận hàng:{' '}
+                Delivery address:{' '}
               </Text>
               <View style={{width: 245, marginLeft: 10, height: '100%'}}>
                 <Text
@@ -151,7 +151,7 @@ export default function DetailCustomer({route, navigation}) {
               marginLeft: 10,
               marginTop: 10,
             }}>
-            Các đơn hàng:
+            Orders:
           </Text>
         </View>
         <View
@@ -208,11 +208,12 @@ export default function DetailCustomer({route, navigation}) {
                 }}>
                 <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
                   <Text style={{color: colors.text, fontSize: 16}}>
-                    Sản phẩm:
+                    Product:
                     {<Text style={{color: 'red'}}>{item.items.length}</Text>}
                   </Text>
                   <Text style={{color: colors.text, fontSize: 16}}>
-                    Ngày đặt: {<Text style={{color: 'red'}}>{item.date}</Text>}
+                    Booking date:{' '}
+                    {<Text style={{color: 'red'}}>{item.date}</Text>}
                   </Text>
                 </View>
                 <Text
@@ -222,14 +223,14 @@ export default function DetailCustomer({route, navigation}) {
                     color: colors.text,
                     fontSize: 16,
                   }}>
-                  Thành tiền:{' '}
+                  Total money:{' '}
                   {<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
                 </Text>
               </View>
             </View>
             <View
               style={
-                item.status == 'Đang giao hàng'
+                item.status == 'Delivery in progress'
                   ? {height: 0}
                   : {
                       flexDirection: 'row',
@@ -256,7 +257,7 @@ export default function DetailCustomer({route, navigation}) {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <Text style={{color: 'white'}}>Xác nhận đơn hàng</Text>
+                  <Text style={{color: 'white'}}>Order confirmation</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -267,7 +268,7 @@ export default function DetailCustomer({route, navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <HeaderAdminOrder navigation={navigation} title="Đơn hàng" />
+      <HeaderAdminOrder navigation={navigation} title="Order" />
       <View style={{marginTop: 10}}>
         <View
           style={{
@@ -283,7 +284,7 @@ export default function DetailCustomer({route, navigation}) {
               fontSize: 16,
               marginRight: 150,
             }}>
-            Thông tin khách hàng
+            Customer information
           </Text>
           <Icon1
             name="reload"

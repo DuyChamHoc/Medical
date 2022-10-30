@@ -44,7 +44,7 @@ export default function ListPharmarcy({ navigation }) {
             <HomeAdminHeader navigation={navigation} title="Home" />
             <View style={{ alignSelf: "center" }}>
                 <View>
-                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 20, marginTop: 20 }}>Danh sách nhà thuốc</Text>
+                    <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 20, marginTop: 20 }}>List of Pharmacy</Text>
                     <FlatList
                         data={nhathuoc}
                         renderItem={({ item }) => <ListItem item={item}/>}

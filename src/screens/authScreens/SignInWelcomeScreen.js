@@ -33,7 +33,7 @@ export default function SignInWelcomeScreen({navigation}) {
             marginTop: 30,
             color: colors.welcome,
           }}>
-          ĐẶT THUỐC HÔM NAY, SỨC KHỎE NGÀY MAI
+          ORDER MEDICINE TODAY, HEALTH TOMORROW
         </Text>
       </View>
       <View style={{flex: 8, justifyContent: 'center', marginTop: 30}}>
@@ -73,10 +73,10 @@ export default function SignInWelcomeScreen({navigation}) {
             color: colors.welcome,
             fontSize: 32,
           }}>
-          Chào mừng!
+          Welcome!
         </Text>
         <Text style={{marginLeft: 30, fontSize: 20, color: colors.black}}>
-          Tạo tài khoản hoặc đăng nhập để đặt thuốc ngay trên
+        Create an account or log in to order medicine right on
         </Text>
         <Text
           style={{
@@ -98,7 +98,7 @@ export default function SignInWelcomeScreen({navigation}) {
         }}>
         <View style={{marginHorizontal: 20, marginLeft: 12}}>
           <Button
-            title="Đăng nhập"
+            title="Login"
             buttonStyle={parameters.styledButton}
             titleStyle={parameters.buttonTitle}
             onPress={() => navigation.navigate('SignInScreen')}
@@ -106,7 +106,7 @@ export default function SignInWelcomeScreen({navigation}) {
         </View>
         <View style={{marginHorizontal: 20, marginTop: 15, marginLeft: 12}}>
           <Button
-            title="Đăng ký"
+            title="Sign up"
             buttonStyle={styles.createButton}
             titleStyle={styles.createButtonTittle}
             onPress={() => {

@@ -122,7 +122,7 @@ export default function Sales({navigation}) {
                 marginRight: 20,
                 fontWeight: '500',
               }}>
-              Đã giao
+              Delivered
             </Text>
           </View>
           <FlatList
@@ -145,21 +145,22 @@ export default function Sales({navigation}) {
               }}>
               <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
                 <Text style={{color: colors.text, fontSize: 16}}>
-                  Sản phẩm:{' '}
+                  Products:{' '}
                   {<Text style={{color: 'red'}}>{item.items.length}</Text>}
                 </Text>
                 <Text style={{color: colors.text, fontSize: 16}}>
-                  Ngày nhận: {<Text style={{color: 'red'}}>{item.date}</Text>}
+                  Received date:{' '}
+                  {<Text style={{color: 'red'}}>{item.date}</Text>}
                 </Text>
                 <Text style={{color: colors.text, fontSize: 16}}>
-                  Người nhận: {<Text style={{color: 'red'}}>{item.name}</Text>}
+                  User: {<Text style={{color: 'red'}}>{item.name}</Text>}
                 </Text>
                 <Text style={{color: colors.text, fontSize: 16}}>
-                  Số điện thoại:{' '}
+                  Phone number:{' '}
                   {<Text style={{color: 'red'}}>{item.phone}</Text>}
                 </Text>
                 <Text style={{color: colors.text, fontSize: 16}}>
-                  Địa chỉ: {<Text style={{color: 'red'}}>{item.address}</Text>}
+                  Adress: {<Text style={{color: 'red'}}>{item.address}</Text>}
                 </Text>
               </View>
               <Text
@@ -169,7 +170,7 @@ export default function Sales({navigation}) {
                   color: colors.text,
                   fontSize: 16,
                 }}>
-                Tổng tiền:{<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
+                Total:{<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
               </Text>
             </View>
           </View>
@@ -179,7 +180,7 @@ export default function Sales({navigation}) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <HomeAdminHeader navigation={navigation} title={'Doanh thu'} />
+      <HomeAdminHeader navigation={navigation} title={'Revenue'} />
       <View
         style={{
           height: 50,
@@ -195,7 +196,7 @@ export default function Sales({navigation}) {
             fontWeight: 'bold',
             marginLeft: 25,
           }}>
-          Thông tin tất cả các đơn hàng đã giao
+          Information on all delivered orders
         </Text>
         <Icon
           name="reload"

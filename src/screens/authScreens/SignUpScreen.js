@@ -77,16 +77,16 @@ const SignUpScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="ĐĂNG KÝ" type="arrow-left" navigation={navigation} />
+      <Header title="Sign up" type="arrow-left" navigation={navigation} />
       <ScrollView keyboardShouldPersistTaps="always">
         <View style={styles.view1}></View>
         <View style={styles.view2}>
           <View>
-            <Text style={styles.text2}>Tài khoản mới với MEDELI ?</Text>
+            <Text style={styles.text2}>Create new account with MEDELI ?</Text>
           </View>
           <View style={styles.view6}>
             <TextInput
-              placeholder="Số điện thoại"
+              placeholder="Phone number"
               style={styles.input1}
               keyboardType="number-pad"
               autoFocus={true}
@@ -96,7 +96,7 @@ const SignUpScreen = ({navigation}) => {
           </View>
           <View style={styles.view6}>
             <TextInput
-              placeholder="Họ và tên"
+              placeholder="Name"
               style={styles.input1}
               autoFocus={false}
               onChangeText={txt => setfullname(txt)}
@@ -174,7 +174,7 @@ const SignUpScreen = ({navigation}) => {
               />
             </Animatable.View>
             <TextInput
-              placeholder="Mật khẩu"
+              placeholder="Password"
               style={{flex: 1}}
               autoFocus={false}
               onChangeText={txt => setpassword(txt)}
@@ -200,18 +200,18 @@ const SignUpScreen = ({navigation}) => {
           </View>
           <View style={styles.view15}>
             <Text style={styles.text3}>
-              Tạo tài khoản hoặc đăng nhập vào tài khoản của bạn
+              Create an account or log in to your account
             </Text>
             <View style={styles.view16}>
-              <Text style={styles.text3}>Đồng ý với chúng tôi </Text>
-              <Text style={styles.text4}>Điều khoản & Điều Kiện </Text>
-              <Text style={styles.text3}>và</Text>
+              <Text style={styles.text3}>Agree with us </Text>
+              <Text style={styles.text4}>Terms & Conditions </Text>
+              <Text style={styles.text3}>and</Text>
             </View>
-            <Text style={styles.text4}>Cam kết bảo mật</Text>
+            <Text style={styles.text4}>Privacy statement</Text>
           </View>
           <View style={styles.view17}>
             <Button
-              title="Tạo tài khoản"
+              title="Create Account"
               buttonStyle={styles.button1}
               titleStyle={styles.title1}
               onPress={signUp}
@@ -224,12 +224,12 @@ const SignUpScreen = ({navigation}) => {
         <View style={styles.view19}>
           <View style={styles.view20}>
             <Text style={{color: colors.grey1}}>
-              Bạn đã sẵn sàng tạo một tài khoản với MEDELI ?
+              You are ready to create an account with MEDELI ?
             </Text>
           </View>
           <View style={[styles.view21, {marginTop: 16}]}>
             <Button
-              title="Đăng nhập"
+              title="Sign in"
               buttonStyle={styles.button2}
               titleStyle={styles.title2}
               onPress={() => {
