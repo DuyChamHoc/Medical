@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { View, Text, StyleSheet} from 'react-native'
 import { colors, parameters }  from '../../global/styles'
 
 export default function HeaderSales({ navigation,title }) {

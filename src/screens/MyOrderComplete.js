@@ -11,111 +11,84 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import HeaderSimple from '../components/HeaderSimple';
-import Icon from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
 import {useTheme} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 import moment from 'moment/moment';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function MyOrderComplete({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-    addd();
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const user = auth().currentUser;
   const [loading, setLoading] = useState(false);
   const [check, getcheck] = useState(true);
   const [getdata, setdata] = useState([]);
-  const ref = firestore()
-    .collection('order' + user.uid)
-    .orderBy('date', 'asc');
+  const [getusername, setusername] = useState('');
   useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    firestore()
+      .collection('Order')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setdata(documentSnapshot.data().listorder);
+          setusername(documentSnapshot.data().username);
+        }
       });
-      setdata(list);
-    });
   }, [check]);
   const addd = () => {
     getcheck(!check);
   };
   const deleteCartToFireBase = id => {
-    firestore()
-      .collection('order' + user.uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.data().id == id) {
-            deletecart(documentSnapshot.id);
-          }
+    if (getdata.length == 1) {
+      firestore()
+        .collection('Order')
+        .doc(user.uid)
+        .delete()
+        .then(() => {
+          console.log('Order deleted!');
+          addd();
         });
-      });
+    } else {
+      firestore()
+        .collection('Order')
+        .doc(user.uid)
+        .set({
+          uid: user.uid,
+          username: getusername,
+          listorder: getdata.filter(item => item.id !== id),
+        })
+        .then(() => {
+          console.log('remove order!');
+          addd();
+        });
+    }
   };
-  const deletecart = item => {
-    firestore()
-      .collection('order' + user.uid)
-      .doc(item)
-      .delete()
-      .then(() => {
-        firestore()
-          .collection('order' + user.uid)
-          .get()
-          .then(querySnapshot => {
-            if (querySnapshot.size == 0) {
-              firestore()
-                .collection('Admin')
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(documentSnapshot => {
-                    if (documentSnapshot.data().uid == user.uid) {
-                      deleteAdmin(documentSnapshot.id);
-                    }
-                  });
-                });
-            }
-            querySnapshot.forEach(documentSnapshot => {});
-          });
-        console.log('order deleted!');
-        addd();
-      });
-  };
-  const deleteAdmin = item => {
-    firestore()
-      .collection('Admin')
-      .doc(item)
-      .delete()
-      .then(() => {
-        console.log('delete admin!');
-      });
-  };
+
   const addCartToFireBase = item => {
     setLoading(true);
+    const data = {
+      nhathuocchung: item.nhathuocchung,
+      datereceived: moment().format('DD/MM/YYYY hh:mm'),
+      items: item.items,
+      name: item.name,
+      phone: item.phone,
+      address: item.address,
+      ship: item.ship,
+      total: item.total,
+    };
     firestore()
-      .collection('lastorder' + user.uid)
-      .add({
-        nhathuocchung: item.nhathuocchung,
-        date: moment().format('DD/MM/YYYY hh:mm'),
-        items: item.items,
-        name: item.name,
-        phone: item.phone,
-        address: item.address,
-        ship: item.ship,
-        total: item.total,
-      })
-      .then(() => {
-        deleteCartToFireBase(item.id);
+      .collection('Completed')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
         firestore()
-          .collection('AdminSales')
+          .collection('Revenue')
           .add({
             nhathuocchung: item.nhathuocchung,
-            date: moment().format('DD/MM/YYYY hh:mm'),
+            datereceived: moment().format('DD/MM/YYYY hh:mm'),
+            datereceivedcheck: moment().format('DD/MM/YYYY'),
             items: item.items,
             name: item.name,
             phone: item.phone,
@@ -123,11 +96,42 @@ export default function MyOrderComplete({navigation}) {
             ship: item.ship,
             total: item.total,
           })
-          .then(() => {});
-        setTimeout(() => {
-          setLoading(false);
-          navigation.navigate('MyLastOrder');
-        }, 1000);
+          .then(() => {
+            console.log('added listrevenue!');
+          });
+        if (documentSnapshot.exists) {
+          firestore()
+            .collection('Completed')
+            .doc(user.uid)
+            .set({
+              uid: user.uid,
+              username: getusername,
+              listcompleted: [...documentSnapshot.data().listcompleted, data],
+            })
+            .then(() => {
+              console.log('listcompleted added! listcompleted');
+              deleteCartToFireBase(item.id);
+              setTimeout(() => {
+                setLoading(false);
+                navigation.navigate('MyLastOrder');
+              }, 1000);
+              deleteCartToFireBase(item.id);
+            });
+        } else {
+          firestore()
+            .collection('Completed')
+            .doc(user.uid)
+            .set({username: getusername, listcompleted: [data]})
+            .then(() => {
+              console.log('added listcompleted 1!');
+              deleteCartToFireBase(item.id);
+              setTimeout(() => {
+                setLoading(false);
+                navigation.navigate('MyLastOrder');
+              }, 1000);
+              deleteCartToFireBase(item.id);
+            });
+        }
       });
   };
   const List = ({item}) => {
@@ -180,7 +184,9 @@ export default function MyOrderComplete({navigation}) {
         style={{
           marginTop: 10,
           marginBottom: 10,
-          backgroundColor: colors.backgroundColor,
+          borderWidth: 1,
+          borderColor: '#6BC8FF',
+          borderRadius: 10,
         }}>
         <View style={{justifyContent: 'center'}}>
           <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 15}}>
@@ -188,7 +194,7 @@ export default function MyOrderComplete({navigation}) {
               style={{
                 flexDirection: 'row',
                 borderBottomWidth: 1,
-                borderBottomColor: colors.text,
+                borderBottomColor: '#6BC8FF',
               }}>
               <Image
                 style={{width: 20, height: 20}}
@@ -207,10 +213,10 @@ export default function MyOrderComplete({navigation}) {
             <Text
               style={{
                 color: 'red',
-                fontSize: 14.5,
+                fontSize: 16,
                 marginLeft: 'auto',
                 marginRight: 20,
-                fontWeight: '500',
+                fontWeight: 'bold',
               }}>
               {t(item.status)}
             </Text>
@@ -230,20 +236,22 @@ export default function MyOrderComplete({navigation}) {
                 alignItems: 'center',
                 borderTopWidth: 0.5,
                 borderBottomWidth: 0.5,
-                borderBottomColor: colors.text,
-                borderTopColor: colors.text,
+                borderColor: '#6BC8FF',
               }}>
               <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
-                <Text style={{color: colors.text, fontSize: 16}}>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
                   {t('Sản phẩm:')}{' '}
                   {<Text style={{color: 'red'}}>{item.items.length}</Text>}
                 </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
                   {t('Ngày đặt:')}{' '}
                   {<Text style={{color: 'red'}}>{item.date} phút</Text>}
                 </Text>
                 <Text
                   style={{
+                    fontWeight: '600',
                     color: colors.text,
                     fontSize: 16,
                   }}>
@@ -256,25 +264,29 @@ export default function MyOrderComplete({navigation}) {
           <View
             style={{
               flexDirection: 'row',
-              marginBottom: 20,
+              marginBottom: 10,
               justifyContent: 'flex-end',
               marginTop: 30,
+              marginRight: 10,
             }}>
             <TouchableOpacity
-              style={
-                item.status == 'Đang xử lý'
-                  ? {}
-                  : {
-                      borderRadius: 10,
-                      marginLeft: 40,
-                      backgroundColor: '#36a0ef',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      width: 120,
-                    }
-              }
+              style={{
+                borderRadius: 10,
+                marginLeft: 40,
+                backgroundColor: '#36a0ef',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 120,
+              }}
               onPress={() => {
-                addCartToFireBase(item);
+                if (
+                  item.status == 'Chưa giải quyết' ||
+                  item.status == 'Pending'
+                ) {
+                  deleteCartToFireBase(item.id);
+                } else {
+                  addCartToFireBase(item);
+                }
               }}>
               <View
                 style={{
@@ -282,34 +294,12 @@ export default function MyOrderComplete({navigation}) {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Text style={{color: 'white'}}>{t('Đã nhận hàng')}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                item.status == 'Đang xử lý'
-                  ? {
-                      borderRadius: 10,
-                      marginLeft: 40,
-                      backgroundColor: '#36a0ef',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 120,
-                      marginRight: 20,
-                    }
-                  : {}
-              }
-              onPress={() => {
-                deleteCartToFireBase(item.id);
-              }}>
-              <View
-                style={{
-                  height: 50,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{color: 'white'}}>
-                  {item.status == 'Đang xử lý' ? t('Huỷ') : ''}
+                <Text
+                  style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>
+                  {' '}
+                  {item.status == 'Chưa giải quyết' || item.status == 'Pending'
+                    ? t('Huỷ')
+                    : t('Đã nhận hàng')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -324,32 +314,10 @@ export default function MyOrderComplete({navigation}) {
         <HeaderSimple title={t('Đang xử lý')} navigation={navigation} />
         <View
           style={{
-            height: 50,
-            backgroundColor: '#eff2cc',
-            flexDirection: 'row',
-            alignItems: 'center',
+            height: '100%',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 16,
-              fontWeight: 'bold',
-              marginLeft: 25,
-            }}>
-            {t('Cảm ơn bạn đã đặt thuốc!')}
-          </Text>
-          <Icon
-            name="reload"
-            size={20}
-            color="red"
-            onPress={() => {
-              addd();
-            }}
-            style={{marginLeft: 'auto', marginRight: 20}}
-          />
-        </View>
-        <View style={{height: '100%'}}>
           <FlatList
             data={getdata}
             renderItem={({item, index}) => <ListItem item={item} />}

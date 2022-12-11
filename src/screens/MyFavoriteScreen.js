@@ -12,15 +12,10 @@ import {
 import HomeHeader from '../components/HomeHeader';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 import firestore from '@react-native-firebase/firestore';
 export default function MyFavoriteScreen({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
+  const {t} = useTranslation();
   const [getSpbanchay, setSpbanchay] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
   useEffect(() => {
     firestore()
       .collection('Data')

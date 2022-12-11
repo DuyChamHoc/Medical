@@ -14,13 +14,11 @@ import HomeHeader from '../components/HomeHeader';
 import {ScrollView} from 'react-native-gesture-handler';
 import SearchComponent from '../components/SearchComponent';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 import firestore from '@react-native-firebase/firestore';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function Categories({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
+  const {t} = useTranslation();
   const [getThuoc, setThuoc] = useState('');
   const [getCovid, setCovid] = useState('');
   const [getThucpham, setThucpham] = useState('');
@@ -31,9 +29,6 @@ export default function Categories({navigation}) {
     t('Thực phẩm chức năng'),
     t('Thiết bị y tế'),
   ];
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
   const [selected, setSelected] = useState(name[0]);
   const [data, setData] = useState([]);
 

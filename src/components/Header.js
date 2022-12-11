@@ -1,6 +1,5 @@
 import React from "react";
 import { View,Text,StyleSheet,Dimensions } from "react-native";
-import { color } from "react-native-elements/dist/helpers";
 import {colors, parameters } from "../global/styles";
 import  Icon  from 'react-native-vector-icons/FontAwesome5'
 import  Icon1  from 'react-native-vector-icons/MaterialCommunityIcons'

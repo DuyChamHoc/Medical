@@ -1,10 +1,7 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { colors, parameters } from '../global/styles'
-// import IconBadge from 'react-native-icon-badge'
-import Icon1 from 'react-native-vector-icons/AntDesign'
-import { Badge } from '@rneui/base'
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 

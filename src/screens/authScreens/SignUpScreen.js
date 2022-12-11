@@ -15,16 +15,14 @@ import * as Animatable from 'react-native-animatable';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import DatetimePicker from '@react-native-community/datetimepicker';
+import {discount} from '../../global/Data';
 
 const SignUpScreen = ({navigation}) => {
   const [passwordFocussed, setPasswordFocussed] = useState(false);
-  const [passwordBlured, setPasswordBlured] = useState(false);
   const [phonenumber, setphonenumber] = useState('');
   const [fullname, setfullname] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
-  const [address, setaddress] = useState('');
-  const [sex, setsex] = useState('');
   const [date, setdate] = useState(new Date());
   const [mode, setmode] = useState('date');
   const [show, setShow] = useState(false);
@@ -52,16 +50,28 @@ const SignUpScreen = ({navigation}) => {
       console.log('USER ACCOUNT CREATED');
       const user = auth().currentUser;
       firestore()
-        .collection('User' + user.uid)
-        .add({
+        .collection('Users')
+        .doc(user.uid)
+        .set({
           phone_number: phonenumber,
           full_name: fullname,
           datetime: formattedDate,
-          address: address,
-          sex: sex,
+          roll: 3,
+          isLanguage: 'en',
+          isDarkMode: false,
         })
         .then(() => {
-          console.log('User add!');
+          console.log('User added!');
+          firestore()
+            .collection('Discount')
+            .doc(user.uid)
+            .set({
+              listdis: discount,
+            })
+            .then(() => {
+              console.log('Discount added!');
+            });
+          navigation.navigate('SignInScreen');
         });
     } catch (error) {
       if (error.code == 'auth/email-already-in-use') {
@@ -181,9 +191,6 @@ const SignUpScreen = ({navigation}) => {
               value={password}
               onFocus={() => {
                 setPasswordFocussed(true);
-              }}
-              onBlur={() => {
-                setPasswordBlured(true);
               }}
               secureTextEntry={getVisible ? false : true}
             />

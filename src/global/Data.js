@@ -201,7 +201,7 @@ export const discount = [
     {
         id: 0,
         name: "Giảm 100% phí giao hàng",
-        image: "https://www.medigoapp.com/assets/images/pharmacy-profile.svg",
+        image: "https://cdn3.iconfinder.com/data/icons/livico-shop-e-commerce/128/shopify_pastel-14-256.png",
         startDate: "17/5/2022",
         endDate: "26/8/2022",
         discount: 1,
@@ -209,7 +209,7 @@ export const discount = [
     {
         id: 1,
         name: "Giảm 50% phí giao hàng",
-        image: "https://www.medigoapp.com/assets/images/pharmacy-profile.svg",
+        image: "https://cdn3.iconfinder.com/data/icons/livico-shop-e-commerce/128/shopify_pastel-14-256.png",
         startDate: "17/5/2022",
         endDate: "26/8/2022",
         discount: 0.5,
@@ -217,7 +217,7 @@ export const discount = [
     {
         id: 2,
         name: "Giảm 30% phí giao hàng",
-        image: "https://www.medigoapp.com/assets/images/pharmacy-profile.svg",
+        image: "https://cdn3.iconfinder.com/data/icons/livico-shop-e-commerce/128/shopify_pastel-14-256.png",
         startDate: "17/5/2022",
         endDate: "26/8/2022",
         discount: 0.3,

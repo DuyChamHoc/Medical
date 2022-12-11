@@ -12,33 +12,25 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import HeaderSimple from '../components/HeaderSimple';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function MyLastOrder({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-    addd();
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const user = auth().currentUser;
   const [getdata, setdata] = useState([]);
   const [check, getcheck] = useState(false);
-  const ref = firestore()
-    .collection('lastorder' + user.uid)
-    .orderBy('date', 'asc');
   useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    firestore()
+      .collection('Completed')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setdata(documentSnapshot.data().listcompleted);
+        }
       });
-      setdata(list);
-    });
   }, [check]);
   const addd = () => {
     getcheck(!check);
@@ -102,9 +94,12 @@ export default function MyLastOrder({navigation}) {
     return (
       <View
         style={{
+          borderColor: '#6BC8FF',
           marginTop: 10,
           marginBottom: 10,
-          backgroundColor: colors.backgroundColor,
+          borderWidth: 1,
+          borderRadius: 10,
+          width: '100%',
         }}>
         <View style={{justifyContent: 'center'}}>
           <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 15}}>
@@ -131,10 +126,10 @@ export default function MyLastOrder({navigation}) {
             <Text
               style={{
                 color: 'red',
-                fontSize: 14.5,
+                fontSize: 16,
                 marginLeft: 'auto',
                 marginRight: 20,
-                fontWeight: '500',
+                fontWeight: 'bold',
               }}>
               {t('Đã giao')}
             </Text>
@@ -146,36 +141,40 @@ export default function MyLastOrder({navigation}) {
             style={{marginBottom: 15}}
           />
         </View>
-        <View>
-          <View style={{marginBottom: 20, height: 40}}>
-            <View
+        <View
+          style={{
+            marginBottom: 10,
+            borderTopWidth: 0.5,
+            borderBottomWidth: 0.5,
+            borderRadius: 10,
+            borderColor: '#6BC8FF',
+          }}>
+          <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
+            <Text style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+              {t('Sản phẩm:')}{' '}
+              {<Text style={{color: 'red'}}>{item.items.length}</Text>}
+            </Text>
+            <Text
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderTopWidth: 0.5,
-                borderBottomColor: colors.text,
-                borderTopColor: colors.text,
-                borderBottomWidth: 0.5,
+                color: colors.text,
+                fontSize: 16,
+                fontWeight: '600',
               }}>
-              <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
-                <Text style={{color: colors.text, fontSize: 16}}>
-                  {t('Sản phẩm:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.items.length}</Text>}
-                </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
-                  {t('Ngày nhận hàng:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.date}</Text>}
-                </Text>
-                <Text
-                  style={{
-                    color: colors.text,
-                    fontSize: 16,
-                  }}>
-                  {t('Tổng tiền:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
-                </Text>
-              </View>
-            </View>
+              {t('Tổng tiền:')}{' '}
+              {<Text style={{color: 'red'}}>{item.total}.000 đ</Text>}{' '}
+            </Text>
+            <Text style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+              {t('Người nhận:')}{' '}
+              {<Text style={{color: 'red'}}>{item.name}</Text>}
+            </Text>
+            <Text style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+              {t('Địa chỉ nhận hàng:')}{' '}
+              {<Text style={{color: 'red'}}>{item.address}</Text>}
+            </Text>
+            <Text style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+              {t('Ngày nhận hàng:')}{' '}
+              {<Text style={{color: 'red'}}>{item.datereceived}</Text>}
+            </Text>
           </View>
         </View>
       </View>
@@ -186,32 +185,10 @@ export default function MyLastOrder({navigation}) {
       <HeaderSimple title={t('Đã nhận hàng')} navigation={navigation} />
       <View
         style={{
-          height: 50,
-          backgroundColor: '#eff2cc',
-          flexDirection: 'row',
-          alignItems: 'center',
+          height: '100%',
           justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginLeft: 25,
-          }}>
-          {t('Cảm ơn bạn đã đặt thuốc!')}
-        </Text>
-        <Icon
-          name="reload"
-          size={20}
-          color="red"
-          onPress={() => {
-            addd();
-          }}
-          style={{marginLeft: 'auto', marginRight: 20}}
-        />
-      </View>
-      <View style={{height: '100%'}}>
         <FlatList
           data={getdata}
           renderItem={({item, index}) => <ListItem item={item} />}

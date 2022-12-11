@@ -3,10 +3,9 @@ import {View, Text, Image, ScrollView} from 'react-native';
 import HeaderSimple from '../components/HeaderSimple';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 export default function Help({navigation}) {
   const {colors} = useTheme();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   return (
     <View>
       <HeaderSimple title={t('Trợ Giúp')} navigation={navigation} />

@@ -59,16 +59,16 @@ let cartReducer = (state = defaultState, action) => {
             // console.log(newState.selectedItems, "👉");
             return newState;
         }
-        case 'UPDATE_TO_LANGUAGE': {
-            let newState = { ...state };
-            console.log('UPDATE LANGUAGE')
-            newState.selectedItems = {
-                items: [],
-                language: action.payload.language,
-            }
-            // console.log(newState.selectedItems.language, "👉");
-            return newState;
-        }
+        // case 'UPDATE_TO_LANGUAGE': {
+        //     let newState = { ...state };
+        //     console.log('UPDATE LANGUAGE')
+        //     newState.selectedItems = {
+        //         items: [],
+        //         language: action.payload.language,
+        //     }
+        //     // console.log(newState.selectedItems.language, "👉");
+        //     return newState;
+        // }
         default:
             return state;
     }

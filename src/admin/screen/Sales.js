@@ -8,25 +8,19 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import firestore from '@react-native-firebase/firestore';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
-import i18n from '../../assets/language/i18n';
 import HomeAdminHeader from '../components/HomeAdminHeader';
 import ViewSales from '../components/ViewSales';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function Sales({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-    addd();
-  }, [currentLanguage]);
   const {colors} = useTheme();
   const [check, getcheck] = useState(false);
-  const ref = firestore().collection('AdminSales');
+  const ref = firestore().collection('Revenue');
   const [getdata, setdata] = useState([]);
+  const [getdataBackup, setdataBackup] = useState([]);
+  const [search, setsearch] = useState('');
   useEffect(() => {
     return ref.onSnapshot(querySnapshot => {
       const list = [];
@@ -34,12 +28,17 @@ export default function Sales({navigation}) {
         list.push(doc.data());
       });
       setdata(list);
+      setdataBackup(list);
     });
   }, [check]);
   const addd = () => {
     getcheck(!check);
   };
 
+  const searchuser = val => {
+    setsearch(val);
+    setdata(getdataBackup.filter(it => it.datereceivedcheck.match(val)));
+  };
   const List = ({item}) => {
     return (
       <View
@@ -50,7 +49,6 @@ export default function Sales({navigation}) {
           height: 100,
           borderRadius: 10,
           width: SCREEN_WIDTH - 20,
-          marginLeft: 10,
         }}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
@@ -71,6 +69,7 @@ export default function Sales({navigation}) {
         </View>
         <Text
           style={{
+            borderColor: '#6BC8FF',
             marginLeft: 'auto',
             fontWeight: 'bold',
             fontSize: 14,
@@ -88,9 +87,14 @@ export default function Sales({navigation}) {
     return (
       <View
         style={{
-          marginTop: 10,
+          width: '99%',
+          marginTop: 5,
           marginBottom: 10,
-          backgroundColor: colors.backgroundColor,
+          borderWidth: 1,
+          borderRadius: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderColor: '#6BC8FF',
         }}>
         <View style={{justifyContent: 'center'}}>
           <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 15}}>
@@ -98,7 +102,7 @@ export default function Sales({navigation}) {
               style={{
                 flexDirection: 'row',
                 borderBottomWidth: 1,
-                borderColor: colors.text,
+                borderColor: '#6BC8FF',
               }}>
               <Image
                 style={{width: 20, height: 20}}
@@ -117,10 +121,10 @@ export default function Sales({navigation}) {
             <Text
               style={{
                 color: 'red',
-                fontSize: 14.5,
+                fontSize: 18,
                 marginLeft: 'auto',
                 marginRight: 20,
-                fontWeight: '500',
+                fontWeight: 'bold',
               }}>
               Delivered
             </Text>
@@ -133,44 +137,53 @@ export default function Sales({navigation}) {
           />
         </View>
         <View>
-          <View style={{marginBottom: 20, height: 95}}>
+          <View style={{marginBottom: 20}}>
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 borderTopWidth: 0.5,
-                borderBottomColor: colors.text,
-                borderTopColor: colors.text,
                 borderBottomWidth: 0.5,
+                borderColor: '#6BC8FF',
               }}>
               <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
-                <Text style={{color: colors.text, fontSize: 16}}>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
                   Products:{' '}
                   {<Text style={{color: 'red'}}>{item.items.length}</Text>}
                 </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
-                  Received date:{' '}
-                  {<Text style={{color: 'red'}}>{item.date}</Text>}
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  Phone: {<Text style={{color: 'red'}}>{item.phone}</Text>}
                 </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  Adress: {<Text style={{color: 'red'}}>{item.address}</Text>}
+                </Text>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
                   User: {<Text style={{color: 'red'}}>{item.name}</Text>}
                 </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
-                  Phone number:{' '}
-                  {<Text style={{color: 'red'}}>{item.phone}</Text>}
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  Order manager:{' '}
+                  {<Text style={{color: 'red'}}>{item.name}</Text>}
                 </Text>
-                <Text style={{color: colors.text, fontSize: 16}}>
-                  Adress: {<Text style={{color: 'red'}}>{item.address}</Text>}
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  Received date:{' '}
+                  {<Text style={{color: 'red'}}>{item.datereceived}</Text>}
                 </Text>
               </View>
               <Text
                 style={{
+                  fontWeight: '600',
                   marginLeft: 'auto',
                   marginRight: 15,
                   color: colors.text,
                   fontSize: 16,
                 }}>
-                Total:{<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
+                Total: {<Text style={{color: 'red'}}>{item.total}.000đ</Text>}
               </Text>
             </View>
           </View>
@@ -183,32 +196,37 @@ export default function Sales({navigation}) {
       <HomeAdminHeader navigation={navigation} title={'Revenue'} />
       <View
         style={{
-          height: 50,
+          height: 35,
           backgroundColor: '#eff2cc',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
         }}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginLeft: 25,
-          }}>
-          Information on all delivered orders
+        <Image
+          source={require('../../global/image/cart_order.png')}
+          style={{height: 30, width: '15%', resizeMode: 'contain'}}
+        />
+        <Text style={{color: 'black', fontSize: 16, fontWeight: '700'}}>
+          Information on all delivered orders!
         </Text>
-        <Icon
-          name="reload"
-          size={20}
-          color="red"
-          onPress={() => {
-            addd();
-          }}
-          style={{marginLeft: 'auto', marginRight: 20}}
+      </View>
+      <View style={{marginTop: -10}}>
+        <SearchBar
+          placeholder="Search by date..."
+          onChangeText={val => searchuser(val)}
+          value={search}
+          autoCapitalize="none"
+          // containerStyle={styles.searchContainer}
+          // inputStyle={styles.searchInput}
         />
       </View>
-      <View style={{height: '81%'}}>
+      <View
+        style={{
+          height: '79%',
+          marginTop: -15,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginLeft: 2,
+        }}>
         <FlatList
           data={getdata}
           renderItem={({item, index}) => <ListItem item={item} />}
@@ -216,7 +234,7 @@ export default function Sales({navigation}) {
           showsVerticalScrollIndicator={false}
         />
       </View>
-      <ViewSales></ViewSales>
+      {getdata == '' ? <></> : <ViewSales data={getdata} />}
     </SafeAreaView>
   );
 }

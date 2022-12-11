@@ -4,14 +4,9 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import HeaderSimple from '../components/HeaderSimple';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 import firestore from '@react-native-firebase/firestore';
 export default function DiscountScreen({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const [getDiscount, setDiscount] = useState('');
   useEffect(() => {

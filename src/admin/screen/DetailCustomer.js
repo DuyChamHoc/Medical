@@ -9,51 +9,38 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {useTheme} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
-import i18n from '../../assets/language/i18n';
-import Icon1 from 'react-native-vector-icons/Ionicons';
 import HeaderAdminOrder from '../components/HeaderAdminOrder';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function DetailCustomer({route, navigation}) {
   const {colors} = useTheme();
-  const {t, i18n} = useTranslation();
   const [check, getcheck] = useState(false);
-  const ref = firestore().collection('order' + route.params.uid);
   const [getdata, setdata] = useState([]);
   useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    firestore()
+      .collection('Order')
+      .doc(route.params.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setdata(documentSnapshot.data().listorder);
+        }
       });
-      setdata(list);
-    });
   }, [check]);
   const addd = () => {
     getcheck(!check);
   };
   const UpdateStatus = id => {
     firestore()
-      .collection('order' + route.params.uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.data().id == id) {
-            Update(documentSnapshot.id);
-          }
-        });
-      });
-  };
-  const Update = item => {
-    firestore()
-      .collection('order' + route.params.uid)
-      .doc(item)
+      .collection('Order')
+      .doc(route.params.uid)
       .update({
-        status: 'Delivery in progress',
+        listorder: getdata.map(item =>
+          item.id === id ? {...item, status: 'Inprogress'} : item,
+        ),
       })
       .then(() => {
-        console.log('User updated!');
         addd();
+        console.log('status updated!');
       });
   };
   const List = ({item}) => {
@@ -66,7 +53,6 @@ export default function DetailCustomer({route, navigation}) {
           height: 100,
           borderRadius: 10,
           width: SCREEN_WIDTH - 20,
-          marginLeft: 10,
         }}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
@@ -102,63 +88,58 @@ export default function DetailCustomer({route, navigation}) {
   };
   const ListItem = ({item, index}) => {
     return (
-      <View>
-        <View style={index == 0 ? {} : {height: 0}}>
+      <View
+        style={{
+          borderWidth: 1,
+          margin: 5,
+          borderRadius: 10,
+          borderColor: '#6BC8FF',
+        }}>
+        <View
+          style={{
+            borderColor: '#6BC8FF',
+            borderRadius: 15,
+            borderWidth: 1,
+            marginLeft: 10,
+            marginRight: 10,
+            marginTop: 10,
+          }}>
           <View
             style={{
-              borderWidth: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               marginLeft: 10,
               marginRight: 10,
               marginTop: 10,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10,
-              }}>
-              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
-                Tên: {item.name}
+            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+              Username: {item.name}
+            </Text>
+            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+              Phone: {item.phone}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', marginTop: 10, marginLeft: 10}}>
+            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+              Delivery address:{' '}
+            </Text>
+            <View style={{width: 245, height: '100%'}}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  fontSize: 15,
+                  marginBottom: 10,
+                }}>
+                {item.address}
               </Text>
-              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
-                SDT: {item.phone}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', marginTop: 10, marginLeft: 10}}>
-              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
-                Delivery address:{' '}
-              </Text>
-              <View style={{width: 245, marginLeft: 10, height: '100%'}}>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                    marginBottom: 10,
-                  }}>
-                  {item.address}
-                </Text>
-              </View>
             </View>
           </View>
-          <Text
-            style={{
-              color: colors.text,
-              fontWeight: 'bold',
-              fontSize: 16,
-              marginLeft: 10,
-              marginTop: 10,
-            }}>
-            Orders:
-          </Text>
         </View>
         <View
           style={{
             marginTop: 10,
             marginBottom: 10,
-            backgroundColor: colors.backgroundColor,
           }}>
           <View style={{justifyContent: 'center'}}>
             <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 15}}>
@@ -180,86 +161,121 @@ export default function DetailCustomer({route, navigation}) {
               <Text
                 style={{
                   color: 'red',
-                  fontSize: 14.5,
+                  fontSize: 18,
                   marginLeft: 'auto',
                   marginRight: 20,
-                  fontWeight: '500',
+                  fontWeight: 'bold',
                 }}>
                 {item.status}
               </Text>
             </View>
-            <FlatList
-              data={item.items}
-              renderItem={({item, index}) => <List item={item} />}
-              showsVerticalScrollIndicator={false}
-              style={{marginBottom: 15}}
-            />
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <FlatList
+                data={item.items}
+                renderItem={({item, index}) => <List item={item} />}
+                showsVerticalScrollIndicator={false}
+                style={{marginBottom: 15}}
+              />
+            </View>
           </View>
-          <View>
-            <View style={{marginBottom: 20, height: 40}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderTopWidth: 0.5,
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: colors.text,
-                  borderTopColor: colors.text,
-                }}>
-                <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
-                  <Text style={{color: colors.text, fontSize: 16}}>
-                    Product:
-                    {<Text style={{color: 'red'}}>{item.items.length}</Text>}
-                  </Text>
-                  <Text style={{color: colors.text, fontSize: 16}}>
-                    Booking date:{' '}
-                    {<Text style={{color: 'red'}}>{item.date}</Text>}
-                  </Text>
-                </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '98%',
+              marginLeft: 4,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderWidth: 0.5,
+                borderRadius: 10,
+                borderColor: '#6BC8FF',
+              }}>
+              <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
                 <Text
                   style={{
-                    marginLeft: 'auto',
-                    marginRight: 15,
                     color: colors.text,
                     fontSize: 16,
+                    fontWeight: '700',
                   }}>
-                  Total money:{' '}
-                  {<Text style={{color: 'red'}}>{item.total}k</Text>}{' '}
+                  Product:{' '}
+                  {
+                    <Text style={{color: 'red', fontWeight: '700'}}>
+                      {item.items.length}
+                    </Text>
+                  }
+                </Text>
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontSize: 16,
+                    fontWeight: '700',
+                  }}>
+                  Booking date:{' '}
+                  {
+                    <Text style={{color: 'red', fontWeight: '700'}}>
+                      {item.date}
+                    </Text>
+                  }
                 </Text>
               </View>
+              <Text
+                style={{
+                  marginTop: -25,
+                  marginLeft: 'auto',
+                  marginRight: 15,
+                  color: colors.text,
+                  fontSize: 16,
+                  fontWeight: '700',
+                }}>
+                Total money:{' '}
+                {
+                  <Text style={{color: 'red', fontWeight: '700'}}>
+                    {item.total}.000 đ
+                  </Text>
+                }{' '}
+              </Text>
             </View>
             <View
-              style={
-                item.status == 'Delivery in progress'
-                  ? {height: 0}
-                  : {
-                      flexDirection: 'row',
-                      marginRight: 10,
-                      justifyContent: 'flex-end',
-                      marginTop: 15,
-                    }
-              }>
-              <TouchableOpacity
-                style={{
-                  borderRadius: 10,
-                  marginLeft: 40,
-                  backgroundColor: '#36a0ef',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 150,
-                }}
-                onPress={() => {
-                  UpdateStatus(item.id);
-                }}>
-                <View
+              style={{
+                justifyContent: 'flex-end',
+                marginTop: 15,
+                marginLeft: 180,
+              }}>
+              {item.status == 'Pending' ? (
+                <TouchableOpacity
                   style={{
-                    height: 50,
-                    alignItems: 'center',
+                    borderRadius: 10,
+                    marginLeft: 40,
+                    backgroundColor: '#36a0ef',
                     justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 170,
+                  }}
+                  onPress={() => {
+                    UpdateStatus(item.id);
                   }}>
-                  <Text style={{color: 'white'}}>Order confirmation</Text>
-                </View>
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      height: 50,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                      }}>
+                      Order confirmation
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )}
             </View>
           </View>
         </View>
@@ -268,35 +284,7 @@ export default function DetailCustomer({route, navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <HeaderAdminOrder navigation={navigation} title="Order" />
-      <View style={{marginTop: 10}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginRight: 10,
-            marginLeft: 10,
-          }}>
-          <Text
-            style={{
-              color: colors.text,
-              fontWeight: 'bold',
-              fontSize: 16,
-              marginRight: 150,
-            }}>
-            Customer information
-          </Text>
-          <Icon1
-            name="reload"
-            size={20}
-            color="red"
-            onPress={() => {
-              addd();
-            }}
-            style={{marginLeft: 'auto', marginRight: 20}}
-          />
-        </View>
-      </View>
+      <HeaderAdminOrder navigation={navigation} title="Detail order" />
       <FlatList
         data={getdata}
         renderItem={({item, index}) => <ListItem item={item} index={index} />}

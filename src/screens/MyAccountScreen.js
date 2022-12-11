@@ -22,17 +22,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {firebase} from '@react-native-firebase/firestore';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
-import {useSelector} from 'react-redux';
 import {Picker} from '@react-native-picker/picker';
 export default function MyAccountScreen({navigation}) {
   const [selectedValue, setSelectedValue] = useState('');
-  const {t, i18n} = useTranslation();
-  const a = useSelector(state => state.cartReducer.selectedItems.language);
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [a]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const [fullname, setfullname] = useState('');
   const [phonenumber, setphonenumber] = useState('');
@@ -53,6 +46,7 @@ export default function MyAccountScreen({navigation}) {
   const [getcomplete, setcomplete] = useState(0);
   const [getnum, setnum] = useState(0);
   var count = 0;
+
   const showMode = currentMode => {
     setShow(true);
     setmode(currentMode);
@@ -67,12 +61,14 @@ export default function MyAccountScreen({navigation}) {
     count = 0;
     setnum(Math.random());
   };
+
   const formattedDate =
     datetime.getDate() +
     '/' +
     (datetime.getMonth() + 1) +
     '/' +
     datetime.getFullYear();
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(false);
@@ -85,28 +81,43 @@ export default function MyAccountScreen({navigation}) {
         currentDate.getFullYear(),
     );
   };
-  firestore()
-    .collection('order' + user.uid)
-    .onSnapshot(snapshot => {
-      setorder(snapshot.size);
-    });
-  firestore()
-    .collection('lastorder' + user.uid)
-    .onSnapshot(snapshot => {
-      setcomplete(snapshot.size);
-    });
+
   useEffect(() => {
     firestore()
-      .collection('User' + user.uid)
+      .collection('Order')
+      .doc(user.uid)
       .onSnapshot(snapshot => {
-        snapshot.docs.map(doc => {
-          setfullname(doc.data().full_name);
-          setphonenumber(doc.data().phone_number);
-          setdate(doc.data().datetime);
-          setsex(doc.data().sex);
-          setaddress(doc.data().address);
-          setSelectedValue(doc.data().sex);
-        });
+        if (!snapshot.exists) {
+          setorder(0);
+        } else {
+          setorder(snapshot.data().listorder.length);
+        }
+      });
+
+    firestore()
+      .collection('Completed')
+      .doc(user.uid)
+      .onSnapshot(snapshot => {
+        if (!snapshot.exists) {
+          setcomplete(0);
+        } else {
+          setcomplete(snapshot.data().listcompleted.length);
+        }
+      });
+
+    firestore()
+      .collection('Users')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setfullname(documentSnapshot.data().full_name);
+          setphonenumber(documentSnapshot.data().phone_number);
+          setdate(documentSnapshot.data().datetime);
+          setsex(documentSnapshot.data().sex);
+          setaddress(documentSnapshot.data().address);
+          setSelectedValue(documentSnapshot.data().sex);
+        }
       });
     if (count == 0) {
       count = 1;
@@ -114,47 +125,28 @@ export default function MyAccountScreen({navigation}) {
       setphonenumber1(phonenumber);
       setdate1(date);
       setsex1(sex);
+      setaddress1(address);
     }
   }, [getnum]);
-  const updateGmail = doc => {
+
+  const update = () => {
     firestore()
-      .collection('User' + user.uid)
-      .doc(doc)
-      .update({
+      .collection('Users')
+      .doc(user.uid)
+      .set({
         phone_number: phonenumber1,
         full_name: fullname1,
         datetime: formattedDate,
         sex: sex1,
         address: address1,
+        roll: 3,
+        isLanguage: 'en',
+        isDarkMode: false,
       })
       .then(() => {
-        console.log('Update GmailUser');
+        console.log('User added!');
+        setnum(Math.random());
       });
-  };
-  const update = () => {
-    if (user.displayName != '' && fullname == '') {
-      firestore()
-        .collection('User' + user.uid)
-        .add({
-          phone_number: phonenumber1,
-          full_name: fullname1,
-          datetime: formattedDate,
-          sex: sex1,
-          address: address1,
-        })
-        .then(() => {
-          console.log('Update User');
-        });
-    } else {
-      firestore()
-        .collection('User' + user.uid)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(documentSnapshot => {
-            updateGmail(documentSnapshot.id);
-          });
-        });
-    }
     setModalVisible(!modalVisible);
     setfullname1('');
     setdatetime(new Date());
@@ -162,6 +154,7 @@ export default function MyAccountScreen({navigation}) {
     setphonenumber1('');
     setaddress1('');
   };
+
   async function getCurrentImage() {
     ImagePicker.openPicker({
       cropping: true,
@@ -174,6 +167,7 @@ export default function MyAccountScreen({navigation}) {
     });
     setnum(Math.random());
   }
+
   return (
     <View style={styles.container}>
       <HomeHeader navigation={navigation} title={t('Tài khoản')} />
@@ -212,9 +206,6 @@ export default function MyAccountScreen({navigation}) {
             }}>
             <TouchableOpacity
               onPress={() => {
-                firestore()
-                  .collection('order' + user.uid)
-                  .onSnapshot(snapshot => {});
                 navigation.navigate('MyOrderComplete');
               }}
               style={styles.viewItem}>
@@ -368,7 +359,7 @@ export default function MyAccountScreen({navigation}) {
                       }}
                       placeholder="Date of Birth"
                       value={date1}
-                      onChangeText={txt => setphonenumber1(txt)}
+                      onChangeText={txt => setdate1(txt)}
                     />
                     <Icon
                       size={30}
@@ -552,7 +543,7 @@ export default function MyAccountScreen({navigation}) {
               source={{
                 uri: 'https://cdn4.iconfinder.com/data/icons/universal-7/614/17_-_Location-256.png',
               }}
-              style={{height: 30, width: 30, marginLeft: 20, marginTop: 5}}
+              style={{height: 30, width: 30, marginLeft: 20}}
             />
             <View style={{width: '85%', marginLeft: 5}}>
               <Text style={{fontSize: 16, color: colors.text}}>{address}</Text>

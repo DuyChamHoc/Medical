@@ -8,7 +8,6 @@ import {
   Image,
 } from 'react-native';
 import Icon3 from 'react-native-vector-icons/EvilIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderSimple from '../components/HeaderSimple';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -17,52 +16,35 @@ import ViewCart from './ViewCart';
 import {useDispatch} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 export default function MyShoppingScreen({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-    addd();
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const user = auth().currentUser;
   const [getdata, setdata] = useState([]);
   const [check, getcheck] = useState(false);
-  const ref = firestore()
-    .collection('cart' + user.uid)
-    .orderBy('datecart', 'asc');
   useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    firestore()
+      .collection('Cart')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setdata(documentSnapshot.data().listcart);
+        }
       });
-      setdata(list);
-    });
   }, [check]);
   const addd = () => {
     getcheck(!check);
   };
   const deleteCartToFireBase = id => {
     firestore()
-      .collection('cart' + user.uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.data().items.id == id) {
-            deletecart(documentSnapshot.id);
-          }
-        });
-      });
-  };
-  const deletecart = item => {
-    firestore()
-      .collection('cart' + user.uid)
-      .doc(item)
-      .delete()
+      .collection('Cart')
+      .doc(user.uid)
+      .set({
+        listcart: getdata.filter(item => item.id !== id),
+      })
       .then(() => {
-        console.log('cart deleted!');
+        console.log('remove cart!');
         addd();
       });
   };
@@ -100,7 +82,7 @@ export default function MyShoppingScreen({navigation}) {
                   fontSize: 16,
                   marginLeft: 10,
                 }}>
-                {item.items.nhathuoc}
+                {item.nhathuoc}
               </Text>
               <Icon3
                 name="chevron-right"
@@ -114,7 +96,7 @@ export default function MyShoppingScreen({navigation}) {
                 color={colors.text}
                 style={{marginLeft: 'auto', marginRight: 10}}
                 onPress={() => {
-                  deleteCartToFireBase(item.items.id);
+                  deleteCartToFireBase(item.id);
                 }}
               />
             </View>
@@ -125,18 +107,18 @@ export default function MyShoppingScreen({navigation}) {
                   iconStyle={{borderColor: 'lightgray', borderRadius: 0}}
                   fillColor="green"
                   onPress={checkboxValue =>
-                    selectItem(item.items, checkboxValue)
+                    selectItem(item, checkboxValue)
                   }
                 />
                 <Image
                   style={{width: 80, height: 80, resizeMode: 'cover'}}
-                  source={{uri: item.items.image}}
+                  source={{uri: item.image}}
                 />
               </View>
               <View style={{marginLeft: 10}}>
                 <View style={{width: 240, height: 20}}>
                   <Text style={{color: colors.text, fontSize: 16}}>
-                    {item.items.name}
+                    {item.name}
                   </Text>
                 </View>
                 <Text
@@ -146,7 +128,7 @@ export default function MyShoppingScreen({navigation}) {
                     fontWeight: 'bold',
                     marginTop: 10,
                   }}>
-                  {item.items.gia}
+                  {item.gia}
                 </Text>
               </View>
             </View>
@@ -172,15 +154,6 @@ export default function MyShoppingScreen({navigation}) {
         <Text style={{color: 'black', fontSize: 15}}>
           {t('Vui lòng chọn sản phẩm bạn muốn mua!')}
         </Text>
-        <Icon
-          name="reload"
-          size={20}
-          color="red"
-          onPress={() => {
-            addd();
-          }}
-          style={{marginLeft: 'auto', marginRight: 20}}
-        />
       </View>
       <View style={{height: '79.5%'}}>
         <FlatList

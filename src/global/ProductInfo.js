@@ -11,26 +11,20 @@ import {
 import {colors} from '../global/styles';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderProject from '../components/HeaderProduct';
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ModalPoup from './ModalPoup';
 import LottieView from 'lottie-react-native';
 import {useDispatch} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import moment from 'moment/moment';
-import i18n from '../assets/language/i18n';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function ProductInfo({navigation, route}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
+  let checkExists = false;
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const [visible, setVisible] = useState(false);
   const user = auth().currentUser;
-  const [getcheck, setCheck] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {
     if (isOpen) {
@@ -39,45 +33,55 @@ export default function ProductInfo({navigation, route}) {
       setIsOpen(true);
     }
   };
-  const addCartToFireBase = () => {
-    const db = firebase.firestore();
-    db.collection('cart' + user.uid)
-      .add({
-        items: route.params.item,
-        datecart: moment().format('DD/MM/YYYY hh:mm'),
-      })
-      .then(() => {
-        console.log('User added!');
+  const addCart = () => {
+    firestore()
+      .collection('Cart')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        firestore()
+          .collection('Cart')
+          .doc(user.uid)
+          .set({
+            listcart: [...documentSnapshot.data().listcart, route.params.item],
+          })
+          .then(() => {
+            console.log('User added! listcart');
+            checkExists = false;
+          });
       });
   };
-  useEffect(() => {
+  const check = async () => {
     firestore()
-      .collection('cart' + user.uid)
-      .onSnapshot(snapshot => {
-        snapshot.docs.map(doc => {
-          if (doc.data().items.id == route.params.item.id) {
-            setCheck(1);
+      .collection('Cart')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          documentSnapshot.data().listcart.map(doc => {
+            if (doc.id == route.params.item.id) {
+              checkExists = true;
+            }
+          });
+          if (checkExists) {
+            console.log('exists');
+            setVisible(true);
+          } else {
+            console.log('no exists and add');
+            addCart();
+            setVisible(true);
           }
-        });
+        } else {
+          firestore()
+            .collection('Cart')
+            .doc(user.uid)
+            .set({listcart: [route.params.item]})
+            .then(() => {
+              console.log('added cart 1!');
+              setVisible(true);
+            });
+        }
       });
-  }, []);
-  const check = () => {
-    setCheck(0);
-    firestore()
-      .collection('cart' + user.uid)
-      .onSnapshot(snapshot => {
-        snapshot.docs.map(doc => {
-          if (doc.data().items.id == route.params.item.id) {
-            setCheck(1);
-          }
-        });
-      });
-    if (getcheck == 1) {
-      setVisible(true);
-    } else {
-      addCartToFireBase();
-      setVisible(true);
-    }
   };
   const dispatch = useDispatch();
 

@@ -1,12 +1,6 @@
 import React, {useContext} from 'react';
 import auth from '@react-native-firebase/auth';
-import {
-  View,
-  Text,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,

@@ -1,25 +1,19 @@
-import React, {useState, useContext, useEffect, useRef} from 'react';
-import auth from '@react-native-firebase/auth';
-import {colors, paremeter} from '../../global/styles';
-import {Avatar, Button} from 'react-native-elements';
+import React, {useState, useEffect} from 'react';
+import {colors} from '../../global/styles';
+import {Button} from 'react-native-elements';
 import {
   View,
   Text,
-  Linking,
-  Pressable,
-  Alert,
   Modal,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  Image,
   Dimensions,
   TextInput,
 } from 'react-native';
-import {SignInContext} from '../contexts/authContext';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import HomeAdminHeader from '../components/HomeAdminHeader';
 import ImagePicker from 'react-native-image-crop-picker';
 import {FlatList} from 'react-native-gesture-handler';
@@ -36,11 +30,13 @@ export default function HomeAdmin({navigation}) {
   const [modalVisible1, setModalVisible1] = useState(false);
   const [gia1, setgia1] = useState('');
   const [image1, setimage1] = useState('');
+  const [imagebackup, setimagebackup] = useState('');
   const [mota1, setmota1] = useState('');
   const [name1, setname1] = useState('');
   const [nhathuoc1, setnhathuoc1] = useState('');
   const [itemthuoc, setitemthuoc] = useState('');
   const [render, setrender] = useState(0);
+
   useEffect(() => {
     firestore()
       .collection('Data')
@@ -51,6 +47,7 @@ export default function HomeAdmin({navigation}) {
         setTotalData(data.TotalData);
       });
   }, [render]);
+
   const showmodal = () => {
     setgia1('');
     setname1('');
@@ -59,8 +56,20 @@ export default function HomeAdmin({navigation}) {
     setnhathuoc1('');
     setModalVisible(!modalVisible);
   };
+
+  const uploadimage = () => {
+    ImagePicker.openPicker({
+      cropping: true,
+    }).then(async image => {
+      setimagebackup(image);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      const reference = storage().ref(imgName);
+      await reference.putFile(image.path);
+      setimage1(await storage().ref(imgName).getDownloadURL());
+    });
+  };
+
   const add = () => {
-    console.log(image1);
     const a = Math.random();
     firestore()
       .collection('Data')
@@ -81,8 +90,10 @@ export default function HomeAdmin({navigation}) {
         ]);
       });
     setModalVisible(!modalVisible);
+    setimagebackup('');
     setrender(Math.random());
   };
+
   const showmodal1 = item => {
     setgia1(item.gia);
     setimage1(item.image);
@@ -119,6 +130,7 @@ export default function HomeAdmin({navigation}) {
     setnhathuoc1('');
     setrender(Math.random());
   };
+
   const updatethuoc = add => {
     firestore()
       .collection('Data')
@@ -131,7 +143,8 @@ export default function HomeAdmin({navigation}) {
         setrender(Math.random());
       });
   };
-  const delete1 = item => {
+
+  const deleteItem = item => {
     firestore()
       .collection('Data')
       .doc('TotalData')
@@ -146,16 +159,7 @@ export default function HomeAdmin({navigation}) {
     setModalVisible1(!modalVisible1);
     setitemthuoc('');
   };
-  const uploadimage = () => {
-    ImagePicker.openPicker({
-      cropping: true,
-    }).then(async image => {
-      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
-      const reference = storage().ref(imgName);
-      await reference.putFile(image.path);
-      setimage1(await storage().ref(imgName).getDownloadURL());
-    });
-  };
+
   return (
     <View>
       <HomeAdminHeader navigation={navigation} title="Home" />
@@ -216,6 +220,8 @@ export default function HomeAdmin({navigation}) {
           </View>
         )}
       />
+
+      {/* updatedđdddddddddddddddddddddddđ */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -232,7 +238,7 @@ export default function HomeAdmin({navigation}) {
             width: 380,
             alignSelf: 'center',
             borderRadius: 30,
-            height: 535,
+            height: 600,
           }}>
           <Text
             style={{
@@ -247,6 +253,7 @@ export default function HomeAdmin({navigation}) {
           <TouchableOpacity
             onPress={() => {
               setModalVisible1(!modalVisible1);
+              setimagebackup('');
             }}>
             <Icon1
               size={20}
@@ -254,23 +261,40 @@ export default function HomeAdmin({navigation}) {
               style={{marginTop: -25, color: colors.black, marginLeft: 330}}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => uploadimage()}
+
+          <View
             style={{
-              height: 50,
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
               justifyContent: 'center',
               alignItems: 'center',
+              marginTop: 20,
             }}>
-            <Text>Upload image</Text>
-          </TouchableOpacity>
+            <ImageBackground
+              style={{
+                height: SCREEN_WIDTH * 0.32,
+                width: SCREEN_WIDTH * 0.32,
+                marginRight: 15,
+              }}
+              source={{uri: imagebackup ? imagebackup.path : image1}}
+            />
+          </View>
+
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: -20,
+              marginLeft: 180,
+            }}>
+            <Icon2
+              size={80}
+              name="camera"
+              onPress={() => {
+                uploadimage();
+              }}
+              style={{color: colors.text}}
+            />
+          </View>
+
           <TextInput
             style={{
               marginTop: 20,
@@ -336,7 +360,8 @@ export default function HomeAdmin({navigation}) {
           <View style={{flexDirection: 'row'}}>
             <Button
               onPress={() => {
-                delete1(itemthuoc);
+                deleteItem(itemthuoc);
+                setimagebackup('');
               }}
               title="Delete"
               buttonStyle={{
@@ -357,18 +382,26 @@ export default function HomeAdmin({navigation}) {
               }}
               onPress={() => {
                 update(itemthuoc);
+                setimagebackup('');
               }}
             />
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => {
-          showmodal();
-        }}>
-        <Text style={styles.fabIcon}>+</Text>
-      </TouchableOpacity>
+
+      {!modalVisible && !modalVisible1 ? (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => {
+            showmodal();
+          }}>
+          <Text style={styles.fabIcon}>+</Text>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
+
+      {/* {adddddddddddddddddddddddddddddddđ} */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -385,7 +418,7 @@ export default function HomeAdmin({navigation}) {
             width: 380,
             alignSelf: 'center',
             borderRadius: 30,
-            height: 535,
+            height: 600,
           }}>
           <Text
             style={{
@@ -395,11 +428,12 @@ export default function HomeAdmin({navigation}) {
               alignSelf: 'center',
               marginTop: 10,
             }}>
-            Update Medicine
+            Add Medicine
           </Text>
           <TouchableOpacity
             onPress={() => {
               setModalVisible(!modalVisible);
+              setimagebackup('');
             }}>
             <Icon1
               size={20}
@@ -407,26 +441,46 @@ export default function HomeAdmin({navigation}) {
               style={{marginTop: -25, color: colors.black, marginLeft: 330}}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => uploadimage()}
+
+          <View
             style={{
-              height: 50,
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
               justifyContent: 'center',
               alignItems: 'center',
+              marginTop: 20,
             }}>
-            <Text>Upload image</Text>
-          </TouchableOpacity>
+            <ImageBackground
+              style={{
+                height: SCREEN_WIDTH * 0.32,
+                width: SCREEN_WIDTH * 0.32,
+                marginRight: 15,
+              }}
+              source={{
+                uri: imagebackup
+                  ? imagebackup.path
+                  : 'https://ps.w.org/file-upload-types/assets/icon-256x256.png?rev=2243278',
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: -20,
+              marginLeft: 180,
+            }}>
+            <Icon2
+              size={80}
+              name="camera"
+              onPress={() => {
+                uploadimage();
+              }}
+              style={{color: colors.text}}
+            />
+          </View>
           <TextInput
             style={{
-              marginTop: 20,
+              marginTop: 10,
               width: 320,
               borderWidth: 1,
               borderColor: '#86939e',
@@ -486,8 +540,7 @@ export default function HomeAdmin({navigation}) {
             value={mota1}
             onChangeText={txt => setmota1(txt)}
           />
-          <View
-            style={{alignItems: 'flex-end', marginRight: 40, marginTop: 20}}>
+          <View style={{alignItems: 'flex-end', marginRight: 40}}>
             <Button
               title="Add"
               buttonStyle={{
@@ -510,6 +563,7 @@ export default function HomeAdmin({navigation}) {
 
 const styles = StyleSheet.create({
   fab: {
+    top: 730,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',

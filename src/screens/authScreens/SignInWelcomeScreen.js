@@ -5,17 +5,23 @@ import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import {SignInContext} from '../../contexts/authContext';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export default function SignInWelcomeScreen({navigation}) {
   const {dispatchSignedIn} = useContext(SignInContext);
-
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       if (user) {
-        dispatchSignedIn({
-          type: 'UPDATE_SIGN_IN',
-          payload: {userToken: 'signed-in'},
-        });
+        firestore()
+          .collection('Users')
+          .doc(user.uid)
+          .get()
+          .then(documentSnapshot => {
+            dispatchSignedIn({
+              type: 'UPDATE_SIGN_IN',
+              payload: {userToken: documentSnapshot.data().roll},
+            });
+          });
       } else {
         dispatchSignedIn({type: 'UPDATE_SIGN_IN', payload: {userToken: null}});
       }
@@ -76,7 +82,7 @@ export default function SignInWelcomeScreen({navigation}) {
           Welcome!
         </Text>
         <Text style={{marginLeft: 30, fontSize: 20, color: colors.black}}>
-        Create an account or log in to order medicine right on
+          Create an account or log in to order medicine right on
         </Text>
         <Text
           style={{

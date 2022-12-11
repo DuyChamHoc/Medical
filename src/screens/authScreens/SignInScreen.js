@@ -15,9 +15,11 @@ import Header from '../../components/Header';
 import * as Animatable from 'react-native-animatable';
 import {Formik} from 'formik';
 import auth, {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {SignInContext} from '../../contexts/authContext';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import {discount} from '../../global/Data';
 
 GoogleSignin.configure({
   webClientId:
@@ -36,10 +38,16 @@ export default function SignInScreen({navigation}) {
       const {password, email} = data;
       const user = await auth().signInWithEmailAndPassword(email, password);
       if (user) {
-        dispatchSignedIn({
-          type: 'UPDATE_SIGN_IN',
-          payload: {userToken: 'signed-in'},
-        });
+        firestore()
+          .collection('Users')
+          .doc(user.user.uid)
+          .get()
+          .then(documentSnapshot => {
+            dispatchSignedIn({
+              type: 'UPDATE_SIGN_IN',
+              payload: {userToken: documentSnapshot.data().roll},
+            });
+          });
       }
     } catch (error) {
       Alert.alert(error.name, error.message);
@@ -54,8 +62,30 @@ export default function SignInScreen({navigation}) {
       if (user) {
         dispatchSignedIn({
           type: 'UPDATE_SIGN_IN',
-          payload: {userToken: 'signed-in'},
+          payload: {userToken: 3},
         });
+        firestore()
+          .collection('Users')
+          .doc(user.user.uid)
+          .get()
+          .then(documentSnapshot => {
+            if (!documentSnapshot.exists) {
+              firestore().collection('Users').doc(user.user.uid).set({
+                roll: 3,
+                isDarkMode: false,
+                isLanguage: 'en',
+              });
+              firestore()
+                .collection('Discount')
+                .doc(user.user.uid)
+                .set({
+                  listdis: discount,
+                })
+                .then(() => {
+                  console.log('Discount added!');
+                });
+            }
+          });
       }
     } catch (error) {
       Alert.alert(error.name, error.message);
@@ -83,8 +113,30 @@ export default function SignInScreen({navigation}) {
       if (user) {
         dispatchSignedIn({
           type: 'UPDATE_SIGN_IN',
-          payload: {userToken: 'signed-in'},
+          payload: {userToken: 3},
         });
+        firestore()
+          .collection('Users')
+          .doc(user.user.uid)
+          .get()
+          .then(documentSnapshot => {
+            if (!documentSnapshot.exists) {
+              firestore().collection('Users').doc(user.user.uid).set({
+                roll: 3,
+                isDarkMode: false,
+                isLanguage: 'en',
+              });
+              firestore()
+                .collection('Discount')
+                .doc(user.user.uid)
+                .set({
+                  listdis: discount,
+                })
+                .then(() => {
+                  console.log('Discount added!');
+                });
+            }
+          });
       }
     } catch (error) {
       Alert.alert(error.name, error.message);

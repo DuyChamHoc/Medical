@@ -10,10 +10,9 @@ import {
   Modal,
 } from 'react-native';
 import HeaderOrder from '../components/HeaderOrder';
-import {TextInput} from 'react-native-gesture-handler';
 import {RadioButton} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import ProductOrder from '../components/ProductOrder';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
@@ -21,20 +20,13 @@ import {useTheme} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment/moment';
-import i18n from '../assets/language/i18n';
 export default function MyOrder({navigation, route}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const [loading, setLoading] = useState(false);
   const {colors} = useTheme();
   const [fullname, setfullname] = useState('');
   const [phonenumber, setphonenumber] = useState('');
   const [address, setaddress] = useState('');
-  const [date, setdate] = useState('');
-  const [sex, setsex] = useState('');
   const [checked, setChecked] = useState('first');
   const [modalVisible, setModalVisible] = useState(false);
   const [name_dis, setName_dis] = useState('');
@@ -46,15 +38,16 @@ export default function MyOrder({navigation, route}) {
     s = 0;
   const user = auth().currentUser;
   const [getDiscount, setDiscount] = useState('');
-  var a = 0;
+
   useEffect(() => {
     firestore()
-      .collection('Data')
-      .doc('Discount')
+      .collection('Discount')
+      .doc(user.uid)
       .get()
       .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setDiscount(data.Discount);
+        if (documentSnapshot.exists) {
+          setDiscount(documentSnapshot.data().listdis);
+        }
       });
   }, []);
   for (var i = 0; i <= items.length - 1; i++) {
@@ -64,48 +57,69 @@ export default function MyOrder({navigation, route}) {
 
   const addCartToFireBase = () => {
     setLoading(true);
-    a = 0;
-    const db = firebase.firestore();
-    db.collection('order' + user.uid)
-      .add({
-        nhathuocchung: items[0].nhathuoc,
-        date: moment().format('DD/MM/YYYY hh:mm'),
-        items: items,
-        name: fullname,
-        phone: phonenumber,
-        address: address,
-        ship: 50 - num_dis * 50,
-        total: cost + 50 - num_dis * 50,
-        id: Math.random(),
-        status: 'Đang xử lý',
+    firestore()
+      .collection('Discount')
+      .doc(user.uid)
+      .update({
+        listdis: getDiscount.filter(item => item.id !== choise_dis),
       })
       .then(() => {
-        firestore()
-          .collection('Admin')
-          .onSnapshot(snapshot => {
-            snapshot.docs.map(doc => {
-              if (doc.data().uid == user.uid) {
-                a = 1;
-              }
+        console.log('discount removed!');
+      });
+    const data = {
+      nhathuocchung: items[0].nhathuoc,
+      date: moment().format('DD/MM/YYYY hh:mm'),
+      items: items,
+      name: fullname,
+      phone: phonenumber,
+      address: address,
+      ship: 50 - num_dis * 50,
+      total: cost + 50 - num_dis * 50,
+      id: Math.random(),
+      status: 'Pending',
+    };
+    firestore()
+      .collection('Order')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          firestore()
+            .collection('Order')
+            .doc(user.uid)
+            .set({
+              dateorder: moment().format('DD/MM/YYYY hh:mm'),
+              uid: user.uid,
+              username: fullname,
+              listorder: [...documentSnapshot.data().listorder, data],
+            })
+            .then(() => {
+              console.log('User added! listorder');
+              setTimeout(() => {
+                setLoading(false);
+                setnull([], false);
+                navigation.navigate('MyOrderComplete');
+              }, 1500);
             });
-            if (a == 1) {
-            } else {
-              firestore()
-                .collection('Admin')
-                .add({
-                  uid: user.uid,
-                  name: user.displayName,
-                })
-                .then(() => {
-                  console.log('add uid success');
-                });
-            }
-          });
-        setTimeout(() => {
-          setLoading(false);
-          setnull([], false);
-          navigation.navigate('MyOrderComplete');
-        }, 1500);
+        } else {
+          firestore()
+            .collection('Order')
+            .doc(user.uid)
+            .set({
+              uid: user.uid,
+              username: fullname,
+              listorder: [data],
+              dateorder: moment().format('DD/MM/YYYY hh:mm'),
+            })
+            .then(() => {
+              console.log('added order 1!');
+              setTimeout(() => {
+                setLoading(false);
+                setnull([], false);
+                navigation.navigate('MyOrderComplete');
+              }, 1500);
+            });
+        }
       });
   };
   const dispatch = useDispatch();
@@ -120,20 +134,20 @@ export default function MyOrder({navigation, route}) {
   };
   useEffect(() => {
     firestore()
-      .collection('User' + user.uid)
-      .onSnapshot(snapshot => {
-        snapshot.docs.map(doc => {
-          setfullname(doc.data().full_name);
-          setphonenumber(doc.data().phone_number);
-          setdate(doc.data().datetime);
-          setsex(doc.data().sex);
-          setaddress(doc.data().address);
-        });
+      .collection('Users')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setfullname(documentSnapshot.data().full_name);
+          setphonenumber(documentSnapshot.data().phone_number);
+          setaddress(documentSnapshot.data().address);
+        }
       });
-  });
+  }, []);
   return (
     <>
-      <View style={{flex: 1, backgroundColor: colors.backgroundColor}}>
+      <View style={{flex: 1}}>
         <HeaderOrder
           navigation={navigation}
           id={route.params.id}
@@ -142,23 +156,14 @@ export default function MyOrder({navigation, route}) {
         <ScrollView style={{height: '100%'}}>
           <View style={{marginTop: 15, marginLeft: 12, marginRight: 12}}>
             <View>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <Text
-                  style={{
-                    color: colors.text,
-                    fontWeight: 'bold',
-                    fontSize: 16,
-                    marginRight: 220,
-                  }}>
-                  {t('Thông tin giao hàng')}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log(name_dis);
-                    console.log(num_dis);
-                  }}></TouchableOpacity>
-              </View>
+              <Text
+                style={{
+                  color: colors.text,
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                }}>
+                {t('Thông tin giao hàng')}
+              </Text>
               <View style={{flexDirection: 'row', marginTop: 10}}>
                 <Text
                   style={{
@@ -175,11 +180,6 @@ export default function MyOrder({navigation, route}) {
               </View>
               <View style={{marginTop: 5}}>
                 <Text style={{color: colors.text}}>{address}</Text>
-                <TextInput
-                  placeholder={t('Thêm ghi chú. VD: tên tòa nhà, số tầng')}
-                  style={{color: colors.text}}
-                  placeholderTextColor={colors.text}
-                />
               </View>
             </View>
             <View>
@@ -390,7 +390,7 @@ export default function MyOrder({navigation, route}) {
                         alignItems: 'center',
                       }}>
                       <Image
-                        source={item.image}
+                        source={{uri: item.image}}
                         style={{height: 55, width: 55, resizeMode: 'contain'}}
                       />
                       <View
@@ -482,15 +482,22 @@ export default function MyOrder({navigation, route}) {
             height: 50,
             flexDirection: 'row',
             justifyContent: 'flex-end',
+            borderTopWidth: 1,
+            borderTopColor: '#6BC8FF',
           }}>
           <View
             style={{
-              justifyContent: 'center',
+              marginRight: 40,
+              flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 20,
             }}>
             <Text
-              style={{color: colors.text, fontSize: 18, fontWeight: 'bold'}}>
+              style={{
+                color: colors.text,
+                fontSize: 18,
+                fontWeight: 'bold',
+                marginRight: 5,
+              }}>
               {t('Tổng thanh toán:')}
             </Text>
             <Text style={{color: 'red', fontSize: 18, fontWeight: 'bold'}}>
@@ -507,11 +514,9 @@ export default function MyOrder({navigation, route}) {
             onPress={() => {
               addCartToFireBase();
             }}>
-            <View>
-              <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
-                {t('Đặt hàng')}
-              </Text>
-            </View>
+            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
+              {t('Đặt hàng')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

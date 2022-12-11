@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
 import HomeAdminHeader from '../components/HomeAdminHeader';
@@ -11,13 +11,13 @@ GoogleSignin.configure({
 
 export default function ListOrder({navigation}) {
   const {colors} = useTheme();
-  const ref = firestore().collection('Admin');
+  const ref = firestore().collection('Order');
   const [getdata, setdata] = useState([]);
   useEffect(() => {
     return ref.onSnapshot(querySnapshot => {
       const list = [];
       querySnapshot.forEach(doc => {
-        list.push(doc.data());
+        if (doc.data().listorder != []) list.push(doc.data());
       });
       setdata(list);
     });
@@ -32,43 +32,52 @@ export default function ListOrder({navigation}) {
           style={{
             flex: 1,
             backgroundColor: colors.boxes,
-            width: 300,
-            height: 50,
-            marginTop: 20,
+            width: 380,
+            height: 65,
+            borderWidth: 1,
+            marginTop: 10,
+            borderColor: '#6BC8FF',
             justifyContent: 'center',
-            alignItems: 'center',
+            borderRadius: 10,
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: 17, color: 'black'}}>
-            User: {item.name}
-          </Text>
+          <View style={{marginLeft: 45}}>
+            <Text style={{fontWeight: 'bold', fontSize: 17, color: 'black'}}>
+              User: {item.username}
+            </Text>
+            <Text style={{fontWeight: '400', fontSize: 15, color: 'black'}}>
+              Recent order time: {item.dateorder}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
   };
   return (
     <View style={{flex: 1}}>
-      <HomeAdminHeader navigation={navigation} title="User" />
+      <HomeAdminHeader navigation={navigation} title="Users order" />
+      <View
+        style={{
+          height: 50,
+          backgroundColor: '#eff2cc',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Image
+          source={require('../../global/image/cart_order.png')}
+          style={{height: 30, width: '15%', resizeMode: 'contain'}}
+        />
+        <Text style={{color: 'black', fontSize: 16, fontWeight: '700'}}>
+          List of users order!
+        </Text>
+      </View>
       <View style={{alignSelf: 'center'}}>
-        <View>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              color: 'black',
-              fontSize: 20,
-              marginTop: 20,
-            }}>
-            List of users
-          </Text>
-          <FlatList
-            data={getdata}
-            renderItem={({item, index}) => (
-              <ListItem item={item} index={index} />
-            )}
-            contentContainerStyle={{paddingBottom: 20}}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          data={getdata}
+          renderItem={({item, index}) => <ListItem item={item} index={index} />}
+          contentContainerStyle={{paddingBottom: 20}}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </View>
   );

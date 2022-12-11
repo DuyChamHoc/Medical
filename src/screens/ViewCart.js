@@ -6,13 +6,8 @@ import ModalPoup from '../global/ModalPoup';
 import LottieView from 'lottie-react-native';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import i18n from '../assets/language/i18n';
 export default function ViewCart({navigation}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
+  const {t} = useTranslation();
   const {colors} = useTheme();
   const [visible, setVisible] = useState(false);
   const items = useSelector(state => state.cartReducer.selectedItems.items);
@@ -30,16 +25,16 @@ export default function ViewCart({navigation}) {
         height: 60,
         justifyContent: 'flex-end',
         borderTopWidth: 0.5,
+        marginTop:16,
         borderTopColor: 'blue',
       }}>
       <View style={{flexDirection: 'row'}}>
-        <View
-          style={{justifyContent: 'center', width: 300, alignItems: 'center'}}>
+        <View style={{width: 300, alignItems: 'center', flexDirection: 'row'}}>
           <Text
             style={{
               color: colors.text,
               fontSize: 20,
-              marginLeft: 120,
+              marginLeft: 60,
               fontWeight: 'bold',
             }}>
             {t('Tổng tiền:')}
@@ -48,7 +43,7 @@ export default function ViewCart({navigation}) {
             style={{
               color: 'red',
               fontWeight: 'bold',
-              marginLeft: 120,
+              marginLeft: 5,
               fontSize: 20,
             }}>
             {total ? total + '.000 đ' : '0 đ'}
@@ -101,7 +96,9 @@ export default function ViewCart({navigation}) {
             }
           }}>
           <View>
-            <Text style={{color: 'white', fontSize: 18}}>{t('Mua Hàng')}</Text>
+            <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+              {t('Mua Hàng')}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>

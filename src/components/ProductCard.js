@@ -11,53 +11,68 @@ import React, {useEffect, useState} from 'react';
 import {colors} from '../global/styles';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import auth from '@react-native-firebase/auth';
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import ModalPoup from '../global/ModalPoup';
 import LottieView from 'lottie-react-native';
 import {useDispatch} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment/moment';
-import i18n from '../assets/language/i18n';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function ProductCard({navigation, screenWidth, item}) {
-  const {t, i18n} = useTranslation();
-  const [currentLanguage, setLanguage] = useState('');
+  const {t} = useTranslation();
   const user = auth().currentUser;
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
   const {colors} = useTheme();
   const [visible, setVisible] = useState(false);
-  const [getcheck, setCheck] = useState(0);
-  const addCartToFireBase = () => {
-    const db = firebase.firestore();
-    db.collection('cart' + user.uid)
-      .add({
-        items: item,
-        datecart: moment().format('DD/MM/YYYY hh:mm'),
-      })
-      .then(() => {
-        console.log('User added!');
+  let checkExists = false;
+
+  const addCart = () => {
+    firestore()
+      .collection('Cart')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        firestore()
+          .collection('Cart')
+          .doc(user.uid)
+          .set({listcart: [...documentSnapshot.data().listcart, item]})
+          .then(() => {
+            console.log('User added! listcart');
+            checkExists = false;
+          });
       });
   };
-  const check = () => {
+  const check = async () => {
     firestore()
-      .collection('cart' + user.uid)
-      .onSnapshot(snapshot => {
-        setCheck(0);
-        snapshot.docs.map(doc => {
-          if (doc.data().items.id == item.id) {
-            setCheck(1);
+      .collection('Cart')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          documentSnapshot.data().listcart.map(doc => {
+            if (doc.id == item.id) {
+              checkExists = true;
+            }
+          });
+          if (checkExists) {
+            console.log('exists');
+            setVisible(true);
+          } else {
+            console.log('no exists and add');
+            addCart();
+            setVisible(true);
           }
-        });
+        } else {
+          firestore()
+            .collection('Cart')
+            .doc(user.uid)
+            .set({listcart: [item]})
+            .then(() => {
+              console.log('added cart 1!');
+              setVisible(true);
+            });
+        }
       });
-    if (getcheck == 1) {
-      setVisible(true);
-    } else {
-      addCartToFireBase();
-      setVisible(true);
-    }
   };
   const dispatch = useDispatch();
 
@@ -153,7 +168,8 @@ export default function ProductCard({navigation, screenWidth, item}) {
                 }}
                 name="shoppingcart"
                 style={{color: colors.secondary, justifyContent: 'center'}}
-                size={35}></Icon1>
+                size={35}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
