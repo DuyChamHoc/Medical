@@ -86,6 +86,7 @@ export default function MyOrderComplete({navigation}) {
         firestore()
           .collection('Revenue')
           .add({
+            manager:item.manager,
             nhathuocchung: item.nhathuocchung,
             datereceived: moment().format('DD/MM/YYYY hh:mm'),
             datereceivedcheck: moment().format('DD/MM/YYYY'),
@@ -143,8 +144,9 @@ export default function MyOrderComplete({navigation}) {
           backgroundColor: colors.boxes,
           height: 100,
           borderRadius: 10,
-          width: SCREEN_WIDTH - 20,
-          marginLeft: 10,
+          width: '98%',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
@@ -184,7 +186,7 @@ export default function MyOrderComplete({navigation}) {
         style={{
           marginTop: 10,
           marginBottom: 10,
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: '#6BC8FF',
           borderRadius: 10,
         }}>
@@ -221,15 +223,22 @@ export default function MyOrderComplete({navigation}) {
               {t(item.status)}
             </Text>
           </View>
-          <FlatList
-            data={item.items}
-            renderItem={({item, index}) => <List item={item} />}
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: 15}}
-          />
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 5,
+            }}>
+            <FlatList
+              data={item.items}
+              renderItem={({item, index}) => <List item={item} />}
+              showsVerticalScrollIndicator={false}
+              style={{marginBottom: 15}}
+            />
+          </View>
         </View>
         <View>
-          <View style={{marginBottom: 20, height: 40}}>
+          <View style={{marginBottom: 20, height: 50}}>
             <View
               style={{
                 flexDirection: 'row',
@@ -245,11 +254,6 @@ export default function MyOrderComplete({navigation}) {
                   {<Text style={{color: 'red'}}>{item.items.length}</Text>}
                 </Text>
                 <Text
-                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
-                  {t('Ngày đặt:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.date} phút</Text>}
-                </Text>
-                <Text
                   style={{
                     fontWeight: '600',
                     color: colors.text,
@@ -257,6 +261,23 @@ export default function MyOrderComplete({navigation}) {
                   }}>
                   {t('Thành tiền:')}{' '}
                   {<Text style={{color: 'red'}}>{item.total}.000đ</Text>}{' '}
+                </Text>
+
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  {t('Số điện thoại')}
+                  {': '}
+                  {<Text style={{color: 'red'}}>{item.phone}</Text>}
+                </Text>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  {t('Địa chỉ nhận hàng:')}{' '}
+                  {<Text style={{color: 'red'}}>{item.address}</Text>}
+                </Text>
+                <Text
+                  style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
+                  {t('Ngày đặt:')}{' '}
+                  {<Text style={{color: 'red'}}>{item.date} phút</Text>}
                 </Text>
               </View>
             </View>
@@ -266,7 +287,7 @@ export default function MyOrderComplete({navigation}) {
               flexDirection: 'row',
               marginBottom: 10,
               justifyContent: 'flex-end',
-              marginTop: 30,
+              marginTop: 80,
               marginRight: 10,
             }}>
             <TouchableOpacity

@@ -77,6 +77,7 @@ export default function MyOrder({navigation, route}) {
       total: cost + 50 - num_dis * 50,
       id: Math.random(),
       status: 'Pending',
+      manager: '',
     };
     firestore()
       .collection('Order')

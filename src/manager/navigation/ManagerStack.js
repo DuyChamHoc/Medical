@@ -1,6 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Drawernavigation from './Drawernavigation';
+import DetailCustomerManager from '../screen/DetailCustomerManager';
 const App = createNativeStackNavigator();
 
 export default function ManagerStack() {
@@ -13,13 +14,13 @@ export default function ManagerStack() {
           headerShown: false,
         }}
       />
-      {/* <App.Screen
-        name="DetailCustomer"
-        component={DetailCustomer}
+      <App.Screen
+        name="DetailCustomerManager"
+        component={DetailCustomerManager}
         options={{
           headerShown: false,
         }}
-      /> */}
+      />
     </App.Navigator>
   );
 }

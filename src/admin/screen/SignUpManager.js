@@ -8,9 +8,9 @@ import {
   Modal,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
   Dimensions,
   TextInput,
-  ScrollView,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import Icon3 from 'react-native-vector-icons/AntDesign';
@@ -205,8 +205,8 @@ export default function SignUpManager({navigation}) {
           .delete()
           .then(() => {
             console.log('User deleted!');
-            setupdateModalVisible(!updatemodalVisible)
-            setimagebackup('')
+            setupdateModalVisible(!updatemodalVisible);
+            setimagebackup('');
           });
       });
   };
@@ -238,18 +238,18 @@ export default function SignUpManager({navigation}) {
                 }}
               />
             </View>
-            <View style={{marginLeft: 40}}>
-              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
-                Name: {item.name}
-              </Text>
-              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
-                Address: {item.address}
-              </Text>
+            <View style={{marginLeft: 30}}>
               <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
                 Phone: {item.phone}
               </Text>
               <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
+                Name: {item.name}
+              </Text>
+              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
                 Date of birth: {item.date}
+              </Text>
+              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
+                Address: {item.address}
               </Text>
             </View>
           </View>
@@ -290,203 +290,212 @@ export default function SignUpManager({navigation}) {
         }}>
         <View
           style={{
-            marginTop: 30,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            width: 380,
-            alignSelf: 'center',
-            borderRadius: 30,
-            height: 740,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
+          <View
             style={{
-              fontSize: 22,
-              fontWeight: 'bold',
-              color: colors.blue,
+              borderWidth: 1,
+              backgroundColor: 'white',
+              width: 380,
               alignSelf: 'center',
-              marginTop: 10,
+              borderRadius: 30,
             }}>
-            Create Account
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setaddModalVisible(!addmodalVisible);
-              setimagebackup('');
-            }}>
-            <Icon1
-              size={20}
-              name="close"
-              style={{marginTop: -25, color: colors.black, marginLeft: 330}}
-            />
-          </TouchableOpacity>
-
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 10,
-            }}>
-            <Avatar
-              size={150}
-              rounded
-              source={{
-                uri: imagebackup
-                  ? imagebackup.path
-                  : 'https://ps.w.org/file-upload-types/assets/icon-256x256.png?rev=2243278',
-              }}
-            />
-          </View>
-
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: -20,
-              marginLeft: 180,
-            }}>
-            <Icon2
-              size={80}
-              name="camera"
+            <Text
+              style={{
+                fontSize: 21,
+                fontWeight: 'bold',
+                color: colors.blue,
+                alignSelf: 'center',
+                marginTop: 10,
+              }}>
+              Create Account
+            </Text>
+            <TouchableOpacity
               onPress={() => {
-                uploadimage();
-              }}
-              style={{color: colors.text}}
-            />
-          </View>
-         
-          <TextInput
-            style={{
-              marginTop: 10,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Name"
-            value={getName}
-            onChangeText={txt => setName(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Address"
-            value={getAddress}
-            onChangeText={txt => setAddress(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Phone Number"
-            value={getPhone}
-            onChangeText={txt => setPhone(txt)}
-          />
-          <View style={{width: 320, flexDirection: 'row'}}>
+                setaddModalVisible(!addmodalVisible);
+                setimagebackup('');
+              }}>
+              <Icon1
+                size={23}
+                name="close"
+                style={{marginTop: -25, color: colors.black, marginLeft: 330}}
+              />
+            </TouchableOpacity>
+
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Avatar
+                size={105}
+                rounded
+                source={{
+                  uri: imagebackup
+                    ? imagebackup.path
+                    : 'https://ps.w.org/file-upload-types/assets/icon-256x256.png?rev=2243278',
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: -30,
+                marginLeft: 130,
+              }}>
+              <Icon2
+                size={45}
+                name="camera"
+                onPress={() => {
+                  uploadimage();
+                }}
+                style={{color: colors.text}}
+              />
+            </View>
             <TextInput
               style={{
-                marginTop: 20,
-                width: 150,
+                height: 42,
+                marginTop: 5,
+                width: 320,
                 borderWidth: 1,
                 borderColor: '#86939e',
-                marginHorizontal: 20,
+                marginHorizontal: 30,
                 borderRadius: 12,
                 paddingHorizontal: 10,
                 color: colors.text,
               }}
-              placeholder="Date of Birth"
-              value={date}
-              onChangeText={txt => setdate(txt)}
+              placeholder="Name"
+              value={getName}
+              onChangeText={txt => setName(txt)}
             />
-            <Icon1
-              size={30}
-              name="calendar"
+            <TextInput
               style={{
-                marginLeft: 10,
-                marginTop: 30,
+                height: 42,
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 30,
+                borderRadius: 12,
+                paddingHorizontal: 10,
                 color: colors.text,
               }}
-              onPress={showDatepicker}
+              placeholder="Address"
+              value={getAddress}
+              onChangeText={txt => setAddress(txt)}
             />
-            {show && (
-              <DatetimePicker
-                testID="dateTimePicker"
-                value={datetime}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-              />
-            )}
-          </View>
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Email"
-            value={getEmail}
-            onChangeText={txt => setEmail(txt)}
-          />
-
-          <View style={styles.view14}>
             <TextInput
-              placeholder="Password"
-              style={{flex: 1, marginLeft: 5}}
-              onChangeText={txt => setPassword(txt)}
-              value={getPassword}
-              secureTextEntry={getVisible ? false : true}
+              style={{
+                height: 42,
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 30,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Phone Number"
+              value={getPhone}
+              onChangeText={txt => setPhone(txt)}
             />
-            <Animatable.View duration={400}>
-              <Icon
-                name={getVisible ? 'visibility' : 'visibility-off'}
-                iconStyle={{color: colors.grey3, marginRight: 10}}
-                type="material"
+            <View style={{width: 320, flexDirection: 'row'}}>
+              <TextInput
+                style={{
+                  height: 42,
+                  marginTop: 10,
+                  width: 150,
+                  borderWidth: 1,
+                  borderColor: '#86939e',
+                  marginHorizontal: 30,
+                  borderRadius: 12,
+                  paddingHorizontal: 10,
+                  color: colors.text,
+                }}
+                placeholder="Date of Birth"
+                value={date}
+                onChangeText={txt => setdate(txt)}
+              />
+              <Icon1
+                size={30}
+                name="calendar"
+                style={{
+                  marginLeft: 10,
+                  marginTop: 15,
+                  color: colors.text,
+                }}
+                onPress={showDatepicker}
+              />
+              {show && (
+                <DatetimePicker
+                  testID="dateTimePicker"
+                  value={datetime}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </View>
+            <TextInput
+              style={{
+                height: 42,
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 30,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Email"
+              value={getEmail}
+              onChangeText={txt => setEmail(txt)}
+            />
+
+            <View style={styles.view14}>
+              <TextInput
+                placeholder="Password"
+                style={{flex: 1, marginLeft: 5}}
+                onChangeText={txt => setPassword(txt)}
+                value={getPassword}
+                secureTextEntry={getVisible ? false : true}
+              />
+              <Animatable.View duration={400}>
+                <Icon
+                  name={getVisible ? 'visibility' : 'visibility-off'}
+                  iconStyle={{color: colors.grey3, marginRight: 10}}
+                  type="material"
+                  onPress={() => {
+                    setVisible(!getVisible);
+                  }}
+                />
+              </Animatable.View>
+            </View>
+
+            <View style={{alignItems: 'flex-end', marginRight: 30}}>
+              <Button
+                title="Create"
+                buttonStyle={{
+                  marginTop: 5,
+                  marginBottom: 10,
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  alignSelf: 'center',
+                  marginLeft: 15,
+                }}
                 onPress={() => {
-                  setVisible(!getVisible);
+                  create();
                 }}
               />
-            </Animatable.View>
-          </View>
-
-          <View style={{alignItems: 'flex-end', marginRight: 40}}>
-            <Button
-              title="Create"
-              buttonStyle={{
-                marginTop: 20,
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                alignSelf: 'center',
-                marginLeft: 15,
-              }}
-              onPress={() => {
-                create();
-              }}
-            />
+            </View>
           </View>
         </View>
       </Modal>
@@ -502,177 +511,186 @@ export default function SignUpManager({navigation}) {
         }}>
         <View
           style={{
-            marginTop: 80,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            width: 380,
-            alignSelf: 'center',
-            borderRadius: 30,
-            height: 610,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
+          <View
             style={{
-              fontSize: 22,
-              fontWeight: 'bold',
-              color: colors.blue,
+              borderWidth: 1,
+              backgroundColor: 'white',
+              width: 380,
               alignSelf: 'center',
-              marginTop: 20,
+              borderRadius: 30,
             }}>
-            Create Account
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setupdateModalVisible(!updatemodalVisible);
-              setimagebackup('');
-            }}>
-            <Icon1
-              size={20}
-              name="close"
-              style={{marginTop: -25, color: colors.black, marginLeft: 330}}
-            />
-          </TouchableOpacity>
-
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 10,
-            }}>
-            <Avatar
-              size={150}
-              rounded
-              source={{uri: imagebackup ? imagebackup.path : image1}}
-            />
-          </View>
-
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: -20,
-              marginLeft: 180,
-            }}>
-            <Icon2
-              size={80}
-              name="camera"
+            <Text
+              style={{
+                fontSize: 21,
+                fontWeight: 'bold',
+                color: colors.blue,
+                alignSelf: 'center',
+                marginTop: 5,
+              }}>
+              Update Account
+            </Text>
+            <TouchableOpacity
               onPress={() => {
-                uploadimage();
-              }}
-              style={{color: colors.text}}
-            />
-          </View>
-          <TextInput
-            style={{
-              marginTop: 10,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Name"
-            value={getName}
-            onChangeText={txt => setName(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Address"
-            value={getAddress}
-            onChangeText={txt => setAddress(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Phone Number"
-            value={getPhone}
-            onChangeText={txt => setPhone(txt)}
-          />
-          <View style={{width: 320, flexDirection: 'row'}}>
+                setupdateModalVisible(!updatemodalVisible);
+                setimagebackup('');
+              }}>
+              <Icon1
+                size={23}
+                name="close"
+                style={{marginTop: -25, color: colors.black, marginLeft: 330}}
+              />
+            </TouchableOpacity>
+
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <Avatar
+                size={110}
+                rounded
+                source={{uri: imagebackup ? imagebackup.path : image1}}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: -30,
+                marginLeft: 120,
+              }}>
+              <Icon2
+                size={50}
+                name="camera"
+                onPress={() => {
+                  uploadimage();
+                }}
+                style={{color: colors.text}}
+              />
+            </View>
             <TextInput
               style={{
-                marginTop: 20,
-                width: 150,
+                marginTop: 10,
+                width: 320,
                 borderWidth: 1,
                 borderColor: '#86939e',
-                marginHorizontal: 20,
+                marginHorizontal: 30,
                 borderRadius: 12,
                 paddingHorizontal: 10,
                 color: colors.text,
               }}
-              placeholder="Date of Birth"
-              value={date}
-              onChangeText={txt => setdate(txt)}
+              placeholder="Name"
+              value={getName}
+              onChangeText={txt => setName(txt)}
             />
-            <Icon1
-              size={30}
-              name="calendar"
+            <TextInput
               style={{
-                marginLeft: 10,
-                marginTop: 30,
+                marginTop: 15,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 30,
+                borderRadius: 12,
+                paddingHorizontal: 10,
                 color: colors.text,
               }}
-              onPress={showDatepicker}
+              placeholder="Address"
+              value={getAddress}
+              onChangeText={txt => setAddress(txt)}
             />
-            {show && (
-              <DatetimePicker
-                testID="dateTimePicker"
-                value={datetime}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
+            <TextInput
+              style={{
+                marginTop: 15,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 30,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Phone Number"
+              value={getPhone}
+              onChangeText={txt => setPhone(txt)}
+            />
+            <View style={{width: 320, flexDirection: 'row'}}>
+              <TextInput
+                style={{
+                  marginTop: 15,
+                  width: 150,
+                  borderWidth: 1,
+                  borderColor: '#86939e',
+                  marginHorizontal: 30,
+                  borderRadius: 12,
+                  paddingHorizontal: 10,
+                  color: colors.text,
+                }}
+                placeholder="Date of Birth"
+                value={date}
+                onChangeText={txt => setdate(txt)}
               />
-            )}
-          </View>
+              <Icon1
+                size={30}
+                name="calendar"
+                style={{
+                  marginLeft: 10,
+                  marginTop: 25,
+                  color: colors.text,
+                }}
+                onPress={showDatepicker}
+              />
+              {show && (
+                <DatetimePicker
+                  testID="dateTimePicker"
+                  value={datetime}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </View>
 
-          <View style={{flexDirection: 'row', marginLeft: 120}}>
-            <Button
-              title="Delete"
-              buttonStyle={{
-                marginTop: 20,
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                alignSelf: 'center',
-                marginLeft: 15,
-              }}
-              onPress={() => {
-                deleteEmployee();
-              }}
-            />
-            <Button
-              title="Update"
-              buttonStyle={{
-                marginTop: 20,
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                alignSelf: 'center',
-                marginLeft: 15,
-              }}
-              onPress={() => {
-                update();
-              }}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 120,
+                marginBottom: 10,
+                marginTop: 10,
+              }}>
+              <Button
+                title="Delete"
+                buttonStyle={{
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  alignSelf: 'center',
+                  marginLeft: 15,
+                }}
+                onPress={() => {
+                  deleteEmployee();
+                }}
+              />
+              <Button
+                title="Update"
+                buttonStyle={{
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  alignSelf: 'center',
+                  marginLeft: 15,
+                }}
+                onPress={() => {
+                  update();
+                }}
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -682,6 +700,7 @@ export default function SignUpManager({navigation}) {
 
 const styles = StyleSheet.create({
   view14: {
+    height: 42,
     width: 320,
     borderWidth: 1,
     borderRadius: 12,
@@ -690,8 +709,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginLeft: 20,
+    marginTop: 10,
+    marginLeft: 30,
   },
   fab: {
     flexDirection: 'row',

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { colors, parameters } from "../../global/styles"
 
-export default function HomeAdminHeader({ navigation, title }) {
+export default function HomeManagerHeader({ navigation, title }) {
     return (
         <View style={styles.header}>
             <View style={{ marginLeft: 20 }}>

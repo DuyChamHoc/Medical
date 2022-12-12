@@ -7,14 +7,28 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useTheme} from 'react-native-paper';
-import HeaderAdminOrder from '../components/HeaderAdminOrder';
+import HeaderManagerOrder from '../components/HeaderManagerOrder';
 const SCREEN_WIDTH = Dimensions.get('window').width;
-export default function DetailCustomer({route, navigation}) {
+export default function DetailCustomerManager({route, navigation}) {
   const {colors} = useTheme();
+  const user = auth().currentUser;
   const [check, getcheck] = useState(false);
   const [getdata, setdata] = useState([]);
+  const [getUser, setUser] = useState('');
+  useEffect(() => {
+    firestore()
+      .collection('Employee')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setUser(documentSnapshot.data());
+        }
+      });
+  }, []);
   useEffect(() => {
     firestore()
       .collection('Order')
@@ -36,7 +50,7 @@ export default function DetailCustomer({route, navigation}) {
       .update({
         listorder: getdata.map(item =>
           item.id === id
-            ? {...item, status: 'Inprogress', manager: 'Admin'}
+            ? {...item, status: 'Inprogress', manager: getUser.name}
             : item,
         ),
       })
@@ -286,7 +300,7 @@ export default function DetailCustomer({route, navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <HeaderAdminOrder navigation={navigation} title="Detail order" />
+      <HeaderManagerOrder navigation={navigation} title="Detail order" />
       <FlatList
         data={getdata}
         renderItem={({item, index}) => <ListItem item={item} index={index} />}

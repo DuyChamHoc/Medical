@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function HeaderAdminOrder({navigation, title}) {
+export default function HeaderManagerOrder({navigation, title}) {
   return (
     <View style={styles.header}>
       <View style={{marginLeft: 20}}>
@@ -22,7 +22,7 @@ export default function HeaderAdminOrder({navigation, title}) {
           color="white"
           size={30}
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.navigate('App');
           }}
         />
       </View>

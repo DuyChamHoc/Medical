@@ -290,7 +290,6 @@ export default function MyAccountScreen({navigation}) {
                   shadowOpacity: 0.25,
                   shadowRadius: 4,
                   elevation: 5,
-                  backgroundColor: colors.background,
                 }}>
                 <TouchableOpacity
                   onPress={() => {

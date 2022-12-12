@@ -167,7 +167,7 @@ export default function Sales({navigation}) {
                 <Text
                   style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
                   Order manager:{' '}
-                  {<Text style={{color: 'red'}}>{item.name}</Text>}
+                  {<Text style={{color: 'red'}}>{item.manager}</Text>}
                 </Text>
                 <Text
                   style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>

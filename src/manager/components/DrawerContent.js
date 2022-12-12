@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {View, Text, Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   DrawerContentScrollView,
@@ -19,6 +20,18 @@ GoogleSignin.configure({
 export default function DrawerContent(props) {
   const {dispatchSignedIn} = useContext(SignInContext);
   const user = auth().currentUser;
+  const [getUser, setUser] = useState('');
+  useEffect(() => {
+    firestore()
+      .collection('Employee')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setUser(documentSnapshot.data());
+        }
+      });
+  }, []);
   async function signOut() {
     try {
       auth()
@@ -60,8 +73,8 @@ export default function DrawerContent(props) {
               rounded
               avatarStyle={styles.avatar}
               source={{
-                uri: user.photoURL
-                  ? user.photoURL
+                uri: getUser.image
+                  ? getUser.image
                   : 'https://i.ytimg.com/vi/jH7e1fDcZnY/maxresdefault.jpg',
               }}
             />
@@ -69,7 +82,7 @@ export default function DrawerContent(props) {
             <View style={{marginLeft: 15}}>
               <Text
                 style={{fontWeight: 'bold', fontSize: 18, color: colors.black}}>
-                Admin
+                {getUser.name ? getUser.name : 'Manager'}
               </Text>
               <Text style={{fontSize: 13, color: colors.black}}>
                 {user.email ? user.email : ''}

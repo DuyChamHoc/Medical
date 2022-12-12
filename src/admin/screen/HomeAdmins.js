@@ -232,159 +232,170 @@ export default function HomeAdmin({navigation}) {
         }}>
         <View
           style={{
-            marginTop: 100,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            width: 380,
-            alignSelf: 'center',
-            borderRadius: 30,
-            height: 600,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: 'bold',
-              color: colors.blue,
-              alignSelf: 'center',
-              marginTop: 10,
-            }}>
-            Update Medicine
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible1(!modalVisible1);
-              setimagebackup('');
-            }}>
-            <Icon1
-              size={20}
-              name="close"
-              style={{marginTop: -25, color: colors.black, marginLeft: 330}}
-            />
-          </TouchableOpacity>
-
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
+              padding: 20,
+              backgroundColor: 'white',
+              borderRadius: 20,
+              shadowOpacity: 0.25,
+              shadowRadius: 10,
+              elevation: 10,
+              width: '95%',
             }}>
-            <ImageBackground
+            <View
               style={{
-                height: SCREEN_WIDTH * 0.32,
-                width: SCREEN_WIDTH * 0.32,
-                marginRight: 15,
-              }}
-              source={{uri: imagebackup ? imagebackup.path : image1}}
-            />
-          </View>
+                marginTop: -10,
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: colors.blue,
+                  alignSelf: 'center',
+                }}>
+                Update Medicine
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible1(!modalVisible1);
+                  setimagebackup('');
+                }}>
+                <Icon1
+                  size={25}
+                  name="close"
+                  style={{marginTop: -25, color: colors.black, marginLeft: 330}}
+                />
+              </TouchableOpacity>
+            </View>
 
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: -20,
-              marginLeft: 180,
-            }}>
-            <Icon2
-              size={80}
-              name="camera"
-              onPress={() => {
-                uploadimage();
-              }}
-              style={{color: colors.text}}
-            />
-          </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <ImageBackground
+                style={{
+                  height: SCREEN_WIDTH * 0.30,
+                  width: SCREEN_WIDTH * 0.30,
+                  marginRight: 15,
+                }}
+                source={{uri: imagebackup ? imagebackup.path : image1}}
+              />
+            </View>
 
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Name medicine"
-            value={name1}
-            onChangeText={txt => setname1(txt)}
-          />
-          <TextInput
-            style={{
-              width: 150,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 2,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Price"
-            value={gia1}
-            onChangeText={txt => setgia1(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Pharmacy"
-            value={nhathuoc1}
-            onChangeText={txt => setnhathuoc1(txt)}
-          />
-          <TextInput
-            style={{
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Description"
-            value={mota1}
-            onChangeText={txt => setmota1(txt)}
-          />
-          <View style={{flexDirection: 'row'}}>
-            <Button
-              onPress={() => {
-                deleteItem(itemthuoc);
-                setimagebackup('');
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: -20,
+                marginLeft: 180,
+              }}>
+              <Icon2
+                size={60}
+                name="camera"
+                onPress={() => {
+                  uploadimage();
+                }}
+                style={{color: colors.text}}
+              />
+            </View>
+
+            <TextInput
+              style={{
+                marginTop: 5,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
               }}
-              title="Delete"
-              buttonStyle={{
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                marginLeft: 140,
-              }}
+              placeholder="Name medicine"
+              value={name1}
+              onChangeText={txt => setname1(txt)}
             />
-            <Button
-              title="Update"
-              buttonStyle={{
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                alignSelf: 'center',
-                marginLeft: 15,
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 150,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
               }}
-              onPress={() => {
-                update(itemthuoc);
-                setimagebackup('');
-              }}
+              placeholder="Price"
+              value={gia1}
+              onChangeText={txt => setgia1(txt)}
             />
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Pharmacy"
+              value={nhathuoc1}
+              onChangeText={txt => setnhathuoc1(txt)}
+            />
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                marginBottom: 10,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Description"
+              value={mota1}
+              onChangeText={txt => setmota1(txt)}
+            />
+            <View style={{flexDirection: 'row'}}>
+              <Button
+                onPress={() => {
+                  deleteItem(itemthuoc);
+                  setimagebackup('');
+                }}
+                title="Delete"
+                buttonStyle={{
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  marginLeft: 130,
+                }}
+              />
+              <Button
+                title="Update"
+                buttonStyle={{
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  alignSelf: 'center',
+                  marginLeft: 15,
+                }}
+                onPress={() => {
+                  update(itemthuoc);
+                  setimagebackup('');
+                }}
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -406,154 +417,163 @@ export default function HomeAdmin({navigation}) {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        style={{backgroundColor: colors.background}}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
         <View
           style={{
-            marginTop: 100,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            width: 380,
-            alignSelf: 'center',
-            borderRadius: 30,
-            height: 600,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: 'bold',
-              color: colors.blue,
-              alignSelf: 'center',
-              marginTop: 10,
-            }}>
-            Add Medicine
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(!modalVisible);
-              setimagebackup('');
-            }}>
-            <Icon1
-              size={20}
-              name="close"
-              style={{marginTop: -25, color: colors.black, marginLeft: 330}}
-            />
-          </TouchableOpacity>
-
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
+              padding: 20,
+              backgroundColor: 'white',
+              borderRadius: 20,
+              shadowOpacity: 0.25,
+              shadowRadius: 10,
+              elevation: 10,
+              width: '95%',
             }}>
-            <ImageBackground
+            <View
               style={{
-                height: SCREEN_WIDTH * 0.32,
-                width: SCREEN_WIDTH * 0.32,
-                marginRight: 15,
-              }}
-              source={{
-                uri: imagebackup
-                  ? imagebackup.path
-                  : 'https://ps.w.org/file-upload-types/assets/icon-256x256.png?rev=2243278',
-              }}
-            />
-          </View>
+                marginTop: -10,
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  color: colors.blue,
+                }}>
+                Add Medicine
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setimagebackup('');
+                }}>
+                <Icon1
+                  size={25}
+                  name="close"
+                  style={{marginTop: -25, color: colors.black, marginLeft: 330}}
+                />
+              </TouchableOpacity>
+            </View>
 
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: -20,
-              marginLeft: 180,
-            }}>
-            <Icon2
-              size={80}
-              name="camera"
-              onPress={() => {
-                uploadimage();
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <ImageBackground
+                style={{
+                  height: SCREEN_WIDTH * 0.3,
+                  width: SCREEN_WIDTH * 0.3,
+                  marginRight: 10,
+                }}
+                source={{
+                  uri: imagebackup
+                    ? imagebackup.path
+                    : 'https://ps.w.org/file-upload-types/assets/icon-256x256.png?rev=2243278',
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: -20,
+                marginLeft: 160,
+              }}>
+              <Icon2
+                size={60}
+                name="camera"
+                onPress={() => {
+                  uploadimage();
+                }}
+                style={{color: colors.text}}
+              />
+            </View>
+            <TextInput
+              style={{
+                marginTop: 5,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
               }}
-              style={{color: colors.text}}
+              placeholder="Name medicine"
+              value={name1}
+              onChangeText={txt => setname1(txt)}
             />
-          </View>
-          <TextInput
-            style={{
-              marginTop: 10,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Name medicine"
-            value={name1}
-            onChangeText={txt => setname1(txt)}
-          />
-          <TextInput
-            style={{
-              width: 150,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 2,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Price"
-            value={gia1}
-            onChangeText={txt => setgia1(txt)}
-          />
-          <TextInput
-            style={{
-              marginTop: 20,
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Pharmacy"
-            value={nhathuoc1}
-            onChangeText={txt => setnhathuoc1(txt)}
-          />
-          <TextInput
-            style={{
-              width: 320,
-              borderWidth: 1,
-              borderColor: '#86939e',
-              marginHorizontal: 20,
-              borderRadius: 12,
-              marginBottom: 20,
-              paddingHorizontal: 10,
-              color: colors.text,
-            }}
-            placeholder="Description"
-            value={mota1}
-            onChangeText={txt => setmota1(txt)}
-          />
-          <View style={{alignItems: 'flex-end', marginRight: 40}}>
-            <Button
-              title="Add"
-              buttonStyle={{
-                backgroundColor: colors.blue,
-                borderRadius: 30,
-                width: 100,
-                alignSelf: 'center',
-                marginLeft: 15,
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 150,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
               }}
-              onPress={() => {
-                add();
-              }}
+              placeholder="Price"
+              value={gia1}
+              onChangeText={txt => setgia1(txt)}
             />
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Pharmacy"
+              value={nhathuoc1}
+              onChangeText={txt => setnhathuoc1(txt)}
+            />
+            <TextInput
+              style={{
+                marginTop: 10,
+                width: 320,
+                borderWidth: 1,
+                borderColor: '#86939e',
+                marginHorizontal: 20,
+                borderRadius: 12,
+                marginBottom: 10,
+                paddingHorizontal: 10,
+                color: colors.text,
+              }}
+              placeholder="Description"
+              value={mota1}
+              onChangeText={txt => setmota1(txt)}
+            />
+            <View style={{alignItems: 'flex-end', marginRight: 10}}>
+              <Button
+                title="Add"
+                buttonStyle={{
+                  backgroundColor: colors.blue,
+                  borderRadius: 30,
+                  width: 100,
+                  alignSelf: 'center',
+                  marginLeft: 15,
+                }}
+                onPress={() => {
+                  add();
+                }}
+              />
+            </View>
           </View>
         </View>
       </Modal>
