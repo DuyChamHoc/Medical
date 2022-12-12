@@ -4,19 +4,22 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import HeaderSimple from '../components/HeaderSimple';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 export default function DiscountScreen({navigation}) {
   const {t} = useTranslation();
   const {colors} = useTheme();
   const [getDiscount, setDiscount] = useState('');
+  const user = auth().currentUser;
   useEffect(() => {
     firestore()
-      .collection('Data')
-      .doc('Discount')
+      .collection('Discount')
+      .doc(user.uid)
       .get()
       .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setDiscount(data.Discount);
+        if (documentSnapshot.exists) {
+          setDiscount(documentSnapshot.data().listdis);
+        }
       });
   }, []);
   return (
