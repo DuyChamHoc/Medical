@@ -10,6 +10,7 @@ import {
   ImageBackground,
   Dimensions,
   TextInput,
+  Image,
 } from 'react-native';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
@@ -18,6 +19,7 @@ import HomeAdminHeader from '../components/HomeAdminHeader';
 import ImagePicker from 'react-native-image-crop-picker';
 import {FlatList} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
+import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import storage from '@react-native-firebase/storage';
 GoogleSignin.configure({
   webClientId:
@@ -26,6 +28,7 @@ GoogleSignin.configure({
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function HomeAdmin({navigation}) {
   const [getTotalData, setTotalData] = useState([]);
+  const [getTotalDataBackup, setTotalDataBackup] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [gia1, setgia1] = useState('');
@@ -36,6 +39,11 @@ export default function HomeAdmin({navigation}) {
   const [nhathuoc1, setnhathuoc1] = useState('');
   const [itemthuoc, setitemthuoc] = useState('');
   const [render, setrender] = useState(0);
+  const [search, setsearch] = useState('');
+  const searchdate = val => {
+    setsearch(val);
+    setTotalData(getTotalDataBackup.filter(it => it.name.match(val)));
+  };
 
   useEffect(() => {
     firestore()
@@ -45,6 +53,7 @@ export default function HomeAdmin({navigation}) {
       .then(documentSnapshot => {
         const data = documentSnapshot.data();
         setTotalData(data.TotalData);
+        setTotalDataBackup(data.TotalData);
       });
   }, [render]);
 
@@ -163,9 +172,35 @@ export default function HomeAdmin({navigation}) {
   return (
     <View>
       <HomeAdminHeader navigation={navigation} title="Home" />
+      <View
+        style={{
+          height: 40,
+          backgroundColor: '#eff2cc',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Image
+          source={require('../../global/image/cart_order.png')}
+          style={{height: 30, width: '15%', resizeMode: 'contain'}}
+        />
+        <Text style={{color: 'black', fontSize: 16, fontWeight: '700'}}>
+          List of medicine!
+        </Text>
+      </View>
+      <View style={{marginTop: -15}}>
+        <SearchBar
+          placeholder="Search by date..."
+          onChangeText={val => searchdate(val)}
+          value={search}
+          autoCapitalize="none"
+          // containerStyle={styles.searchContainer}
+          // inputStyle={styles.searchInput}
+        />
+      </View>
       <FlatList
-        style={{marginLeft: 5, marginBottom: 10, marginTop: 20}}
+        style={{marginLeft: 5, marginTop: -10}}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 80}}
         horizontal={false}
         numColumns={2}
         data={getTotalData}
@@ -281,8 +316,8 @@ export default function HomeAdmin({navigation}) {
               }}>
               <ImageBackground
                 style={{
-                  height: SCREEN_WIDTH * 0.30,
-                  width: SCREEN_WIDTH * 0.30,
+                  height: SCREEN_WIDTH * 0.3,
+                  width: SCREEN_WIDTH * 0.3,
                   marginRight: 15,
                 }}
                 source={{uri: imagebackup ? imagebackup.path : image1}}

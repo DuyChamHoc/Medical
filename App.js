@@ -1,9 +1,6 @@
 import React from 'react'
-import { View, Text, StatusBar, StyleSheet } from 'react-native'
-import Voice from '@react-native-community/voice';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { View, StatusBar, StyleSheet } from 'react-native'
 import { colors } from './src/global/styles'
-import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/rootNavigation';
 import { SignInContextProvider } from './src/contexts/authContext'
 import { LogBox } from 'react-native';

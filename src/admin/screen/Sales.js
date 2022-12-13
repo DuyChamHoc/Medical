@@ -35,7 +35,7 @@ export default function Sales({navigation}) {
     getcheck(!check);
   };
 
-  const searchuser = val => {
+  const searchdate = val => {
     setsearch(val);
     setdata(getdataBackup.filter(it => it.datereceivedcheck.match(val)));
   };
@@ -90,7 +90,7 @@ export default function Sales({navigation}) {
           width: '99%',
           marginTop: 5,
           marginBottom: 10,
-          borderWidth: 1,
+          borderWidth: 2,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -142,8 +142,8 @@ export default function Sales({navigation}) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderTopWidth: 0.5,
-                borderBottomWidth: 0.5,
+                borderTopWidth: 0.8,
+                borderBottomWidth: 0.8,
                 borderColor: '#6BC8FF',
               }}>
               <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>
@@ -212,7 +212,7 @@ export default function Sales({navigation}) {
       <View style={{marginTop: -10}}>
         <SearchBar
           placeholder="Search by date..."
-          onChangeText={val => searchuser(val)}
+          onChangeText={val => searchdate(val)}
           value={search}
           autoCapitalize="none"
           // containerStyle={styles.searchContainer}

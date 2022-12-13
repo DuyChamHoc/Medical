@@ -243,13 +243,13 @@ export default function SignUpManager({navigation}) {
                 Phone: {item.phone}
               </Text>
               <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
+                Address: {item.address}
+              </Text>
+              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
                 Name: {item.name}
               </Text>
               <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
                 Date of birth: {item.date}
-              </Text>
-              <Text style={{fontWeight: '500', fontSize: 16, color: 'black'}}>
-                Address: {item.address}
               </Text>
             </View>
           </View>
