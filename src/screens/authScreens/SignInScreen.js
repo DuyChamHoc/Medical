@@ -19,6 +19,7 @@ import firestore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {SignInContext} from '../../contexts/authContext';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {discount} from '../../global/Data';
 
 GoogleSignin.configure({
@@ -69,11 +70,15 @@ export default function SignInScreen({navigation}) {
           .doc(user.user.uid)
           .get()
           .then(documentSnapshot => {
+            console.log(documentSnapshot.exists);
+            console.log('data: ', documentSnapshot.data());
             if (!documentSnapshot.exists) {
               firestore().collection('Users').doc(user.user.uid).set({
                 roll: 3,
                 isDarkMode: false,
                 isLanguage: 'en',
+                uid: user.user.uid,
+                full_name: user.user.displayName,
               });
               firestore()
                 .collection('Discount')
@@ -114,6 +119,7 @@ export default function SignInScreen({navigation}) {
         dispatchSignedIn({
           type: 'UPDATE_SIGN_IN',
           payload: {userToken: 3},
+          full_name: user.user.displayName,
         });
         firestore()
           .collection('Users')
@@ -125,6 +131,7 @@ export default function SignInScreen({navigation}) {
                 roll: 3,
                 isDarkMode: false,
                 isLanguage: 'en',
+                uid: user.user.uid,
               });
               firestore()
                 .collection('Discount')
@@ -161,185 +168,186 @@ export default function SignInScreen({navigation}) {
     <>
       <View style={styles.container}>
         <Header title="LOGIN" type="arrow-left" navigation={navigation} />
-        <View style={{marginLeft: 20, marginTop: 10}}></View>
-        <View style={{alignItems: 'center', marginTop: 10}}>
+        <View style={{alignItems: 'center', marginTop: 20}}>
           <Text style={styles.text1}>Log in to your account</Text>
         </View>
-        <Formik
-          initialValues={{email: '', password: ''}}
-          onSubmit={values => {
-            signIn(values);
-          }}>
-          {props => (
-            <View>
-              <View style={{marginTop: 20}}>
-                <View style={styles.textinput2}>
-                  <Icon name="email" color={colors.grey3} type="material" />
-                  <TextInput
-                    placeholder="Email"
-                    ref={textinput1}
-                    style={{width: '90%'}}
-                    onChangeText={props.handleChange('email')}
-                    value={props.values.email}
-                    autoCapitalize="none"
-                  />
-                </View>
-                <View style={styles.textinput2}>
-                  <Animatable.View
-                    animation={textinput2Fossued ? '' : 'fadeInLeft'}
-                    duration={400}>
-                    <Icon
-                      name="lock"
-                      iconStyle={{color: colors.grey3}}
-                      type="material"
-                      style={{}}
-                    />
-                  </Animatable.View>
-                  <TextInput
-                    autoCapitalize="none"
-                    style={{width: '76%'}}
-                    placeholder="Password"
-                    ref={textinput2}
-                    onFocus={() => {
-                      setTextInput2Fossued(false);
-                    }}
-                    onBlur={() => {
-                      setTextInput2Fossued(true);
-                    }}
-                    onChangeText={props.handleChange('password')}
-                    value={props.values.password}
-                    secureTextEntry={getVisible ? false : true}
-                  />
-                  <Animatable.View
-                    animation={textinput2Fossued ? '' : 'fadeInLeft'}
-                    duration={400}>
-                    <Icon
-                      name={getVisible ? 'visibility' : 'visibility-off'}
-                      iconStyle={{color: colors.grey3, marginRight: 10}}
-                      type="material"
-                      onPress={() => {
-                        setVisible(!getVisible);
-                      }}
-                    />
-                  </Animatable.View>
-                </View>
-              </View>
-
-              <View style={{marginHorizontal: 20, marginTop: 10}}>
-                <Button
-                  title="Login"
-                  buttonStyle={styles.styledButton}
-                  titleStyle={styles.buttonTitle}
-                  onPress={props.handleSubmit}
-                />
-              </View>
-            </View>
-          )}
-        </Formik>
-
-        <View style={{alignItems: 'center', marginTop: 15}}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text style={{...styles.text1, textDecorationLine: 'underline'}}>
-              {' '}
-              Forgot password ?
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{alignItems: 'center', marginTop: 20, marginBottom: 20}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>OR</Text>
-        </View>
-
-        <View style={{marginHorizontal: 10, marginTop: -2}}>
-          <SocialIcon
-            title="Login with Facebook"
-            button
-            type="facebook"
-            style={styles.SocialIcon}
-            onPress={() => {
-              onFacebookButtonPress();
-            }}
-          />
-        </View>
-        <View style={{marginHorizontal: 10, marginTop: 0}}>
-          <SocialIcon
-            title="Login with Google"
-            button
-            type="google"
-            style={styles.SocialIcon}
-            onPress={() => {
-              onGoogleButtonPress();
-            }}
-          />
-        </View>
-
-        <View style={{marginTop: 20, marginLeft: 20}}>
-          <Text style={{...styles.text1}}> No account ? </Text>
-        </View>
-
-        <View style={{alignItems: 'flex-end', marginHorizontal: 20}}>
-          <Button
-            title="Sign up"
-            buttonStyle={styles.createButton}
-            titleStyle={styles.createButtonTittle}
-            onPress={() => {
-              navigation.navigate('SignUpScreen');
-            }}
-          />
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}>
-                <Icon1
-                  size={20}
-                  name="close"
-                  style={{marginLeft: 265, marginTop: -20}}
-                />
-              </TouchableOpacity>
-              <Text style={styles.modalText}>Forgot password</Text>
-              <Text style={styles.modalText1}>
-                Enter your email. We will send you a link to reset your password
-                export.
-              </Text>
+        <KeyboardAwareScrollView>
+          <Formik
+            initialValues={{email: '', password: ''}}
+            onSubmit={values => {
+              signIn(values);
+            }}>
+            {props => (
               <View>
-                <TextInput
-                  style={styles.textinput3}
-                  placeholder="example@gmail.com  "
-                  ref={textinput1}
-                  autoCapitalize="none"
-                  onChangeText={setemail}
-                  value={getemail}
+                <View style={{marginTop: 20}}>
+                  <View style={styles.textinput2}>
+                    <Icon name="email" color={colors.grey3} type="material" />
+                    <TextInput
+                      placeholder="Email"
+                      ref={textinput1}
+                      style={{width: '90%'}}
+                      onChangeText={props.handleChange('email')}
+                      value={props.values.email}
+                      autoCapitalize="none"
+                    />
+                  </View>
+                  <View style={styles.textinput2}>
+                    <Animatable.View
+                      animation={textinput2Fossued ? '' : 'fadeInLeft'}
+                      duration={400}>
+                      <Icon
+                        name="lock"
+                        iconStyle={{color: colors.grey3}}
+                        type="material"
+                        style={{}}
+                      />
+                    </Animatable.View>
+                    <TextInput
+                      autoCapitalize="none"
+                      style={{width: '76%'}}
+                      placeholder="Password"
+                      ref={textinput2}
+                      onFocus={() => {
+                        setTextInput2Fossued(false);
+                      }}
+                      onBlur={() => {
+                        setTextInput2Fossued(true);
+                      }}
+                      onChangeText={props.handleChange('password')}
+                      value={props.values.password}
+                      secureTextEntry={getVisible ? false : true}
+                    />
+                    <Animatable.View
+                      animation={textinput2Fossued ? '' : 'fadeInLeft'}
+                      duration={400}>
+                      <Icon
+                        name={getVisible ? 'visibility' : 'visibility-off'}
+                        iconStyle={{color: colors.grey3, marginRight: 10}}
+                        type="material"
+                        onPress={() => {
+                          setVisible(!getVisible);
+                        }}
+                      />
+                    </Animatable.View>
+                  </View>
+                </View>
+
+                <View style={{marginHorizontal: 20, marginTop: 10}}>
+                  <Button
+                    title="Login"
+                    buttonStyle={styles.styledButton}
+                    titleStyle={styles.buttonTitle}
+                    onPress={props.handleSubmit}
+                  />
+                </View>
+              </View>
+            )}
+          </Formik>
+
+          <View style={{alignItems: 'center', marginTop: 15}}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text style={{...styles.text1, textDecorationLine: 'underline'}}>
+                {' '}
+                Forgot password ?
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{alignItems: 'center', marginTop: 20, marginBottom: 20}}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>OR</Text>
+          </View>
+
+          <View style={{marginHorizontal: 10, marginTop: -2}}>
+            <SocialIcon
+              title="Login with Facebook"
+              button
+              type="facebook"
+              style={styles.SocialIcon}
+              onPress={() => {
+                onFacebookButtonPress();
+              }}
+            />
+          </View>
+          <View style={{marginHorizontal: 10, marginTop: 0}}>
+            <SocialIcon
+              title="Login with Google"
+              button
+              type="google"
+              style={styles.SocialIcon}
+              onPress={() => {
+                onGoogleButtonPress();
+              }}
+            />
+          </View>
+
+          <View style={{marginTop: 20, marginLeft: 20}}>
+            <Text style={{...styles.text1}}> No account ? </Text>
+          </View>
+
+          <View style={{alignItems: 'flex-end', marginHorizontal: 20}}>
+            <Button
+              title="Sign up"
+              buttonStyle={styles.createButton}
+              titleStyle={styles.createButtonTittle}
+              onPress={() => {
+                navigation.navigate('SignUpScreen');
+              }}
+            />
+          </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <Icon1
+                    size={20}
+                    name="close"
+                    style={{marginLeft: 265, marginTop: -20}}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.modalText}>Forgot password</Text>
+                <Text style={styles.modalText1}>
+                  Enter your email. We will send you a link to reset your
+                  password export.
+                </Text>
+                <View>
+                  <TextInput
+                    style={styles.textinput3}
+                    placeholder="example@gmail.com  "
+                    ref={textinput1}
+                    autoCapitalize="none"
+                    onChangeText={setemail}
+                    value={getemail}
+                  />
+                </View>
+                <Button
+                  title="Send Email"
+                  buttonStyle={{
+                    alignContent: 'center',
+                    borderRadius: 15,
+                    height: 45,
+                    width: 250,
+                    backgroundColor: colors.blue,
+                    marginLeft: 8,
+                  }}
+                  titleStyle={styles.buttonTitle}
+                  onPress={() => {
+                    forgotPassword(getemail);
+                    setModalVisible(!modalVisible);
+                  }}
                 />
               </View>
-              <Button
-                title="Send Email"
-                buttonStyle={{
-                  alignContent: 'center',
-                  borderRadius: 15,
-                  height: 45,
-                  width: 250,
-                  backgroundColor: colors.blue,
-                  marginLeft: 8,
-                }}
-                titleStyle={styles.buttonTitle}
-                onPress={() => {
-                  forgotPassword(getemail);
-                  setModalVisible(!modalVisible);
-                }}
-              />
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </KeyboardAwareScrollView>
       </View>
     </>
   );

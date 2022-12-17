@@ -59,6 +59,7 @@ const SignUpScreen = ({navigation}) => {
           roll: 3,
           isLanguage: 'en',
           isDarkMode: false,
+          uid: user.uid,
         })
         .then(() => {
           console.log('User added!');

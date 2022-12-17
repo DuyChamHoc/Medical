@@ -82,14 +82,6 @@ export default function DrawerContent(props) {
       });
   };
   async function signOut() {
-    firestore()
-      .collection('User' + user.uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          update2(documentSnapshot.id);
-        });
-      });
     try {
       auth()
         .signOut()

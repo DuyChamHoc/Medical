@@ -6,8 +6,10 @@ import HomeAdmin from '../screen/HomeAdmins';
 import ListOrder from '../screen/ListOrder';
 import DrawerContent from '../components/DrawerContent';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon3 from 'react-native-vector-icons/Entypo';
 import Sales from '../screen/Sales';
 import SignUpManager from '../screen/SignUpManager';
+import DiscountAdmin from '../screen/DiscountAdmin';
 const Drawer = createDrawerNavigator();
 
 export default function Drawernavigation() {
@@ -43,6 +45,17 @@ export default function Drawernavigation() {
           title: 'Revenue',
           drawerIcon: ({color, size}) => (
             <Icon1 name="skype-business" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="discount"
+        component={DiscountAdmin}
+        options={{
+          headerShown: false,
+          title: 'Discount',
+          drawerIcon: ({color, size}) => (
+            <Icon3 name="price-tag" color={color} size={size} />
           ),
         }}
       />

@@ -82,17 +82,17 @@ export default function SignInWelcomeScreen({navigation}) {
           Welcome!
         </Text>
         <Text style={{marginLeft: 30, fontSize: 20, color: colors.black}}>
-          Create an account or log in to order medicine right on
-        </Text>
-        <Text
-          style={{
-            marginLeft: 174,
-            marginTop: -27,
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.black,
-          }}>
-          MEDELI
+          Create an account or log in to order medicine right on{' '}
+          <Text
+            style={{
+              marginLeft: 174,
+              marginTop: -27,
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: colors.black,
+            }}>
+            MEDELI
+          </Text>
         </Text>
       </View>
       <View

@@ -45,6 +45,8 @@ export default function MyAccountScreen({navigation}) {
   const [getorder, setorder] = useState(0);
   const [getcomplete, setcomplete] = useState(0);
   const [getnum, setnum] = useState(0);
+  const [getisDarkMode, setisDarkMode] = useState();
+  const [getisLanguage, setisLanguage] = useState();
   var count = 0;
 
   const showMode = currentMode => {
@@ -117,6 +119,8 @@ export default function MyAccountScreen({navigation}) {
           setsex(documentSnapshot.data().sex);
           setaddress(documentSnapshot.data().address);
           setSelectedValue(documentSnapshot.data().sex);
+          setisDarkMode(documentSnapshot.data().isDarkMode);
+          setisLanguage(documentSnapshot.data().isLanguage);
         }
       });
     if (count == 0) {
@@ -140,8 +144,9 @@ export default function MyAccountScreen({navigation}) {
         sex: sex1,
         address: address1,
         roll: 3,
-        isLanguage: 'en',
-        isDarkMode: false,
+        isLanguage: getisLanguage,
+        isDarkMode: getisDarkMode,
+        uid: user.uid,
       })
       .then(() => {
         console.log('User added!');
