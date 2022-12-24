@@ -93,7 +93,7 @@ export default function ProductCard({navigation, screenWidth, item}) {
         <View style={[styles.imageView, {marginTop: 20}, {width: screenWidth}]}>
           <ImageBackground
             style={styles.image}
-            source={{uri: item.image}}></ImageBackground>
+            source={{uri: item.image}}/>
           <View>
             <Text
               style={{
@@ -219,14 +219,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.3,
-    height: SCREEN_WIDTH * 0.7,
+    height: SCREEN_WIDTH * 0.50,
     marginLeft: SCREEN_WIDTH * 0.035,
     marginBottom: SCREEN_WIDTH * 0.035,
   },
 
   image: {
-    height: SCREEN_WIDTH * 0.35,
-    width: SCREEN_WIDTH * 0.35,
+    height: SCREEN_WIDTH * 0.20,
+    width: SCREEN_WIDTH * 0.20,
     borderRadius: 10,
     marginRight: 15,
   },

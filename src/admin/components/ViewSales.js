@@ -26,7 +26,7 @@ export default function ViewSales({data}) {
           fontWeight: 'bold',
           fontSize: 20,
         }}>
-        Total revenue: {isValue}.000đ
+        Total revenue: {isValue}.000 VND
       </Text>
     </View>
   );

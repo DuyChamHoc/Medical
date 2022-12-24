@@ -25,7 +25,7 @@ export default function Categories({navigation}) {
   const [getThietbi, setThietbi] = useState('');
   const name = [
     t('Thuốc không kê đơn'),
-    'COVID-19',
+    t('COVID-19'),
     t('Thực phẩm chức năng'),
     t('Thiết bị y tế'),
   ];
@@ -82,7 +82,7 @@ export default function Categories({navigation}) {
         <SearchComponent navigation={navigation} />
       </View>
 
-      <View style={{marginTop: 80, marginLeft: 10, marginBottom: 20}}>
+      <View style={{marginTop: 70, marginLeft: 10, marginBottom: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <CategoriesCard
             image={require('../global/image/categories/category__thuockhongkedon.png')}
@@ -117,7 +117,7 @@ export default function Categories({navigation}) {
 
       <View>
         <FlatList
-          style={{marginLeft: 5, marginBottom: 10, marginTop: 20}}
+          style={{marginLeft: 5, marginBottom: 10}}
           showsVerticalScrollIndicator={false}
           horizontal={false}
           numColumns={2}

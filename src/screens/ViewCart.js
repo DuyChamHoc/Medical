@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import Icon1 from 'react-native-vector-icons/AntDesign';
@@ -46,7 +46,7 @@ export default function ViewCart({navigation}) {
               marginLeft: 5,
               fontSize: 20,
             }}>
-            {total ? total + '.000 đ' : '0 đ'}
+            {total ? total + '.000 VND' : '0 VND'}
           </Text>
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

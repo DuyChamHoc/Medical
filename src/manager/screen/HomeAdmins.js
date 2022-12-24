@@ -27,7 +27,7 @@ GoogleSignin.configure({
     '359199845323-h10e31djcqb9fbobv2vknmh1h1h5hge0.apps.googleusercontent.com',
 });
 const SCREEN_WIDTH = Dimensions.get('window').width;
-export default function HomeAdmin({navigation}) {
+export default function CheckMedicine({navigation}) {
   const [getTotalData, setTotalData] = useState([]);
   const [getTotalDataBackup, setTotalDataBackup] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,16 +47,16 @@ export default function HomeAdmin({navigation}) {
     setTotalData(getTotalDataBackup.filter(it => it.name.match(val)));
   };
 
-  const ref = firestore().collection('Products');
   useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    firestore()
+      .collection('Data')
+      .doc('TotalData')
+      .get()
+      .then(documentSnapshot => {
+        const data = documentSnapshot.data();
+        setTotalData(data.TotalData);
+        setTotalDataBackup(data.TotalData);
       });
-      setTotalData(list);
-      setTotalDataBackup(list);
-    });
   }, [render]);
 
   const showmodal = () => {
@@ -84,20 +84,24 @@ export default function HomeAdmin({navigation}) {
   const add = () => {
     const a = Math.random();
     firestore()
-      .collection('Products')
-      .add({
-        SL: 1,
-        amount: amount1,
-        supplier: supplier1,
-        gia: gia1,
-        id: a,
-        image: image1,
-        mota: mota1,
-        name: name1,
-        nhathuoc: 'Long Chau Pharmacy',
-      })
-      .then(() => {
-        console.log('products added!');
+      .collection('Data')
+      .doc('TotalData')
+      .get()
+      .then(documentSnapshot => {
+        updatethuoc([
+          ...documentSnapshot.data().TotalData,
+          {
+            SL: 1,
+            amount: amount1,
+            supplier: supplier1,
+            gia: gia1,
+            id: a,
+            image: image1,
+            mota: mota1,
+            name: name1,
+            nhathuoc: 'Long Chau Pharmacy',
+          },
+        ]);
       });
     setModalVisible(!modalVisible);
     setimagebackup('');
@@ -118,27 +122,21 @@ export default function HomeAdmin({navigation}) {
 
   const update = item => {
     firestore()
-      .collection('Products')
+      .collection('Data')
+      .doc('TotalData')
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.data().id == item.id) {
-            firestore()
-              .collection('Products')
-              .doc(documentSnapshot.id)
-              .update({
-                amount: amount1,
-                supplier: supplier1,
-                SL: 1,
-                gia: gia1,
-                image: image1,
-                mota: mota1,
-                name: name1,
-                nhathuoc: 'Long Chau Pharmacy',
-              })
-              .then(() => {
-                console.log('User updated!');
-              });
+      .then(documentSnapshot => {
+        documentSnapshot.data().TotalData.map(items => {
+          if (items.id == item.id) {
+            (items.amount = amount1),
+              (items.supplier = supplier1),
+              (items.SL = 1),
+              (items.gia = gia1),
+              (items.image = image1),
+              (items.mota = mota1),
+              (items.name = name1),
+              (items.nhathuoc = 'Long Chau Pharmacy');
+            updatethuoc(documentSnapshot.data().TotalData);
           }
         });
       });
@@ -151,22 +149,30 @@ export default function HomeAdmin({navigation}) {
     setrender(Math.random());
   };
 
+  const updatethuoc = add => {
+    firestore()
+      .collection('Data')
+      .doc('TotalData')
+      .update({
+        TotalData: add,
+      })
+      .then(() => {
+        console.log('Thuoc updated!');
+        setrender(Math.random());
+      });
+  };
+
   const deleteItem = item => {
     firestore()
-      .collection('Products')
+      .collection('Data')
+      .doc('TotalData')
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          if (documentSnapshot.data().id == item.id) {
-            firestore()
-              .collection('Products')
-              .doc(documentSnapshot.id)
-              .delete()
-              .then(() => {
-                console.log('Products deleted!');
-              });
-          }
-        });
+      .then(documentSnapshot => {
+        updatethuoc(
+          documentSnapshot
+            .data()
+            .TotalData.filter(items => items.id != item.id),
+        );
       });
     setModalVisible1(!modalVisible1);
     setitemthuoc('');
@@ -295,7 +301,7 @@ export default function HomeAdmin({navigation}) {
           }}>
           <View
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: 'white',
               borderRadius: 20,
               shadowOpacity: 0.25,
@@ -502,7 +508,7 @@ export default function HomeAdmin({navigation}) {
           }}>
           <View
             style={{
-              padding: 10,
+              padding: 20,
               backgroundColor: 'white',
               borderRadius: 20,
               shadowOpacity: 0.25,
@@ -677,8 +683,7 @@ export default function HomeAdmin({navigation}) {
 
 const styles = StyleSheet.create({
   fab: {
-    // top: 730,
-    top: SCREEN_WIDTH * 1.65,
+    top: 730,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',
@@ -694,7 +699,7 @@ const styles = StyleSheet.create({
   fabIcon: {
     fontSize: 40,
     color: '#03A9F4',
-    marginTop: 0,
+    marginTop: -5,
   },
   cardView: {
     padding: 5,
@@ -713,7 +718,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.3,
-    height: SCREEN_WIDTH * 0.6,
+    height: SCREEN_WIDTH * 0.7,
     marginLeft: SCREEN_WIDTH * 0.035,
     marginBottom: SCREEN_WIDTH * 0.035,
   },
@@ -725,7 +730,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: SCREEN_WIDTH * 0.3,
+    height: SCREEN_WIDTH * 0.35,
     width: SCREEN_WIDTH * 0.35,
     borderRadius: 10,
     marginRight: 15,

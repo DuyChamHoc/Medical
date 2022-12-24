@@ -92,7 +92,7 @@ export default function DetailCustomer({route, navigation}) {
     return (
       <View
         style={{
-          borderWidth: 1,
+          borderWidth: 3,
           margin: 5,
           borderRadius: 10,
           borderColor: '#6BC8FF',
@@ -235,7 +235,7 @@ export default function DetailCustomer({route, navigation}) {
                 Total money:{' '}
                 {
                   <Text style={{color: 'red', fontWeight: '700'}}>
-                    {item.total}.000 đ
+                    {item.total}.000 VND
                   </Text>
                 }{' '}
               </Text>
@@ -254,7 +254,7 @@ export default function DetailCustomer({route, navigation}) {
                     backgroundColor: '#36a0ef',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: 170,
+                    width: 150,
                   }}
                   onPress={() => {
                     UpdateStatus(item.id);
@@ -271,7 +271,7 @@ export default function DetailCustomer({route, navigation}) {
                         fontWeight: 'bold',
                         fontSize: 16,
                       }}>
-                      Order confirmation
+                      Confirm
                     </Text>
                   </View>
                 </TouchableOpacity>

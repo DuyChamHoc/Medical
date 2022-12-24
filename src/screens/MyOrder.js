@@ -206,7 +206,7 @@ export default function MyOrder({navigation, route}) {
                     fontWeight: 'bold',
                     fontSize: 16,
                   }}>
-                  {cost}.000 đ
+                  {cost}.000 VND
                 </Text>
               </View>
               <View
@@ -230,7 +230,7 @@ export default function MyOrder({navigation, route}) {
                     fontWeight: 'bold',
                     fontSize: 16,
                   }}>
-                  50.0000 đ
+                  50.0000 VND
                 </Text>
               </View>
               <View style={num_dis == 0 ? styles.hideDis : styles.showDis}>
@@ -244,7 +244,7 @@ export default function MyOrder({navigation, route}) {
                 </Text>
                 <Text
                   style={{color: 'green', fontWeight: 'bold', fontSize: 16}}>
-                  -{num_dis * 50}.000đ
+                  -{num_dis * 50}.000 VND
                 </Text>
               </View>
               <View
@@ -488,7 +488,7 @@ export default function MyOrder({navigation, route}) {
           }}>
           <View
             style={{
-              marginRight: 40,
+              marginRight: 10,
               flexDirection: 'row',
               alignItems: 'center',
             }}>
@@ -497,12 +497,12 @@ export default function MyOrder({navigation, route}) {
                 color: colors.text,
                 fontSize: 18,
                 fontWeight: 'bold',
-                marginRight: 5,
               }}>
               {t('Tổng thanh toán:')}
             </Text>
             <Text style={{color: 'red', fontSize: 18, fontWeight: 'bold'}}>
-              {cost + 50 - num_dis * 50}.000đ
+              {' '}
+              {cost + 50 - num_dis * 50}.000 VND
             </Text>
           </View>
           <TouchableOpacity

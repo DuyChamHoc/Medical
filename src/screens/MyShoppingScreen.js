@@ -155,7 +155,7 @@ export default function MyShoppingScreen({navigation}) {
           {t('Vui lòng chọn sản phẩm bạn muốn mua!')}
         </Text>
       </View>
-      <View style={{height: '79.5%'}}>
+      <View style={{height: '77%'}}>
         <FlatList
           data={getdata}
           renderItem={({item, index}) => <ListItem item={item} />}

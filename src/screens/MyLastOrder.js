@@ -32,9 +32,6 @@ export default function MyLastOrder({navigation}) {
         }
       });
   }, [check]);
-  const addd = () => {
-    getcheck(!check);
-  };
   const List = ({item}) => {
     return (
       <TouchableOpacity
@@ -49,7 +46,8 @@ export default function MyLastOrder({navigation}) {
             height: 100,
             borderRadius: 10,
             width: SCREEN_WIDTH - 20,
-            marginLeft: 10,
+            marginLeft: 5,
+            marginRight: 5,
           }}>
           <View
             style={{
@@ -97,7 +95,7 @@ export default function MyLastOrder({navigation}) {
           borderColor: '#6BC8FF',
           marginTop: 10,
           marginBottom: 10,
-          borderWidth: 1,
+          borderWidth: 3,
           borderRadius: 10,
           width: '100%',
         }}>

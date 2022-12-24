@@ -183,7 +183,7 @@ export default function Sales({navigation}) {
                   color: colors.text,
                   fontSize: 16,
                 }}>
-                Total: {<Text style={{color: 'red'}}>{item.total}.000đ</Text>}
+                Total: {<Text style={{color: 'red'}}>{item.total}.000 VND</Text>}
               </Text>
             </View>
           </View>
@@ -221,7 +221,7 @@ export default function Sales({navigation}) {
       </View>
       <View
         style={{
-          height: '79%',
+          height: '76%',
           marginTop: -15,
           justifyContent: 'center',
           alignItems: 'center',

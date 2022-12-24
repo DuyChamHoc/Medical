@@ -186,7 +186,7 @@ export default function MyOrderComplete({navigation}) {
         style={{
           marginTop: 10,
           marginBottom: 10,
-          borderWidth: 2,
+          borderWidth: 3,
           borderColor: '#6BC8FF',
           borderRadius: 10,
         }}>
@@ -260,7 +260,7 @@ export default function MyOrderComplete({navigation}) {
                     fontSize: 16,
                   }}>
                   {t('Thành tiền:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.total}.000đ</Text>}{' '}
+                  {<Text style={{color: 'red'}}>{item.total}.000 VND</Text>}{' '}
                 </Text>
 
                 <Text

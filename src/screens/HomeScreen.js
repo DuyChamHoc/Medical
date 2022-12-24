@@ -20,22 +20,21 @@ export default function HomeScreen({navigation}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
   const [getTotalData, setTotalData] = useState('');
+  const ref = firestore().collection('Products');
   useEffect(() => {
-    firestore()
-      .collection('Data')
-      .doc('TotalData')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setTotalData(data.TotalData);
+    return ref.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        list.push(doc.data());
       });
+      setTotalData(list);
+    });
   }, []);
   return (
     <View style={styles.container}>
       <View>
         <HomeHeader navigation={navigation} title="MEDELI" />
       </View>
-
       <View style={{height: '30%'}}>
         <Swiper
           activeDot={
@@ -47,7 +46,6 @@ export default function HomeScreen({navigation}) {
                 borderRadius: 4,
                 marginLeft: 3,
                 marginRight: 3,
-                marginTop: 3,
                 marginBottom: 3,
               }}
             />
@@ -57,7 +55,7 @@ export default function HomeScreen({navigation}) {
             alignContent: 'center',
             marginLeft: 25,
             justifyContent: 'center',
-            marginTop: 40,
+            marginTop: 15,
             height: 168,
           }}>
           <View style={{height: 113, width: 348}}>
@@ -97,7 +95,7 @@ export default function HomeScreen({navigation}) {
       </View>
       <View>
         <FlatList
-          style={{marginLeft: 5, marginBottom: 10, marginTop: 20}}
+          style={{marginLeft: 5, marginBottom: 300}}
           showsVerticalScrollIndicator={false}
           horizontal={false}
           numColumns={2}
@@ -169,9 +167,9 @@ const styles = StyleSheet.create({
   },
   headerTextView: {
     marginLeft: 20,
-    marginTop: 3,
     marginBottom: 8,
     paddingVertical: 3,
+    marginTop:-20,
   },
   smallCard: {
     borderRadius: 20,
