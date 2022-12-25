@@ -39,7 +39,6 @@ export default function DetailDiscount({route, navigation}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User data: ', documentSnapshot.data());
           setdiscount(documentSnapshot.data().listdis);
         }
       });

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, TouchableOpacity, Image,Dimensions} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
 import HomeAdminHeader from '../components/HomeAdminHeader';
@@ -8,7 +8,6 @@ GoogleSignin.configure({
   webClientId:
     '359199845323-h10e31djcqb9fbobv2vknmh1h1h5hge0.apps.googleusercontent.com',
 });
-const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function DiscountAdmin({navigation}) {
   const {colors} = useTheme();
   const ref = firestore().collection('Users');

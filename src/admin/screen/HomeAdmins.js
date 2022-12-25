@@ -17,6 +17,7 @@ import Icon2 from 'react-native-vector-icons/EvilIcons';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import HomeAdminHeader from '../components/HomeAdminHeader';
 import ImagePicker from 'react-native-image-crop-picker';
+import {Picker} from '@react-native-picker/picker';
 import {FlatList} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
@@ -28,6 +29,8 @@ GoogleSignin.configure({
 });
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function HomeAdmin({navigation}) {
+  const refcate = firestore().collection('categories');
+  const [getCate, setCate] = useState([]);
   const [getTotalData, setTotalData] = useState([]);
   const [getTotalDataBackup, setTotalDataBackup] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,15 +40,26 @@ export default function HomeAdmin({navigation}) {
   const [imagebackup, setimagebackup] = useState('');
   const [mota1, setmota1] = useState('');
   const [name1, setname1] = useState('');
-  const [amount1, setamount1] = useState('');
+  const [quantity1, setquantity1] = useState('');
   const [supplier1, setsupplier1] = useState('');
   const [itemthuoc, setitemthuoc] = useState('');
   const [render, setrender] = useState(0);
   const [search, setsearch] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
   const searchdate = val => {
     setsearch(val);
     setTotalData(getTotalDataBackup.filter(it => it.name.match(val)));
   };
+  useEffect(() => {
+    return refcate.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        list.push(doc.data());
+      });
+      setCate(list);
+      setSelectedValue(list[0].name);
+    });
+  }, [render]);
 
   const ref = firestore().collection('Products');
   useEffect(() => {
@@ -60,7 +74,7 @@ export default function HomeAdmin({navigation}) {
   }, [render]);
 
   const showmodal = () => {
-    setamount1('');
+    setquantity1('');
     setsupplier1('');
     setgia1('');
     setname1('');
@@ -87,7 +101,7 @@ export default function HomeAdmin({navigation}) {
       .collection('Products')
       .add({
         SL: 1,
-        amount: amount1,
+        quantity: quantity1,
         supplier: supplier1,
         gia: gia1,
         id: a,
@@ -95,6 +109,7 @@ export default function HomeAdmin({navigation}) {
         mota: mota1,
         name: name1,
         nhathuoc: 'Long Chau Pharmacy',
+        category: selectedValue,
       })
       .then(() => {
         console.log('products added!');
@@ -105,9 +120,9 @@ export default function HomeAdmin({navigation}) {
   };
 
   const showmodal1 = item => {
-    console.log(item.amount);
+    setSelectedValue(item.category);
     setsupplier1(item.supplier);
-    setamount1(item.amount);
+    setquantity1(item.quantity);
     setgia1(item.gia);
     setimage1(item.image);
     setmota1(item.mota);
@@ -127,7 +142,7 @@ export default function HomeAdmin({navigation}) {
               .collection('Products')
               .doc(documentSnapshot.id)
               .update({
-                amount: amount1,
+                quantity: quantity1,
                 supplier: supplier1,
                 SL: 1,
                 gia: gia1,
@@ -135,6 +150,7 @@ export default function HomeAdmin({navigation}) {
                 mota: mota1,
                 name: name1,
                 nhathuoc: 'Long Chau Pharmacy',
+                category:selectedValue,
               })
               .then(() => {
                 console.log('User updated!');
@@ -192,12 +208,10 @@ export default function HomeAdmin({navigation}) {
       </View>
       <View style={{marginTop: -15}}>
         <SearchBar
-          placeholder="Search by date..."
+          placeholder="Search by name...?"
           onChangeText={val => searchdate(val)}
           value={search}
           autoCapitalize="none"
-          // containerStyle={styles.searchContainer}
-          // inputStyle={styles.searchInput}
         />
       </View>
       <FlatList
@@ -247,7 +261,7 @@ export default function HomeAdmin({navigation}) {
                         marginTop: 5,
                       },
                     ]}>
-                    Amount {item.amount}
+                    Quantity {item.quantity}
                   </Text>
                   <Text
                     style={[
@@ -342,7 +356,9 @@ export default function HomeAdmin({navigation}) {
                   width: SCREEN_WIDTH * 0.3,
                   marginRight: 15,
                 }}
-                source={{uri: imagebackup ? imagebackup.path : image1}}
+                source={{
+                  uri: imagebackup ? imagebackup.path : image1,
+                }}
               />
             </View>
 
@@ -404,9 +420,9 @@ export default function HomeAdmin({navigation}) {
                   paddingHorizontal: 10,
                   color: colors.text,
                 }}
-                placeholder="Amount"
-                value={amount1.toString()}
-                onChangeText={txt => setamount1(txt)}
+                placeholder="Quantity"
+                value={quantity1.toString()}
+                onChangeText={txt => setquantity1(txt)}
               />
             </View>
 
@@ -441,6 +457,29 @@ export default function HomeAdmin({navigation}) {
               value={mota1}
               onChangeText={txt => setmota1(txt)}
             />
+            <View style={styles.switchText}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: 'black',
+                  paddingLeft: 5,
+                  fontWeight: 'bold',
+                }}>
+                Categories:
+              </Text>
+              <View>
+                <Picker
+                  selectedValue={selectedValue}
+                  style={{height: 50, width: 210, color: colors.text}}
+                  onValueChange={(itemValue, itemIndex) => {
+                    setSelectedValue(itemValue);
+                  }}>
+                  {getCate.map(item => (
+                    <Picker.Item label={item.name} value={item.name} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
             <View style={{flexDirection: 'row'}}>
               <Button
                 onPress={() => {
@@ -544,8 +583,8 @@ export default function HomeAdmin({navigation}) {
                 }}>
                 <ImageBackground
                   style={{
-                    height: SCREEN_WIDTH * 0.3,
-                    width: SCREEN_WIDTH * 0.3,
+                    height: SCREEN_WIDTH * 0.28,
+                    width: SCREEN_WIDTH * 0.28,
                     marginRight: 10,
                   }}
                   source={{
@@ -564,7 +603,7 @@ export default function HomeAdmin({navigation}) {
                   marginLeft: 160,
                 }}>
                 <Icon2
-                  size={60}
+                  size={55}
                   name="camera"
                   onPress={() => {
                     uploadimage();
@@ -615,9 +654,9 @@ export default function HomeAdmin({navigation}) {
                     paddingHorizontal: 10,
                     color: colors.text,
                   }}
-                  placeholder="Amount"
-                  value={amount1}
-                  onChangeText={txt => setamount1(txt)}
+                  placeholder="Quantity"
+                  value={quantity1}
+                  onChangeText={txt => setquantity1(txt)}
                 />
               </View>
 
@@ -652,6 +691,29 @@ export default function HomeAdmin({navigation}) {
                 value={mota1}
                 onChangeText={txt => setmota1(txt)}
               />
+              <View style={styles.switchText}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: 'black',
+                    paddingLeft: 5,
+                    fontWeight: 'bold',
+                  }}>
+                  Categories:
+                </Text>
+                <View>
+                  <Picker
+                    selectedValue={selectedValue}
+                    style={{height: 50, width: 210, color: colors.text}}
+                    onValueChange={(itemValue, itemIndex) => {
+                      setSelectedValue(itemValue);
+                    }}>
+                    {getCate.map(item => (
+                      <Picker.Item label={item.name} value={item.name} />
+                    ))}
+                  </Picker>
+                </View>
+              </View>
               <View style={{alignItems: 'flex-end', marginRight: 10}}>
                 <Button
                   title="Add"
@@ -802,5 +864,14 @@ const styles = StyleSheet.create({
     height: 20,
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+  switchText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingVertical: 5,
+    paddingRight: 10,
+    marginTop: 5,
   },
 });

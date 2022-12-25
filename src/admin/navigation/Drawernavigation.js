@@ -1,15 +1,17 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeAdmin from '../screen/HomeAdmins';
 import ListOrder from '../screen/ListOrder';
 import DrawerContent from '../components/DrawerContent';
+import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/Entypo';
+import Icon4 from 'react-native-vector-icons/MaterialIcons';
 import Sales from '../screen/Sales';
 import SignUpManager from '../screen/SignUpManager';
 import DiscountAdmin from '../screen/DiscountAdmin';
+import Category from '../screen/Category';
 const Drawer = createDrawerNavigator();
 
 export default function Drawernavigation() {
@@ -64,9 +66,20 @@ export default function Drawernavigation() {
         component={SignUpManager}
         options={{
           headerShown: false,
-          title: 'Employee Manager',
+          title: 'Employee',
           drawerIcon: ({color, size}) => (
-            <Icon name="user" color={color} size={size} />
+            <Icon name="addusergroup" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="category"
+        component={Category}
+        options={{
+          headerShown: false,
+          title: 'Category',
+          drawerIcon: ({color, size}) => (
+            <Icon4 name="category" color={color} size={size} />
           ),
         }}
       />

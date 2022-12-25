@@ -179,9 +179,6 @@ export default function SignUpManager({navigation}) {
       setemployeemanager(list);
     });
   }, [check]);
-  const addd = () => {
-    getcheck(!check);
-  };
   const dataupdate = item => {
     setName(item.name);
     setAddress(item.address);

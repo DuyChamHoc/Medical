@@ -106,7 +106,7 @@ export default function DetailCustomerManager({route, navigation}) {
     return (
       <View
         style={{
-          borderWidth: 1,
+          borderWidth: 3,
           margin: 5,
           borderRadius: 10,
           borderColor: '#6BC8FF',
@@ -163,7 +163,7 @@ export default function DetailCustomerManager({route, navigation}) {
                 style={{
                   flexDirection: 'row',
                   borderBottomWidth: 1,
-                  borderBottomColor: colors.text,
+                  borderBottomColor: '#6BC8FF',
                 }}>
                 <Text
                   style={{
@@ -205,7 +205,7 @@ export default function DetailCustomerManager({route, navigation}) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderWidth: 0.5,
+                borderWidth: 1,
                 borderRadius: 10,
                 borderColor: '#6BC8FF',
               }}>
@@ -268,7 +268,7 @@ export default function DetailCustomerManager({route, navigation}) {
                     backgroundColor: '#36a0ef',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: 170,
+                    width: 140,
                   }}
                   onPress={() => {
                     UpdateStatus(item.id);
@@ -285,7 +285,7 @@ export default function DetailCustomerManager({route, navigation}) {
                         fontWeight: 'bold',
                         fontSize: 16,
                       }}>
-                      Order confirmation
+                      Confirm
                     </Text>
                   </View>
                 </TouchableOpacity>

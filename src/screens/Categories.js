@@ -11,7 +11,6 @@ import {
 import {colors} from '../global/styles';
 import ProductCard from '../components/ProductCard';
 import HomeHeader from '../components/HomeHeader';
-import {ScrollView} from 'react-native-gesture-handler';
 import SearchComponent from '../components/SearchComponent';
 import {useTranslation} from 'react-i18next';
 import firestore from '@react-native-firebase/firestore';
@@ -19,60 +18,41 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function Categories({navigation}) {
   const {t} = useTranslation();
-  const [getThuoc, setThuoc] = useState('');
-  const [getCovid, setCovid] = useState('');
-  const [getThucpham, setThucpham] = useState('');
-  const [getThietbi, setThietbi] = useState('');
-  const name = [
-    t('Thuốc không kê đơn'),
-    t('COVID-19'),
-    t('Thực phẩm chức năng'),
-    t('Thiết bị y tế'),
-  ];
-  const [selected, setSelected] = useState(name[0]);
+  const [getCate, setCate] = useState([]);
+  const refdata = firestore().collection('Products');
+  const refcate = firestore().collection('categories');
+  const [selected, setSelected] = useState();
   const [data, setData] = useState([]);
-
   useEffect(() => {
-    firestore()
-      .collection('Data')
-      .doc('Thuoc')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setThuoc(data.Thuoc);
+    return refcate.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        list.push(doc.data());
       });
-    firestore()
-      .collection('Data')
-      .doc('Covid')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setCovid(data.Covid);
-      });
-    firestore()
-      .collection('Data')
-      .doc('Thucphamchucnang')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setThucpham(data.Thucphamchucnang);
-      });
-    firestore()
-      .collection('Data')
-      .doc('Thietbiyte')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setThietbi(data.Thietbiyte);
-      });
+      setCate(list);
+      setSelected(list[0].name);
+    });
   }, []);
   useEffect(() => {
-    setData(getThuoc);
-  }, [getThuoc]);
+    return refdata.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        if (getCate != [] && doc.data().category == getCate[0].name)
+          list.push(doc.data());
+      });
+      setData(list);
+    });
+  }, [getCate]);
 
-  const handleSelected = (value, data) => {
+  const handleSelected = value => {
     setSelected(value);
-    setData(data);
+    return refdata.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        if (doc.data().category == value) list.push(doc.data());
+      });
+      setData(list);
+    });
   };
 
   return (
@@ -82,37 +62,26 @@ export default function Categories({navigation}) {
         <SearchComponent navigation={navigation} />
       </View>
 
-      <View style={{marginTop: 70, marginLeft: 10, marginBottom: 20}}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <CategoriesCard
-            image={require('../global/image/categories/category__thuockhongkedon.png')}
-            title={name[0]}
-            onPress={handleSelected}
-            value={selected}
-            data={getThuoc}
+      <View style={{marginTop: 70, marginLeft: 10, marginBottom: 10}}>
+        <View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            horizontal={true}
+            data={getCate}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item, index}) => (
+              <View key={item.id}>
+                <CategoriesCard
+                  image={item.image}
+                  title={item.name}
+                  onPress={handleSelected}
+                  value={selected}
+                />
+              </View>
+            )}
           />
-          <CategoriesCard
-            image={require('../global/image/categories/category__covid19.png')}
-            title={name[1]}
-            onPress={handleSelected}
-            value={selected}
-            data={getCovid}
-          />
-          <CategoriesCard
-            image={require('../global/image/categories/category__thucphamchucnang.png')}
-            title={name[2]}
-            onPress={handleSelected}
-            value={selected}
-            data={getThucpham}
-          />
-          <CategoriesCard
-            image={require('../global/image/categories/category__thietbiyte.png')}
-            title={name[3]}
-            onPress={handleSelected}
-            value={selected}
-            data={getThietbi}
-          />
-        </ScrollView>
+        </View>
       </View>
 
       <View>
@@ -129,13 +98,11 @@ export default function Categories({navigation}) {
           }}
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => (
-            <View>
-              <ProductCard
-                navigation={navigation}
-                screenWidth={SCREEN_WIDTH * 0.4}
-                item={item}
-              />
-            </View>
+            <ProductCard
+              navigation={navigation}
+              screenWidth={SCREEN_WIDTH * 0.4}
+              item={item}
+            />
           )}
         />
       </View>
@@ -143,18 +110,16 @@ export default function Categories({navigation}) {
   );
 }
 
-function CategoriesCard({image, title, onPress, value, data}) {
+function CategoriesCard({image, title, onPress, value}) {
   return (
-    <TouchableOpacity
-      style={[styles.frame, {borderColor: value === title ? 'green' : 'red'}]}
-      onPress={() => onPress(title, data)}>
+    <TouchableOpacity onPress={() => onPress(title)}>
       <View
         style={[
           value === title
             ? {...styles.smallCardSelected}
             : {...styles.smallCard},
         ]}>
-        <Image style={{height: 75, width: 100}} source={image} />
+        <Image style={{height: 75, width: 100}} source={{uri: image}} />
         <View>
           <Text
             style={[

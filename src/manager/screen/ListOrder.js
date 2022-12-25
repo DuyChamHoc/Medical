@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, TouchableOpacity,Image} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
 import HomeManagerHeader from '../components/HomeManagerHeader';
@@ -54,7 +54,7 @@ export default function ListOrder({navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <HomeManagerHeader navigation={navigation} title="List of users" />
+      <HomeManagerHeader navigation={navigation} title="User order" />
       <View
         style={{
           height: 50,

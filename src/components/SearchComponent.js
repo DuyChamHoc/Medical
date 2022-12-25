@@ -20,19 +20,18 @@ import firestore from '@react-native-firebase/firestore';
 import {useTheme} from 'react-native-paper';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-
 const SearchComponent = () => {
+  const refdata = firestore().collection('Products');
   const {t} = useTranslation();
   const [getTotalData, setTotalData] = useState('');
   useEffect(() => {
-    firestore()
-      .collection('Data')
-      .doc('TotalData')
-      .get()
-      .then(documentSnapshot => {
-        const data = documentSnapshot.data();
-        setTotalData(data.TotalData);
+    return refdata.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        list.push(doc.data());
       });
+      setTotalData(list);
+    });
   }, []);
   const {colors} = useTheme();
   const navigation = useNavigation();
@@ -65,36 +64,30 @@ const SearchComponent = () => {
           setTextInputFossued(true);
           navigation.push('ProductInfo', {item: item});
         }}>
-        <View style={{backgroundColor: colors.background}}>
-          <View style={{borderWidth: 0.8}}>
-            <View style={[styles.imageView, {marginTop: 15}]}>
-              <ImageBackground
-                style={styles.image}
-                source={{uri: item.image}}/>
-              <View>
-                <Text
-                  style={{
-                    color: colors.text,
-                    marginTop: 10,
-                    textAlign: 'center',
-                  }}>
-                  {item.name}
-                </Text>
-              </View>
-              <View>
-                <Text
-                  style={[
-                    {
-                      color: 'red',
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      marginTop: 10,
-                    },
-                  ]}>
-                  {item.gia}
-                </Text>
-              </View>
-            </View>
+        <View style={styles.imageView}>
+          <ImageBackground style={styles.image} source={{uri: item.image}} />
+          <View>
+            <Text
+              style={{
+                color: colors.text,
+                marginTop: 10,
+                textAlign: 'center',
+              }}>
+              {item.name}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={[
+                {
+                  color: 'red',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  marginTop: 10,
+                },
+              ]}>
+              {item.gia}
+            </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -250,19 +243,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageView: {
+    borderColor: '#6BC8FF',
     borderRadius: 10,
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 12,
-    width: SCREEN_WIDTH * 0.429,
-    height: SCREEN_WIDTH * 0.62,
+    width: SCREEN_WIDTH * 0.45,
+    height: SCREEN_WIDTH * 0.63,
     marginLeft: SCREEN_WIDTH * 0.035,
     marginBottom: SCREEN_WIDTH * 0.035,
   },
 
   image: {
-    height: SCREEN_WIDTH * 0.4475,
-    width: SCREEN_WIDTH * 0.4475,
+    height: SCREEN_WIDTH * 0.4,
+    width: SCREEN_WIDTH * 0.4,
     borderRadius: 10,
   },
 

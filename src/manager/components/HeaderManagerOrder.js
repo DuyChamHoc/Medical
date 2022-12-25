@@ -22,7 +22,7 @@ export default function HeaderManagerOrder({navigation, title}) {
           color="white"
           size={30}
           onPress={() => {
-            navigation.navigate('App');
+            navigation.navigate('Home');
           }}
         />
       </View>

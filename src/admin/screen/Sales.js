@@ -48,16 +48,16 @@ export default function Sales({navigation}) {
           backgroundColor: colors.boxes,
           height: 100,
           borderRadius: 10,
-          width: SCREEN_WIDTH - 20,
+          width: SCREEN_WIDTH - 30,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
+          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
           <Image
             style={{width: 80, height: 80, resizeMode: 'cover'}}
             source={{uri: item.image}}
           />
         </View>
-        <View style={{marginLeft: 10, marginTop: 10}}>
+        <View style={{marginLeft: 6, marginTop: 10}}>
           <View style={{width: 265, height: 20}}>
             <Text style={{color: colors.text, fontSize: 15}}>{item.name}</Text>
           </View>
@@ -90,7 +90,7 @@ export default function Sales({navigation}) {
           width: '99%',
           marginTop: 5,
           marginBottom: 10,
-          borderWidth: 2,
+          borderWidth: 2.5,
           borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
@@ -142,8 +142,8 @@ export default function Sales({navigation}) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderTopWidth: 0.8,
-                borderBottomWidth: 0.8,
+                borderTopWidth: 1,
+                borderBottomWidth: 1,
                 borderColor: '#6BC8FF',
               }}>
               <View style={{marginLeft: 15, marginTop: 10, marginBottom: 10}}>

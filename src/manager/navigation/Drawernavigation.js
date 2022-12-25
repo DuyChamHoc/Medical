@@ -2,18 +2,18 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
-// import HomeAdmin from '../screen/HomeAdmins';
 import ListOrder from '../screen/ListOrder';
 import DrawerContent from '../components/DrawerContent';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import HomeManager from '../screen/HomeManager';
 const Drawer = createDrawerNavigator();
 
 export default function Drawernavigation() {
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-      {/* <Drawer.Screen
+      <Drawer.Screen
         name="Home"
-        component={HomeAdmin}
+        component={HomeManager}
         options={{
           headerShown: false,
           title: 'Home',
@@ -21,13 +21,13 @@ export default function Drawernavigation() {
             <Icon2 name="home" color={color} size={size} />
           ),
         }}
-      /> */}
+      />
       <Drawer.Screen
         name="ListOrder"
         component={ListOrder}
         options={{
           headerShown: false,
-          title: 'List user order',
+          title: 'User order',
           drawerIcon: ({color, size}) => (
             <Icon name="user" color={color} size={size} />
           ),
