@@ -112,7 +112,7 @@ export default function MyShoppingScreen({navigation}) {
                 />
                 <Image
                   style={{width: 80, height: 80, resizeMode: 'cover'}}
-                  source={{uri: item.image}}
+                  source={{uri: item.image[0]}}
                 />
               </View>
               <View style={{marginLeft: 10}}>

@@ -60,7 +60,7 @@ export default function DetailCustomer({route, navigation}) {
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
           <Image
             style={{width: 80, height: 80, resizeMode: 'cover'}}
-            source={{uri: item.image}}
+            source={{uri: item.image[0]}}
           />
         </View>
         <View style={{marginLeft: 10, marginTop: 10}}>
@@ -235,7 +235,7 @@ export default function DetailCustomer({route, navigation}) {
                 Total money:{' '}
                 {
                   <Text style={{color: 'red', fontWeight: '700'}}>
-                    {item.total}.000 VND
+                    {new Intl.NumberFormat('en-VI').format(item.total)} VND
                   </Text>
                 }{' '}
               </Text>

@@ -25,7 +25,7 @@ export default function ViewCart({navigation}) {
         height: 60,
         justifyContent: 'flex-end',
         borderTopWidth: 0.5,
-        marginTop:16,
+        marginTop: 16,
         borderTopColor: 'blue',
       }}>
       <View style={{flexDirection: 'row'}}>
@@ -46,7 +46,9 @@ export default function ViewCart({navigation}) {
               marginLeft: 5,
               fontSize: 20,
             }}>
-            {total ? total + '.000 VND' : '0 VND'}
+            {total
+              ? new Intl.NumberFormat('en-VI').format(total) + ' VND'
+              : '0 VND'}
           </Text>
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

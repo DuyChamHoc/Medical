@@ -10,7 +10,7 @@ let cartReducer = (state = defaultState, action) => {
                 newState.selectedItems = {
                     items: [...newState.selectedItems.items, action.payload],
                 };
-
+                // console.log(newState.selectedItems, "👉");
             }
             else {
                 console.log('REMOVE FROM CART')

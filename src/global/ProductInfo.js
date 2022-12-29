@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -112,7 +112,7 @@ export default function ProductInfo({navigation, route}) {
               }}>
               <Image
                 style={{width: '90%', height: '90%', resizeMode: 'cover'}}
-                source={{uri: route.params.item.image}}
+                source={{uri: route.params.item.image[0]}}
               />
               <View
                 style={{

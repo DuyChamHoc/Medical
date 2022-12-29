@@ -57,7 +57,7 @@ export default function MyLastOrder({navigation}) {
             }}>
             <Image
               style={{width: 80, height: 80, resizeMode: 'cover'}}
-              source={{uri: item.image}}
+              source={{uri: item.image[0]}}
             />
           </View>
           <View style={{marginLeft: 10, marginTop: 10}}>
@@ -159,7 +159,11 @@ export default function MyLastOrder({navigation}) {
                 fontWeight: '600',
               }}>
               {t('Tổng tiền:')}{' '}
-              {<Text style={{color: 'red'}}>{item.total}.000 đ</Text>}{' '}
+              {
+                <Text style={{color: 'red'}}>
+                  {new Intl.NumberFormat('en-VI').format(item.total)} VND
+                </Text>
+              }{' '}
             </Text>
             <Text style={{color: colors.text, fontSize: 16, fontWeight: '600'}}>
               {t('Người nhận:')}{' '}

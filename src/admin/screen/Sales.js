@@ -54,7 +54,7 @@ export default function Sales({navigation}) {
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
           <Image
             style={{width: 80, height: 80, resizeMode: 'cover'}}
-            source={{uri: item.image}}
+            source={{uri: item.image[0]}}
           />
         </View>
         <View style={{marginLeft: 6, marginTop: 10}}>
@@ -183,7 +183,12 @@ export default function Sales({navigation}) {
                   color: colors.text,
                   fontSize: 16,
                 }}>
-                Total: {<Text style={{color: 'red'}}>{item.total}.000 VND</Text>}
+                Total:{' '}
+                {
+                  <Text style={{color: 'red'}}>
+                    {new Intl.NumberFormat('en-VI').format(item.total)} VND
+                  </Text>
+                }
               </Text>
             </View>
           </View>

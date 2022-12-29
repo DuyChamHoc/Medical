@@ -241,7 +241,7 @@ export default function HomeAdmin({navigation}) {
                   ]}>
                   <ImageBackground
                     style={styles.image}
-                    source={{uri: item.image}}
+                    source={{uri: item.image[0]}}
                   />
                   <Text
                     style={{

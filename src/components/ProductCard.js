@@ -7,7 +7,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {colors} from '../global/styles';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import auth from '@react-native-firebase/auth';
@@ -17,7 +17,6 @@ import LottieView from 'lottie-react-native';
 import {useDispatch} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import moment from 'moment/moment';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function ProductCard({navigation, screenWidth, item}) {
   const {t} = useTranslation();
@@ -91,9 +90,7 @@ export default function ProductCard({navigation, screenWidth, item}) {
       }}>
       <View style={[styles.cardView, {backgroundColor: colors.background}]}>
         <View style={[styles.imageView, {marginTop: 20}, {width: screenWidth}]}>
-          <ImageBackground
-            style={styles.image}
-            source={{uri: item.image}}/>
+          <ImageBackground style={styles.image} source={{uri: item.image[0]}} />
           <View>
             <Text
               style={{
@@ -219,14 +216,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: SCREEN_WIDTH * 0.3,
-    height: SCREEN_WIDTH * 0.50,
+    height: SCREEN_WIDTH * 0.5,
     marginLeft: SCREEN_WIDTH * 0.035,
     marginBottom: SCREEN_WIDTH * 0.035,
   },
 
   image: {
-    height: SCREEN_WIDTH * 0.20,
-    width: SCREEN_WIDTH * 0.20,
+    height: SCREEN_WIDTH * 0.2,
+    width: SCREEN_WIDTH * 0.2,
     borderRadius: 10,
     marginRight: 15,
   },

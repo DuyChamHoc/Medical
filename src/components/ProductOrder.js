@@ -1,18 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Pressable, Image, Dimensions, Alert, Modal } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/MaterialIcons'
+import React, { useState} from 'react';
+import { View, Text,TouchableOpacity,Image} from 'react-native';
 import Icon3 from 'react-native-vector-icons/EvilIcons'
 import Icon4 from 'react-native-vector-icons/AntDesign'
-import { colors, paremeter } from '../global/styles';
-import { RadioButton } from 'react-native-paper';
-import { test } from '../global/Data';
-import { discount } from '../global/Data';
-import auth from "@react-native-firebase/auth"
-import { SafeAreaView } from 'react-native-safe-area-context';
-import firestore, { firebase } from '@react-native-firebase/firestore';
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { useTheme } from 'react-native-paper';
 
 export default function ProductOrder({ item }) {
@@ -27,7 +17,6 @@ export default function ProductOrder({ item }) {
         }
     }
     const dispatch = useDispatch();
-
     const selectItem = (item, checkboxValue, SL) =>
         dispatch({
             type: "UPDATE_TO_CART",
@@ -56,7 +45,7 @@ export default function ProductOrder({ item }) {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image
                             style={{ width: 80, height: 80, resizeMode: "cover" }}
-                            source={{ uri: item.image }} />
+                            source={{ uri: item.image[0] }} />
                     </View>
                     <View style={{ marginLeft: 10 }}>
                         <View style={{ width: 240, height: 20 }}>

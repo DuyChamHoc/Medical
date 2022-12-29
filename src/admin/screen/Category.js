@@ -491,7 +491,7 @@ function ProductCard({screenWidth, item}) {
   return (
     <View style={[styles.cardView, {backgroundColor: colors.background}]}>
       <View style={[styles.imageView1, {marginTop: 20}, {width: screenWidth}]}>
-        <ImageBackground style={styles.image} source={{uri: item.image}} />
+        <ImageBackground style={styles.image} source={{uri: item.image[0]}} />
         <View>
           <Text
             style={{

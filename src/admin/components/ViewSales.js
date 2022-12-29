@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 
 export default function ViewSales({data}) {
   const [isValue, setValue] = useState(0);
@@ -26,7 +25,7 @@ export default function ViewSales({data}) {
           fontWeight: 'bold',
           fontSize: 20,
         }}>
-        Total revenue: {isValue}.000 VND
+        Total revenue: {new Intl.NumberFormat('en-VI').format(isValue)} VND
       </Text>
     </View>
   );

@@ -16,7 +16,6 @@ import {useTheme} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment/moment';
-const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function MyOrderComplete({navigation}) {
   const {t} = useTranslation();
   const {colors} = useTheme();
@@ -86,7 +85,7 @@ export default function MyOrderComplete({navigation}) {
         firestore()
           .collection('Revenue')
           .add({
-            manager:item.manager,
+            manager: item.manager,
             nhathuocchung: item.nhathuocchung,
             datereceived: moment().format('DD/MM/YYYY hh:mm'),
             datereceivedcheck: moment().format('DD/MM/YYYY'),
@@ -152,7 +151,7 @@ export default function MyOrderComplete({navigation}) {
           style={{flexDirection: 'row', alignItems: 'center', marginLeft: 15}}>
           <Image
             style={{width: 80, height: 80, resizeMode: 'cover'}}
-            source={{uri: item.image}}
+            source={{uri: item.image[0]}}
           />
         </View>
         <View style={{marginLeft: 10, marginTop: 10}}>
@@ -260,7 +259,11 @@ export default function MyOrderComplete({navigation}) {
                     fontSize: 16,
                   }}>
                   {t('Thành tiền:')}{' '}
-                  {<Text style={{color: 'red'}}>{item.total}.000 VND</Text>}{' '}
+                  {
+                    <Text style={{color: 'red'}}>
+                      {new Intl.NumberFormat('en-VI').format(item.total)} VND
+                    </Text>
+                  }{' '}
                 </Text>
 
                 <Text

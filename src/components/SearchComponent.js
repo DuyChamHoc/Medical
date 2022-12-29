@@ -65,7 +65,7 @@ const SearchComponent = () => {
           navigation.push('ProductInfo', {item: item});
         }}>
         <View style={styles.imageView}>
-          <ImageBackground style={styles.image} source={{uri: item.image}} />
+          <ImageBackground style={styles.image} source={{uri: item.image[0]}} />
           <View>
             <Text
               style={{

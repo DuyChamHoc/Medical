@@ -56,7 +56,7 @@ export default function HomeManager({navigation}) {
   const showmodal = item => {
     setquantityshow(item.quantity);
     setname1(item.name);
-    setimagebackup(item.image);
+    setimagebackup(item.image[0]);
     setModalVisible(!modalVisible);
   };
 
@@ -139,7 +139,7 @@ export default function HomeManager({navigation}) {
                   ]}>
                   <ImageBackground
                     style={styles.image}
-                    source={{uri: item.image}}
+                    source={{uri: item.image[0]}}
                   />
                   <Text
                     style={{
