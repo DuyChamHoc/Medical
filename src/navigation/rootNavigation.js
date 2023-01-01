@@ -75,9 +75,7 @@ export default function RootNavigator() {
       tertiary: '#ffffff',
     },
   };
-  console.log('isDarkTheme', isDarkTheme);
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
-  console.log(signedIn.userToken);
   return (
     <PaperProvider theme={theme}>
       <ReduxProvider store={store}>

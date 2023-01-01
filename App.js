@@ -10,7 +10,6 @@ LogBox.ignoreAllLogs();
 
 export default function App() {
   const netInfo = useNetInfo();
-  console.log();
   return (
     <SignInContextProvider>
       <View style={styles.container}>

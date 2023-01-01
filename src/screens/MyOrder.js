@@ -503,7 +503,7 @@ export default function MyOrder({navigation, route}) {
             <Text style={{color: 'red', fontSize: 18, fontWeight: 'bold'}}>
               {' '}
               {new Intl.NumberFormat('en-VI').format(
-                cost + 50 - num_dis * 50,
+                cost + 50000 - num_dis * 50000,
               )}{' '}
               VND
             </Text>

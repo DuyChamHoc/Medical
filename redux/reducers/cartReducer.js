@@ -1,77 +1,88 @@
 let defaultState = {
-    selectedItems: { items: [],language: 'vi' },
-}
+  selectedItems: {items: [], language: 'en', dark: 'false'},
+};
 let cartReducer = (state = defaultState, action) => {
-    switch (action.type) {
-        case 'ADD_TO_CART': {
-            let newState = { ...state };
-            if (action.payload.checkboxValue) {
-                console.log('ADD_TO_CART')
-                newState.selectedItems = {
-                    items: [...newState.selectedItems.items, action.payload],
-                };
-                // console.log(newState.selectedItems, "👉");
-            }
-            else {
-                console.log('REMOVE FROM CART')
-                newState.selectedItems = {
-                    items: [
-                        ...newState.selectedItems.items.filter(
-                            (item) => item.id !== action.payload.id
-                        ),
-                    ],
-                }
-            }
-            // console.log(newState.selectedItems, "👉");
-            return newState;
-        }
-        case 'DELETE_TO_CART': {
-            let newState = { ...state };
-            newState.selectedItems = {
-                items: [],
-            };
-            // console.log(newState, "👉");
-            return newState;
-        }
-        case 'UPDATE_TO_CART': {
-            let newState = { ...state };
-            const a = action.payload.SL;
-            console.log('UPDATE CART')
-            newState.selectedItems = {
-                items: [...newState.selectedItems.items.map(
-                    (item) => item.id === action.payload.id ? { ...item, SL: a }
-                        : item
-                )]
-            }
-            // console.log(newState.selectedItems, "👉");
-            return newState;
-        }
-        case 'UPDATE1_TO_CART': {
-            let newState = { ...state };
-            const a = action.payload.SL;
-            console.log('UPDATE CART')
-            newState.selectedItems = {
-                items: [...newState.selectedItems.items.map(
-                    (item) => item.id === item.id ? { ...item, SL: a }
-                        : item
-                )]
-            }
-            // console.log(newState.selectedItems, "👉");
-            return newState;
-        }
-        // case 'UPDATE_TO_LANGUAGE': {
-        //     let newState = { ...state };
-        //     console.log('UPDATE LANGUAGE')
-        //     newState.selectedItems = {
-        //         items: [],
-        //         language: action.payload.language,
-        //     }
-        //     // console.log(newState.selectedItems.language, "👉");
-        //     return newState;
-        // }
-        default:
-            return state;
+  switch (action.type) {
+    case 'ADD_TO_CART': {
+      let newState = {...state};
+      if (action.payload.checkboxValue) {
+        console.log('ADD_TO_CART');
+        newState.selectedItems = {
+          items: [...newState.selectedItems.items, action.payload],
+        };
+        // console.log(newState.selectedItems, "👉");
+      } else {
+        console.log('REMOVE FROM CART');
+        newState.selectedItems = {
+          items: [
+            ...newState.selectedItems.items.filter(
+              item => item.id !== action.payload.id,
+            ),
+          ],
+        };
+      }
+      // console.log(newState.selectedItems, "👉");
+      return newState;
     }
+    case 'DELETE_TO_CART': {
+      let newState = {...state};
+      newState.selectedItems = {
+        items: [],
+      };
+      // console.log(newState, "👉");
+      return newState;
+    }
+    case 'UPDATE_TO_CART': {
+      let newState = {...state};
+      const a = action.payload.SL;
+      console.log('UPDATE CART');
+      newState.selectedItems = {
+        items: [
+          ...newState.selectedItems.items.map(item =>
+            item.id === action.payload.id ? {...item, SL: a} : item,
+          ),
+        ],
+      };
+      // console.log(newState.selectedItems, "👉");
+      return newState;
+    }
+    case 'UPDATE1_TO_CART': {
+      let newState = {...state};
+      const a = action.payload.SL;
+      console.log('UPDATE CART');
+      newState.selectedItems = {
+        items: [
+          ...newState.selectedItems.items.map(item =>
+            item.id === item.id ? {...item, SL: a} : item,
+          ),
+        ],
+      };
+      // console.log(newState.selectedItems, "👉");
+      return newState;
+    }
+    case 'UPDATE_TO_LANGUAGE': {
+      let newState = {...state};
+      console.log('UPDATE LANGUAGE');
+      newState.selectedItems = {
+        items: [],
+        language: action.payload.language,
+      };
+      console.log(newState.selectedItems.language, '👉');
+      return newState;
+    }
+    case 'UPDATE_TO_DARK': {
+      let newState = {...state};
+      console.log('UPDATE DARK');
+      newState.selectedItems = {
+        items: [],
+        dark: action.payload.dark,
+      };
+      console.log(newState.selectedItems.dark, '👉');
+      return newState;
+    }
+    default:
+      return state;
+  }
 };
 
 export default cartReducer;

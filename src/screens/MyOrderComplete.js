@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Alert,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import HeaderSimple from '../components/HeaderSimple';
@@ -47,6 +48,8 @@ export default function MyOrderComplete({navigation}) {
         .delete()
         .then(() => {
           console.log('Order deleted!');
+          getcheck(!check);
+          setdata([]);
           addd();
         });
     } else {
@@ -169,7 +172,7 @@ export default function MyOrderComplete({navigation}) {
             marginLeft: 'auto',
             fontWeight: 'bold',
             fontSize: 14,
-            marginTop: 3,
+            marginTop: 15,
             marginRight: 10,
             alignSelf: 'center',
             color: colors.text,
@@ -307,7 +310,14 @@ export default function MyOrderComplete({navigation}) {
                   item.status == 'Chưa giải quyết' ||
                   item.status == 'Pending'
                 ) {
-                  deleteCartToFireBase(item.id);
+                  Alert.alert('Delete Order', 'Do you want to delete order?', [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {text: 'OK', onPress: () => deleteCartToFireBase(item.id)},
+                  ]);
                 } else {
                   addCartToFireBase(item);
                 }

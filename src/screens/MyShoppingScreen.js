@@ -106,9 +106,7 @@ export default function MyShoppingScreen({navigation}) {
                   style={{marginLeft: 10}}
                   iconStyle={{borderColor: 'lightgray', borderRadius: 0}}
                   fillColor="green"
-                  onPress={checkboxValue =>
-                    selectItem(item, checkboxValue)
-                  }
+                  onPress={checkboxValue => selectItem(item, checkboxValue)}
                 />
                 <Image
                   style={{width: 80, height: 80, resizeMode: 'cover'}}
@@ -163,7 +161,7 @@ export default function MyShoppingScreen({navigation}) {
           showsVerticalScrollIndicator={false}
         />
       </View>
-      <ViewCart navigation={navigation} />
+      {getdata.length!=0 ? <ViewCart navigation={navigation} /> : <></>}
     </View>
   );
 }

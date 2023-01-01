@@ -172,7 +172,7 @@ export default function DetailDiscount({route, navigation}) {
   };
   return (
     <View>
-      <HeaderAdminOrder navigation={navigation} title="Detail order" />
+      <HeaderAdminOrder navigation={navigation} title="Detail discount" />
       <View
         style={{
           height: 35,

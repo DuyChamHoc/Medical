@@ -21,12 +21,14 @@ import {SignInContext} from '../../contexts/authContext';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {discount} from '../../global/Data';
+import LottieView from 'lottie-react-native';
 
 GoogleSignin.configure({
   webClientId:
     '359199845323-h10e31djcqb9fbobv2vknmh1h1h5hge0.apps.googleusercontent.com',
 });
 export default function SignInScreen({navigation}) {
+  const [loading, setLoading] = useState(false);
   const {dispatchSignedIn} = useContext(SignInContext);
   const [textinput2Fossued, setTextInput2Fossued] = useState(false);
   const textinput1 = useRef(1);
@@ -35,6 +37,7 @@ export default function SignInScreen({navigation}) {
   const [getVisible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   async function signIn(data) {
+    setLoading(true);
     try {
       const {password, email} = data;
       const user = await auth().signInWithEmailAndPassword(email, password);
@@ -48,14 +51,17 @@ export default function SignInScreen({navigation}) {
               type: 'UPDATE_SIGN_IN',
               payload: {userToken: documentSnapshot.data().roll},
             });
+            setLoading(false);
           });
       }
     } catch (error) {
+      setLoading(false);
       Alert.alert(error.name, error.message);
     }
   }
 
   async function onGoogleButtonPress() {
+    setLoading(true);
     try {
       const {idToken} = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
@@ -70,8 +76,7 @@ export default function SignInScreen({navigation}) {
           .doc(user.user.uid)
           .get()
           .then(documentSnapshot => {
-            console.log(documentSnapshot.exists);
-            console.log('data: ', documentSnapshot.data());
+            setLoading(false);
             if (!documentSnapshot.exists) {
               firestore().collection('Users').doc(user.user.uid).set({
                 roll: 3,
@@ -94,10 +99,12 @@ export default function SignInScreen({navigation}) {
       }
     } catch (error) {
       Alert.alert(error.name, error.message);
+      setLoading(false);
     }
   }
 
   async function onFacebookButtonPress() {
+    setLoading(true);
     try {
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
@@ -126,6 +133,7 @@ export default function SignInScreen({navigation}) {
           .doc(user.user.uid)
           .get()
           .then(documentSnapshot => {
+            setLoading(false);
             if (!documentSnapshot.exists) {
               firestore().collection('Users').doc(user.user.uid).set({
                 roll: 3,
@@ -146,6 +154,7 @@ export default function SignInScreen({navigation}) {
           });
       }
     } catch (error) {
+      setLoading(false);
       Alert.alert(error.name, error.message);
     }
   }
@@ -349,6 +358,27 @@ export default function SignInScreen({navigation}) {
           </Modal>
         </KeyboardAwareScrollView>
       </View>
+      {loading ? (
+        <View
+          style={{
+            backgroundColor: 'black',
+            position: 'absolute',
+            opacity: 0.7,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            width: '100%',
+          }}>
+          <LottieView
+            style={{height: 400}}
+            source={require('../../assets/animations/98288-loading.json')}
+            autoPlay
+            speed={2}
+          />
+        </View>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
