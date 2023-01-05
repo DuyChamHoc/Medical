@@ -226,7 +226,7 @@ export default function Sales({navigation}) {
       </View>
       <View
         style={{
-          height: '76%',
+          height: '78%',
           marginTop: -15,
           justifyContent: 'center',
           alignItems: 'center',

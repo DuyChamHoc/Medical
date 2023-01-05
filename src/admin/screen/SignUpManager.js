@@ -711,7 +711,7 @@ const styles = StyleSheet.create({
   fab: {
     flexDirection: 'row',
     // top: 740,
-    top: SCREEN_WIDTH * 1.65,
+    top: SCREEN_WIDTH * 1.8,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',

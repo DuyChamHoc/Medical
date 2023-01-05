@@ -13,7 +13,7 @@ export default function ViewSales({data}) {
   return (
     <View
       style={{
-        height: 50,
+        height: 60,
         backgroundColor: '#36a0ef',
         borderTopColor: 'blue',
         justifyContent: 'center',

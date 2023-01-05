@@ -37,7 +37,10 @@ export default function Categories({navigation}) {
     return refdata.onSnapshot(querySnapshot => {
       const list = [];
       querySnapshot.forEach(doc => {
-        if (getCate != [] && doc.data().category == getCate[0].name)
+        if (
+          getCate[0].name != undefined &&
+          doc.data().category == getCate[0].name
+        )
           list.push(doc.data());
       });
       setData(list);

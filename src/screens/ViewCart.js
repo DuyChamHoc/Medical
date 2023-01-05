@@ -25,7 +25,7 @@ export default function ViewCart({navigation}) {
         height: 60,
         justifyContent: 'flex-end',
         borderTopWidth: 0.5,
-        marginTop: 16,
+        marginTop: 36,
         borderTopColor: 'blue',
       }}>
       <View style={{flexDirection: 'row'}}>

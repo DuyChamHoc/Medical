@@ -28,7 +28,7 @@ export default function ProductOrder({ item }) {
         });
     return (
         <View style={{ alignSelf: 'center', width: 380 }}>
-            <View style={{ backgroundColor: colors.boxes, height: 160, justifyContent: 'center', marginTop: 10 }}>
+            <View style={{ backgroundColor: colors.boxes, height: 155, justifyContent: 'center', marginTop: 10 }}>
                 <View style={{ flexDirection: 'row', marginLeft: 15 }}>
                     <Image
                         style={{ width: 22, height: 22, }}

@@ -37,6 +37,7 @@ export default function DrawerContent(props) {
   const [getstatus, setstatus] = useState(0);
   const [DarkMode, setDarkMode] = useState(false);
   const [fullname, setfullname] = useState('');
+
   useEffect(() => {
     firestore()
       .collection('Users')
@@ -46,6 +47,7 @@ export default function DrawerContent(props) {
         if (documentSnapshot.exists) {
           setDarkMode(documentSnapshot.data().isDarkMode);
           setSelectedValue(documentSnapshot.data().isLanguage);
+          setfullname(documentSnapshot.data().full_name);
         }
       });
     firestore()
@@ -142,7 +144,6 @@ export default function DrawerContent(props) {
             <View style={{marginLeft: 15}}>
               <Text
                 style={{fontWeight: 'bold', fontSize: 18, color: colors.text}}>
-                {' '}
                 {user.displayName ? user.displayName : fullname}
               </Text>
               <Text style={{fontSize: 13, color: colors.text}}>

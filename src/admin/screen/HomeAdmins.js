@@ -105,7 +105,7 @@ export default function HomeAdmin({navigation}) {
         supplier: supplier1,
         gia: gia1,
         id: a,
-        image: image1,
+        image: [image1],
         mota: mota1,
         name: name1,
         nhathuoc: 'Long Chau Pharmacy',
@@ -124,7 +124,7 @@ export default function HomeAdmin({navigation}) {
     setsupplier1(item.supplier);
     setquantity1(item.quantity);
     setgia1(item.gia);
-    setimage1(item.image);
+    setimage1(item.image[0]);
     setmota1(item.mota);
     setname1(item.name);
     setitemthuoc(item);
@@ -146,7 +146,7 @@ export default function HomeAdmin({navigation}) {
                 supplier: supplier1,
                 SL: 1,
                 gia: gia1,
-                image: image1,
+                image: [image1],
                 mota: mota1,
                 name: name1,
                 nhathuoc: 'Long Chau Pharmacy',
@@ -740,7 +740,7 @@ export default function HomeAdmin({navigation}) {
 const styles = StyleSheet.create({
   fab: {
     // top: 730,
-    top: SCREEN_WIDTH * 1.65,
+    top: SCREEN_WIDTH * 1.8,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',
@@ -756,7 +756,7 @@ const styles = StyleSheet.create({
   fabIcon: {
     fontSize: 40,
     color: '#03A9F4',
-    marginTop: 0,
+    marginTop: -5,
   },
   cardView: {
     padding: 5,

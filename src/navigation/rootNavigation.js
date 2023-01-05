@@ -35,6 +35,7 @@ export default function RootNavigator() {
           if (snapshot.exists) {
             setIsDarkTheme(snapshot.data().isDarkMode);
             i18n.changeLanguage(snapshot.data().isLanguage);
+            console.log('aaa')
           }
         });
     } else {
