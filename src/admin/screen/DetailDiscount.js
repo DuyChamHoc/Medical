@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     flexDirection: 'row',
-    top: SCREEN_WIDTH * 1.8,
+    top: SCREEN_WIDTH * 1.65,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',

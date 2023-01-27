@@ -740,7 +740,7 @@ export default function HomeAdmin({navigation}) {
 const styles = StyleSheet.create({
   fab: {
     // top: 730,
-    top: SCREEN_WIDTH * 1.8,
+    top: SCREEN_WIDTH * 1.65,
     borderWidth: 1,
     borderColor: '#03A9F4',
     position: 'absolute',
