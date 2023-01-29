@@ -91,6 +91,9 @@
     "Trợ Giúp": "Help",
     "Bản đồ": "Map",
     "Có vẻ như bạn đang gặp vấn đề khi trải nghiệm Medili, nếu cần sự trợ giúp bạn có thể liên hệ chúng tôi": "If you are facing problems when using Medili, please contact us",
-    "Chúng tôi có thể giúp gì cho bạn ?": "We can help you?"
+    "Chúng tôi có thể giúp gì cho bạn ?": "We can help you?",
+    "Bạn chưa cung cấp số điện thoại": "You have not provided a phone number",
+    "Bạn chưa cung cấp địa chỉ giao hàng":"You have not provided a shipping address",
+    "Sử dụng mặc định thông tin này": "Use this information by default"
   }
 }

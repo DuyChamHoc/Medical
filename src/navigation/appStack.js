@@ -17,6 +17,7 @@ import News2 from '../screens/News2';
 import News3 from '../screens/News3';
 import News4 from '../screens/News4';
 import News5 from '../screens/News5';
+import InforShipping from '../screens/InforShipping';
 import {useSelector} from 'react-redux';
 const App = createNativeStackNavigator();
 
@@ -139,6 +140,13 @@ export function AppStack() {
       <App.Screen
         name="News5"
         component={News5}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <App.Screen
+        name="InforShipping"
+        component={InforShipping}
         options={{
           headerShown: false,
         }}

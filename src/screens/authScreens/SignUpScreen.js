@@ -73,6 +73,8 @@ const SignUpScreen = ({navigation}) => {
             isLanguage: 'en',
             isDarkMode: false,
             uid: user.uid,
+            sex:'',
+            address:'',
           })
           .then(() => {
             setLoading(false);

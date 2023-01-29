@@ -6,9 +6,11 @@ import Swiper from 'react-native-swiper';
 import {SignInContext} from '../../contexts/authContext';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useDispatch } from 'react-redux';
 
 export default function SignInWelcomeScreen({navigation}) {
   const {dispatchSignedIn} = useContext(SignInContext);
+  const dispatch = useDispatch()
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       if (user) {
@@ -17,6 +19,10 @@ export default function SignInWelcomeScreen({navigation}) {
           .doc(user.uid)
           .get()
           .then(documentSnapshot => {
+            dispatch({
+              type: 'ADD_DATA',
+              payload: documentSnapshot.data(),
+            });
             dispatchSignedIn({
               type: 'UPDATE_SIGN_IN',
               payload: {userToken: documentSnapshot.data().roll},

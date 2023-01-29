@@ -23,20 +23,21 @@ import {firebase} from '@react-native-firebase/firestore';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {Picker} from '@react-native-picker/picker';
+import {useDispatch, useSelector} from 'react-redux';
 export default function MyAccountScreen({navigation}) {
   const [selectedValue, setSelectedValue] = useState('');
+  const dataUser = useSelector(state => state.dataReducer.dataUser);
   const {t} = useTranslation();
   const {colors} = useTheme();
-  const [fullname, setfullname] = useState('');
-  const [phonenumber, setphonenumber] = useState('');
-  const [address, setaddress] = useState('');
   const [date, setdate] = useState('');
-  const [sex, setsex] = useState('');
-  const [fullname1, setfullname1] = useState('');
-  const [phonenumber1, setphonenumber1] = useState('');
-  const [address1, setaddress1] = useState('');
-  const [sex1, setsex1] = useState('');
-  const [date1, setdate1] = useState('');
+  const dispatch = useDispatch();
+
+  const [fullname1, setfullname1] = useState(dataUser.full_name);
+  const [phonenumber1, setphonenumber1] = useState(dataUser.phone_number);
+  const [address1, setaddress1] = useState(dataUser.address);
+  const [sex1, setsex1] = useState(dataUser.sex);
+  const [date1, setdate1] = useState(dataUser.datetime);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [datetime, setdatetime] = useState(new Date());
   const [mode, setmode] = useState('date');
@@ -45,9 +46,6 @@ export default function MyAccountScreen({navigation}) {
   const [getorder, setorder] = useState(0);
   const [getcomplete, setcomplete] = useState(0);
   const [getnum, setnum] = useState(0);
-  const [getisDarkMode, setisDarkMode] = useState();
-  const [getisLanguage, setisLanguage] = useState();
-  var count = 0;
 
   const showMode = currentMode => {
     setShow(true);
@@ -59,17 +57,13 @@ export default function MyAccountScreen({navigation}) {
   };
 
   const createuser = () => {
+    setfullname1(dataUser.full_name);
+    setphonenumber1(dataUser.phone_number);
+    setaddress1(dataUser.address);
+    setsex1(dataUser.sex);
+    setdate1(dataUser.datetime);
     setModalVisible(true);
-    count = 0;
-    setnum(Math.random());
   };
-
-  const formattedDate =
-    datetime.getDate() +
-    '/' +
-    (datetime.getMonth() + 1) +
-    '/' +
-    datetime.getFullYear();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -106,51 +100,28 @@ export default function MyAccountScreen({navigation}) {
           setcomplete(snapshot.data().listcompleted.length);
         }
       });
-
-    firestore()
-      .collection('Users')
-      .doc(user.uid)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          setfullname(documentSnapshot.data().full_name);
-          setphonenumber(documentSnapshot.data().phone_number);
-          setdate(documentSnapshot.data().datetime);
-          setsex(documentSnapshot.data().sex);
-          setaddress(documentSnapshot.data().address);
-          setSelectedValue(documentSnapshot.data().sex);
-          setisDarkMode(documentSnapshot.data().isDarkMode);
-          setisLanguage(documentSnapshot.data().isLanguage);
-        }
-      });
-    if (count == 0) {
-      count = 1;
-      setfullname1(fullname);
-      setphonenumber1(phonenumber);
-      setdate1(date);
-      setsex1(sex);
-      setaddress1(address);
-    }
   }, [getnum]);
 
   const update = () => {
+    const newdata = {
+      phone_number: phonenumber1,
+      full_name: fullname1,
+      datetime: date1,
+      sex: sex1,
+      address: address1,
+      roll: 3,
+      isLanguage: dataUser.isLanguage,
+      isDarkMode: dataUser.isDarkMode,
+      uid: user.uid,
+    };
     firestore()
       .collection('Users')
       .doc(user.uid)
-      .set({
-        phone_number: phonenumber1,
-        full_name: fullname1,
-        datetime: formattedDate,
-        sex: sex1,
-        address: address1,
-        roll: 3,
-        isLanguage: getisLanguage,
-        isDarkMode: getisDarkMode,
-        uid: user.uid,
-      })
+      .set(newdata)
       .then(() => {
         console.log('User added!');
         setnum(Math.random());
+        dispatch({type: 'ADD_DATA', payload: newdata});
       });
     setModalVisible(!modalVisible);
     setfullname1('');
@@ -200,7 +171,7 @@ export default function MyAccountScreen({navigation}) {
               />
             </View>
             <Text style={{color: colors.text, fontSize: 20}}>
-              {user.displayName ? user.displayName : fullname}
+              {user.displayName ? user.displayName : dataUser.full_name}
             </Text>
           </View>
           <View
@@ -460,7 +431,7 @@ export default function MyAccountScreen({navigation}) {
                 }}>
                 <Text style={{color: colors.text}}>{t('Tên người dùng')}</Text>
                 <Text style={{color: colors.text, marginTop: 5}}>
-                  {fullname}
+                  {dataUser.full_name}
                 </Text>
               </View>
             </View>
@@ -481,7 +452,7 @@ export default function MyAccountScreen({navigation}) {
                 }}>
                 <Text style={{color: colors.text}}>{t('Số điện thoại')}</Text>
                 <Text style={{color: colors.text, marginTop: 5}}>
-                  {phonenumber}
+                  {dataUser.phone_number}
                 </Text>
               </View>
             </View>
@@ -501,7 +472,9 @@ export default function MyAccountScreen({navigation}) {
                   marginLeft: 10,
                 }}>
                 <Text style={{color: colors.text}}>{t('Ngày sinh')}</Text>
-                <Text style={{color: colors.text, marginTop: 5}}>{date}</Text>
+                <Text style={{color: colors.text, marginTop: 5}}>
+                  {dataUser.datetime}
+                </Text>
               </View>
             </View>
           </View>
@@ -520,7 +493,9 @@ export default function MyAccountScreen({navigation}) {
                   marginLeft: 10,
                 }}>
                 <Text style={{color: colors.text}}>{t('Giới tính')}</Text>
-                <Text style={{color: colors.text, marginTop: 5}}>{sex}</Text>
+                <Text style={{color: colors.text, marginTop: 5}}>
+                  {dataUser.sex}
+                </Text>
               </View>
             </View>
           </View>
@@ -550,7 +525,9 @@ export default function MyAccountScreen({navigation}) {
               style={{height: 30, width: 30, marginLeft: 20}}
             />
             <View style={{width: '85%', marginLeft: 5}}>
-              <Text style={{fontSize: 16, color: colors.text}}>{address}</Text>
+              <Text style={{fontSize: 16, color: colors.text}}>
+                {dataUser.address}
+              </Text>
             </View>
           </View>
         </View>

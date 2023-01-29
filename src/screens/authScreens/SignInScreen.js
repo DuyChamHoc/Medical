@@ -22,6 +22,7 @@ import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {discount} from '../../global/Data';
 import LottieView from 'lottie-react-native';
+import {useDispatch} from 'react-redux';
 
 GoogleSignin.configure({
   webClientId:
@@ -36,6 +37,7 @@ export default function SignInScreen({navigation}) {
   const [getemail, setemail] = useState('');
   const [getVisible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useDispatch();
   async function signIn(data) {
     setLoading(true);
     try {
@@ -47,6 +49,7 @@ export default function SignInScreen({navigation}) {
           .doc(user.user.uid)
           .get()
           .then(documentSnapshot => {
+            dispatch({type: 'ADD_DATA', payload: documentSnapshot.data()});
             dispatchSignedIn({
               type: 'UPDATE_SIGN_IN',
               payload: {userToken: documentSnapshot.data().roll},
@@ -84,6 +87,10 @@ export default function SignInScreen({navigation}) {
                 isLanguage: 'en',
                 uid: user.user.uid,
                 full_name: user.user.displayName,
+                phone_number: '',
+                datetime: '',
+                sex: '',
+                address: '',
               });
               firestore()
                 .collection('Discount')
@@ -95,6 +102,7 @@ export default function SignInScreen({navigation}) {
                   console.log('Discount added!');
                 });
             }
+            dispatch({type: 'ADD_DATA', payload: documentSnapshot.data()});
           });
       }
     } catch (error) {
@@ -151,6 +159,7 @@ export default function SignInScreen({navigation}) {
                   console.log('Discount added!');
                 });
             }
+            dispatch({type: 'ADD_DATA', payload: documentSnapshot.data()});
           });
       }
     } catch (error) {

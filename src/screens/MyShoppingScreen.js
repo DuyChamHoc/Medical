@@ -6,6 +6,7 @@ import {
   ScrollView,
   FlatList,
   Image,
+  Dimensions,
 } from 'react-native';
 import Icon3 from 'react-native-vector-icons/EvilIcons';
 import HeaderSimple from '../components/HeaderSimple';
@@ -16,6 +17,7 @@ import ViewCart from './ViewCart';
 import {useDispatch} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+const {width, height} = Dimensions.get('window');
 export default function MyShoppingScreen({navigation}) {
   const {t} = useTranslation();
   const {colors} = useTheme();
@@ -62,13 +64,12 @@ export default function MyShoppingScreen({navigation}) {
   const ListItem = ({item}) => {
     return (
       <ScrollView>
-        <View style={{alignSelf: 'center', width: 380}}>
+        <View style={{alignSelf: 'center', width: 380, paddingVertical: 5}}>
           <View
             style={{
               backgroundColor: colors.boxes,
               height: 160,
               justifyContent: 'center',
-              marginTop: 10,
             }}>
             <View style={{flexDirection: 'row', marginLeft: 8}}>
               <Image
@@ -153,15 +154,24 @@ export default function MyShoppingScreen({navigation}) {
           {t('Vui lòng chọn sản phẩm bạn muốn mua!')}
         </Text>
       </View>
-      <View style={{height: '77%'}}>
+      <View
+        style={{
+          height: height - 170,
+        }}>
         <FlatList
           data={getdata}
           renderItem={({item, index}) => <ListItem item={item} />}
-          contentContainerStyle={{paddingBottom: 100}}
           showsVerticalScrollIndicator={false}
+          keyExtractor={item => item.id}
         />
       </View>
-      {getdata.length!=0 ? <ViewCart navigation={navigation} /> : <></>}
+      <View style={{
+        position: 'absolute',
+        bottom: 0,
+        width: width,
+      }}>
+        {getdata.length != 0 ? <ViewCart navigation={navigation} /> : <></>}
+      </View>
     </View>
   );
 }

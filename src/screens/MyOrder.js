@@ -8,6 +8,7 @@ import {
   FlatList,
   Image,
   Modal,
+  Pressable,
 } from 'react-native';
 import HeaderOrder from '../components/HeaderOrder';
 import {RadioButton} from 'react-native-paper';
@@ -24,9 +25,9 @@ export default function MyOrder({navigation, route}) {
   const {t} = useTranslation();
   const [loading, setLoading] = useState(false);
   const {colors} = useTheme();
-  const [fullname, setfullname] = useState('');
-  const [phonenumber, setphonenumber] = useState('');
-  const [address, setaddress] = useState('');
+  const dataUser = useSelector(state => state.dataReducer.dataUser);
+  console.log(dataUser);
+  const [fullname, setfullname] = useState(dataUser.full_name);
   const [checked, setChecked] = useState('first');
   const [modalVisible, setModalVisible] = useState(false);
   const [name_dis, setName_dis] = useState('');
@@ -71,14 +72,15 @@ export default function MyOrder({navigation, route}) {
       date: moment().format('DD/MM/YYYY hh:mm'),
       items: items,
       name: fullname,
-      phone: phonenumber,
-      address: address,
+      phone: dataUser.phone_number,
+      address: dataUser.address,
       ship: 50 - num_dis * 50,
       total: cost + 50 - num_dis * 50,
       id: Math.random(),
       status: 'Pending',
       manager: '',
     };
+    console.log(data);
     firestore()
       .collection('Order')
       .doc(user.uid)
@@ -133,19 +135,27 @@ export default function MyOrder({navigation, route}) {
       },
     });
   };
-  useEffect(() => {
-    firestore()
-      .collection('Users')
-      .doc(user.uid)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          setfullname(documentSnapshot.data().full_name);
-          setphonenumber(documentSnapshot.data().phone_number);
-          setaddress(documentSnapshot.data().address);
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   firestore()
+  //     .collection('Users')
+  //     .doc(user.uid)
+  //     .get()
+  //     .then(documentSnapshot => {
+  //       if (documentSnapshot.exists) {
+  //         setfullname(documentSnapshot.data().full_name);
+  //         setphonenumber(
+  //           documentSnapshot.data().phone_number
+  //             ? documentSnapshot.data().phone_number
+  //             : t('Số điện thoại'),
+  //         );
+  //         setaddress(
+  //           documentSnapshot.data().address
+  //             ? documentSnapshot.data().address
+  //             : t('Địa chỉ'),
+  //         );
+  //       }
+  //     });
+  // }, []);
   return (
     <>
       <View style={{flex: 1}}>
@@ -157,14 +167,34 @@ export default function MyOrder({navigation, route}) {
         <ScrollView style={{height: '100%'}}>
           <View style={{marginTop: 15, marginLeft: 12, marginRight: 12}}>
             <View>
-              <Text
+              <View
                 style={{
-                  color: colors.text,
-                  fontWeight: 'bold',
-                  fontSize: 18,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}>
-                {t('Thông tin giao hàng')}
-              </Text>
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontWeight: 'bold',
+                    fontSize: 18,
+                  }}>
+                  {t('Thông tin giao hàng')}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('InforShipping');
+                  }}>
+                  <Text
+                    style={{
+                      color: 'red',
+                      fontWeight: 'bold',
+                      fontSize: 18,
+                    }}>
+                    {t('Sửa')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <View style={{flexDirection: 'row', marginTop: 10}}>
                 <Text
                   style={{
@@ -176,11 +206,11 @@ export default function MyOrder({navigation, route}) {
                 </Text>
                 <Text style={[styles.textStyle, {color: colors.text}]}>|</Text>
                 <Text style={[styles.textStyle, {color: colors.text}]}>
-                  {phonenumber}
+                  {dataUser.phone_number}
                 </Text>
               </View>
               <View style={{marginTop: 5}}>
-                <Text style={{color: colors.text}}>{address}</Text>
+                <Text style={{color: colors.text}}>{dataUser.address}</Text>
               </View>
             </View>
             <View>
@@ -360,7 +390,11 @@ export default function MyOrder({navigation, route}) {
           </View>
         </ScrollView>
         <Modal animationType="slide" transparent={true} visible={modalVisible}>
-          <View style={styles.modal}>
+          <Pressable
+            style={styles.modal}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}>
             <View style={styles.modalContainer}>
               <View
                 style={{
@@ -476,13 +510,13 @@ export default function MyOrder({navigation, route}) {
                 </View>
               </TouchableOpacity>
             </View>
-          </View>
+          </Pressable>
         </Modal>
         <View
           style={{
             height: 50,
             flexDirection: 'row',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
             borderTopWidth: 1,
             borderTopColor: '#6BC8FF',
           }}>
@@ -495,7 +529,8 @@ export default function MyOrder({navigation, route}) {
             <Text
               style={{
                 color: colors.text,
-                fontSize: 18,
+                fontSize: 20,
+                marginLeft: 30,
                 fontWeight: 'bold',
               }}>
               {t('Tổng thanh toán:')}
@@ -516,7 +551,13 @@ export default function MyOrder({navigation, route}) {
               alignItems: 'center',
             }}
             onPress={() => {
-              addCartToFireBase();
+              if (!dataUser.phone_number) {
+                alert(t('Bạn chưa cung cấp số điện thoại'));
+              } else if (!dataUser.address) {
+                alert(t('Bạn chưa cung cấp địa chỉ giao hàng'));
+              } else {
+                addCartToFireBase();
+              }
             }}>
             <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
               {t('Đặt hàng')}

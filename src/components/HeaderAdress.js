@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'space-between',
         backgroundColor: '#6BC8FF',
-        height: 40
+        height: 40,
+        alignItems:'center'
     },
     headerText: {
         fontSize: 21,

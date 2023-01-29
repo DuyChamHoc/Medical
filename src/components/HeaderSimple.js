@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: colors.buttons,
         height: parameters.headerHeight,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     headerText: {
         color: colors.headerText,

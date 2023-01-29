@@ -89,7 +89,7 @@ export default function ProductCard({navigation, screenWidth, item}) {
         navigation.push('ProductInfo', {item: item});
       }}>
       <View style={[styles.cardView, {backgroundColor: colors.background}]}>
-        <View style={[styles.imageView, {marginTop: 20}, {width: screenWidth}]}>
+        <View style={[styles.imageView, {width: screenWidth}]}>
           <ImageBackground style={styles.image} source={{uri: item.image[0]}} />
           <View>
             <Text
@@ -115,8 +115,7 @@ export default function ProductCard({navigation, screenWidth, item}) {
               {item.gia}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', marginBottom: 15, marginTop: 12}}>
-            <View
+          <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <ModalPoup visible={visible}>
                 <View style={{alignItems: 'center'}}>
@@ -149,14 +148,22 @@ export default function ProductCard({navigation, screenWidth, item}) {
                 </Text>
               </ModalPoup>
             </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: 10,
+              marginBottom: 5,
+            }}>
             <TouchableOpacity
               style={{
                 borderWidth: 0.7,
                 borderRadius: 5,
-                marginRight: 30,
                 width: 50,
                 height: 40,
                 alignItems: 'center',
+                justifyContent: 'center',
                 borderColor: colors.tertiary,
               }}>
               <Icon1
@@ -165,7 +172,7 @@ export default function ProductCard({navigation, screenWidth, item}) {
                 }}
                 name="shoppingcart"
                 style={{color: colors.secondary, justifyContent: 'center'}}
-                size={35}
+                size={30}
               />
             </TouchableOpacity>
             <TouchableOpacity
@@ -179,13 +186,13 @@ export default function ProductCard({navigation, screenWidth, item}) {
                 height: 40,
                 width: 85,
                 alignItems: 'center',
-                marginRight: 10,
                 borderColor: colors.secondary,
+                alignContent: 'center',
+                justifyContent: 'center',
               }}>
               <Text
                 style={{
                   fontWeight: 'bold',
-                  marginTop: 10,
                   color: colors.secondary,
                 }}>
                 {t('MUA NGAY')}
@@ -202,32 +209,20 @@ const styles = StyleSheet.create({
   cardView: {
     padding: 5,
     marginBottom: 10,
-    marginHorizontal: 5,
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
     borderColor: colors.buttons,
     borderWidth: 1,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
   },
 
-  imageView: {
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: SCREEN_WIDTH * 0.3,
-    height: SCREEN_WIDTH * 0.5,
-    marginLeft: SCREEN_WIDTH * 0.035,
-    marginBottom: SCREEN_WIDTH * 0.035,
-  },
+  imageView: {},
 
   image: {
     height: SCREEN_WIDTH * 0.2,
     width: SCREEN_WIDTH * 0.2,
     borderRadius: 10,
-    marginRight: 15,
+    alignSelf: 'center',
   },
-
   shadow: {
     shadowColor: '#000',
     shadowOffset: {

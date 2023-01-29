@@ -22,12 +22,43 @@ export default function ViewCart({navigation}) {
     <View
       style={{
         flexDirection: 'row',
-        height: 60,
+        height: 50,
         justifyContent: 'flex-end',
         borderTopWidth: 0.5,
-        marginTop: 36,
         borderTopColor: 'blue',
       }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ModalPoup visible={visible}>
+          <View style={{alignItems: 'center'}}>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => setVisible(false)}>
+                <Icon1
+                  name="close"
+                  style={{height: 30, width: 30, color: colors.text}}
+                  size={25}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <LottieView
+            style={{height: 100, alignSelf: 'center', marginBottom: 10}}
+            source={require('../assets/animations/error.json')}
+            autoPlay
+            speed={0.8}
+            loop={false}
+          />
+          <Text
+            style={{
+              marginVertical: 30,
+              fontSize: 20,
+              textAlign: 'center',
+              color: colors.text,
+              fontWeight: 'bold',
+            }}>
+            {t('Không có sản phẩm nào được chọn.')}
+          </Text>
+        </ModalPoup>
+      </View>
       <View style={{flexDirection: 'row'}}>
         <View style={{width: 300, alignItems: 'center', flexDirection: 'row'}}>
           <Text
@@ -44,44 +75,12 @@ export default function ViewCart({navigation}) {
               color: 'red',
               fontWeight: 'bold',
               marginLeft: 5,
-              fontSize: 20,
+              fontSize: 18,
             }}>
             {total
               ? new Intl.NumberFormat('en-VI').format(total) + ' VND'
               : '0 VND'}
           </Text>
-        </View>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ModalPoup visible={visible}>
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.header}>
-                <TouchableOpacity onPress={() => setVisible(false)}>
-                  <Icon1
-                    name="close"
-                    style={{height: 30, width: 30, color: colors.text}}
-                    size={25}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <LottieView
-              style={{height: 100, alignSelf: 'center', marginBottom: 10}}
-              source={require('../assets/animations/error.json')}
-              autoPlay
-              speed={0.8}
-              loop={false}
-            />
-            <Text
-              style={{
-                marginVertical: 30,
-                fontSize: 20,
-                textAlign: 'center',
-                color: colors.text,
-                fontWeight: 'bold',
-              }}>
-              {t('Không có sản phẩm nào được chọn.')}
-            </Text>
-          </ModalPoup>
         </View>
         <TouchableOpacity
           style={{
@@ -98,7 +97,7 @@ export default function ViewCart({navigation}) {
             }
           }}>
           <View>
-            <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
               {t('Mua Hàng')}
             </Text>
           </View>
