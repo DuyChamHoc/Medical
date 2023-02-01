@@ -27,7 +27,7 @@ const InforShipping = ({navigation}) => {
     newdata.full_name = name;
     newdata.phone_number = phonenumber;
     newdata.address = address;
-    console.log(newdata)
+    console.log(newdata);
     if (check) {
       firestore()
         .collection('Users')
@@ -55,16 +55,15 @@ const InforShipping = ({navigation}) => {
       <HeaderAdress navigation={navigation} title={t('Thông tin giao hàng')} />
       <View style={{padding: 10}}>
         <View style={{marginTop: 10}}>
-          <Text style={{color: colors.text, fontSize: 16}}>
-            {t('Tên người dùng')}
-          </Text>
+          <Text style={{color: colors.text, fontSize: 16}}>{t('Tên')}</Text>
           <View style={styles.view6}>
             <TextInput
-              placeholder={t('Tên người dùng')}
+              placeholder={t('Tên')}
               style={styles.input1}
               autoFocus={true}
               onChangeText={txt => setname(txt)}
               value={name}
+              color={colors.text}
             />
           </View>
         </View>
@@ -80,6 +79,7 @@ const InforShipping = ({navigation}) => {
               autoFocus={true}
               onChangeText={txt => setphonenumber(txt)}
               value={phonenumber}
+              color={colors.text}
             />
           </View>
         </View>
@@ -92,6 +92,7 @@ const InforShipping = ({navigation}) => {
               autoFocus={true}
               onChangeText={txt => setaddress(txt)}
               value={address}
+              color={colors.text}
             />
           </View>
         </View>
@@ -103,7 +104,12 @@ const InforShipping = ({navigation}) => {
             fillColor="green"
             onPress={checkboxValue => setcheck(checkboxValue)}
           />
-          <Text>{t('Sử dụng mặc định thông tin này')}</Text>
+          <Text
+            style={{
+              color: colors.text,
+            }}>
+            {t('Sử dụng mặc định thông tin này')}
+          </Text>
         </View>
         <TouchableOpacity
           style={{

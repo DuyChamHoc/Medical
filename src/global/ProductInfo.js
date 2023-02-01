@@ -218,27 +218,6 @@ export default function ProductInfo({navigation, route}) {
                   {t('Xem đánh giá')}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.push('StoreDetail', {
-                    item: route.params.item,
-                    kc: far,
-                  });
-                }}>
-                <View
-                  style={{
-                    marginTop: 20,
-                    marginLeft: 43,
-                    borderWidth: 1,
-                    justifyContent: 'center',
-                    borderColor: 'red',
-                    width: 80,
-                    height: 25,
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: 'red'}}>{t('Xem Shop')}</Text>
-                </View>
-              </TouchableOpacity>
             </View>
             <View
               style={{

@@ -55,6 +55,13 @@ const SearchComponent = () => {
       setSearch('');
     }
   };
+  const formatName = name => {
+    //regex name > 30 char
+    if (name.length > 40) {
+      return name.slice(0, 40) + '...';
+    }
+    return name;
+  }
   const renderItem = ({item}) => {
     return (
       <TouchableWithoutFeedback
@@ -73,7 +80,7 @@ const SearchComponent = () => {
                 marginTop: 10,
                 textAlign: 'center',
               }}>
-              {item.name}
+              {formatName(item.name)}
             </Text>
           </View>
           <View>
