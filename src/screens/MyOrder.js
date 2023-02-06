@@ -360,13 +360,12 @@ export default function MyOrder({navigation, route}) {
                       marginRight: 10,
                     }}
                   />
-                  <Text style={{color: colors.text}}>{t('Ví MoMo')}</Text>
+                  <Text style={{color: colors.text}}>{t('Ví MoMo (Bảo trì)')}</Text>
                 </View>
               </View>
               <View
                 style={{
                   marginTop: 20,
-                  marginBottom: 10,
                   flexDirection: 'row',
                   width: 350,
                 }}>
@@ -533,7 +532,7 @@ export default function MyOrder({navigation, route}) {
                 marginLeft: 30,
                 fontWeight: 'bold',
               }}>
-              {t('Tổng thanh toán:')}
+              {t('Tổng tiền:')}
             </Text>
             <Text style={{color: 'red', fontSize: 18, fontWeight: 'bold'}}>
               {' '}

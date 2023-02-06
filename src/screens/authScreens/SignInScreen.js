@@ -39,6 +39,10 @@ export default function SignInScreen({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   async function signIn(data) {
+    if(data.email == '' || data.password == ''){
+      Alert.alert('Error', 'Please enter your email and password');
+      return;
+    }
     setLoading(true);
     try {
       const {password, email} = data;
