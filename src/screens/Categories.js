@@ -34,11 +34,12 @@ export default function Categories({navigation}) {
     });
   }, []);
   useEffect(() => {
+    if(getCate[0] === undefined) return;
     return refdata.onSnapshot(querySnapshot => {
       const list = [];
       querySnapshot.forEach(doc => {
         if (
-          getCate[0].name != undefined &&
+          getCate[0].name !== undefined &&
           doc.data().category == getCate[0].name
         )
           list.push(doc.data());
