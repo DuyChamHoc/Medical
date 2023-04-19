@@ -6,8 +6,10 @@ import {
   FlatList,
   Image,
   Dimensions,
+  TouchableOpacity
 } from 'react-native';
 import {colors} from '../global/styles';
+import Icon from 'react-native-vector-icons/Fontisto';
 import HomeHeader from '../components/HomeHeader';
 import ProductCard from '../components/ProductCard';
 import CountDown from 'react-native-countdown-component';
@@ -115,6 +117,13 @@ export default function HomeScreen({navigation}) {
           )}
         />
       </View>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => {
+          navigation.navigate('Chat');
+        }}>
+        <Icon name="messenger" size={30} color="#03A9F4" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -123,6 +132,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundColor,
+  },
+  fab: {
+    // top: 730,
+    top: SCREEN_WIDTH * 1.52,
+    borderWidth: 1,
+    borderColor: '#03A9F4',
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: 20,
+    bottom: 50,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    elevation: 8,
+  },
+  fabIcon: {
+    fontSize: 40,
+    color: '#03A9F4',
+    marginTop: -3,
   },
   deliveryButton: {
     paddingHorizontal: 20,
@@ -169,7 +199,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 8,
     paddingVertical: 3,
-    marginTop:-20,
+    marginTop: -20,
   },
   smallCard: {
     borderRadius: 20,

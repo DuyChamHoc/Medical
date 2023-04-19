@@ -18,7 +18,8 @@ import News3 from '../screens/News3';
 import News4 from '../screens/News4';
 import News5 from '../screens/News5';
 import InforShipping from '../screens/InforShipping';
-import {useSelector} from 'react-redux';
+import SingleChat from '../screens/SingleChat';
+
 const App = createNativeStackNavigator();
 
 export function AppStack() {
@@ -144,9 +145,16 @@ export function AppStack() {
           headerShown: false,
         }}
       />
-       <App.Screen
+      <App.Screen
         name="InforShipping"
         component={InforShipping}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <App.Screen
+        name="Chat"
+        component={SingleChat}
         options={{
           headerShown: false,
         }}

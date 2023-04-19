@@ -1,5 +1,59 @@
 let defaultState = {
   selectedItems: {items: [], language: 'en', dark: 'false'},
+  dataChat: [
+    {
+      id: 1,
+      roll: 'admin',
+      message: 'Chào bạn, Medeli có thể hỗ trợ gì cho bạn ạ?',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+    {
+      id: 2,
+      roll: 'user',
+      message: 'Tôi cảm thấy nhứt đầu, đau mỏi toàn thân.',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+    {
+      id: 3,
+      roll: 'admin',
+      message:
+        'Thiếu nước, cơ thể không thể thực hiện được các nhiệm vụ quan trọng, trong đó có hô hấp và tiêu hóa.',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+    {
+      id: 4,
+      roll: 'admin',
+      message: 'Bạn nên uống nước thường xuyên nhé!',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+    {
+      id: 5,
+      roll: 'admin',
+      message:
+        'https://cdn.medigoapp.com/product/1c90b8adb5d944dbb5ea7111252ec0b0.jpeg',
+      timestamp: Date.now(),
+      type: 'image',
+    },
+    {
+      id: 6,
+      roll: 'admin',
+      message:
+        'Tôi nghĩ bạn nên dùng Viên sủi Vitamed DIAMOND, nó có thể tốt cho bạn.',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+    {
+      id: 7,
+      roll: 'user',
+      message: 'Cảm ơn bác sĩ.',
+      timestamp: Date.now(),
+      type: 'mess',
+    },
+  ],
 };
 let cartReducer = (state = defaultState, action) => {
   switch (action.type) {
@@ -78,6 +132,12 @@ let cartReducer = (state = defaultState, action) => {
         dark: action.payload.dark,
       };
       console.log(newState.selectedItems.dark, '👉');
+      return newState;
+    }
+    case 'ADD_TO_CHAT': {
+      let newState = {...state};
+      newState.dataChat = [...newState.dataChat, action.payload.DataChat];
+      console.log(newState.dataChat, '👉');
       return newState;
     }
     default:
